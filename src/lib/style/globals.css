@@ -21,7 +21,7 @@ body::before {
 	inset: 0;
 	width: 100%;
 	height: 100%;
-	background: transparent url('/src/lib/assets/noise.png') 0 0;
+	background: transparent url('noise.png') 0 0;
 	background-size: 320px 320px;
 	opacity: 0.4;
 }
