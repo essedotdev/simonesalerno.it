@@ -28,7 +28,7 @@
 	}}
 	class={isInView ? 'animate' : 'opacity-0'}
 >
-	<div class="flex pb-8 sm:pb-10 2xl:pb-14 text-2xl">
+	<div class="flex pb-8 text-2xl sm:pb-10 2xl:pb-14">
 		<a href="/" class="flex items-center gap-x-1">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -46,10 +46,10 @@
 	</div>
 
 	{#if project}
-		<div class="flex flex-col xl:flex-row gap-y-6 xl:gap-x-14">
+		<div class="flex flex-col gap-y-6 xl:flex-row xl:gap-x-14">
 			<div class="w-full xl:w-1/2">
 				<img
-					class="rounded-3xl w-full h-full object-cover"
+					class="h-full w-full rounded-3xl object-cover"
 					src={'https://directus.simonesalerno.it/assets/' +
 						project.images[0].directus_files_id +
 						'/' +
@@ -58,7 +58,7 @@
 					alt={project.translations[0].title}
 				/>
 			</div>
-			<div class="flex flex-col gap-y-6 w-full xl:w-1/2">
+			<div class="flex w-full flex-col gap-y-6 xl:w-1/2">
 				<h2 class="text-5xl font-normal sm:text-6xl 2xl:text-7xl">
 					{project.translations[0].title}
 				</h2>
@@ -77,7 +77,7 @@
 				{/if}
 
 				{#if project.translations[0].body}
-					<div class="flex flex-col text-2xl gap-y-4">
+					<div class="flex flex-col gap-y-4 text-2xl">
 						{#each project.translations[0].body.blocks as paragraph}
 							<p>{paragraph.data.text}</p>
 						{/each}

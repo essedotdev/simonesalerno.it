@@ -20,10 +20,10 @@
 	}}
 	class="flex flex-col gap-y-14 sm:gap-y-16 2xl:gap-y-[4.5rem] {isInView ? 'animate' : 'opacity-0'}"
 >
-	<h2 class="text-5xl sm:text-6xl 2xl:text-7xl font-normal">
+	<h2 class="text-5xl font-normal sm:text-6xl 2xl:text-7xl">
 		{data.about.title}
 	</h2>
-	<div class="flex flex-col text-2xl lg:text-[1.7rem] 2xl:text-3xl gap-y-4 lg:gap-y-6 2xl:gap-y-8">
+	<div class="flex flex-col gap-y-4 text-2xl lg:gap-y-6 lg:text-[1.7rem] 2xl:gap-y-8 2xl:text-3xl">
 		{#each data.about.description.blocks as paragraph}
 			<p>{paragraph.data.text}</p>
 		{/each}

@@ -51,7 +51,7 @@
 	<div>
 		<button
 			type="button"
-			class="flex justify-center gap-x-1.5 rounded-md w-16 py-3 text-base border border-white border-opacity-5 bg-white bg-opacity-[0.02] backdrop-blur-md"
+			class="flex w-16 justify-center gap-x-1.5 rounded-md border border-white/5 bg-white/[.02] py-3 text-base backdrop-blur-md"
 			id="menu-button"
 			aria-expanded={isOpen}
 			aria-haspopup="true"
@@ -63,7 +63,7 @@
 				{/if}
 			{/each}
 			<svg
-				class="-mr-1 h-5 w-5 text-white text-opacity-15"
+				class="mt-[0.15rem] -mr-1 h-5 w-5 text-white/15"
 				viewBox="0 0 20 20"
 				fill="currentColor"
 				aria-hidden="true"
@@ -81,7 +81,7 @@
 		<div
 			in:fly={{ y: -10, duration: 100 }}
 			out:fade={{ duration: 100 }}
-			class="absolute right-0 z-10 mt-1 w-16 origin-top-right text-base rounded-md border border-white border-opacity-5 bg-white bg-opacity-[0.02] backdrop-blur-md"
+			class="absolute right-0 z-10 mt-1 w-16 origin-top-right rounded-md border border-white/5 bg-white/[.02] text-base backdrop-blur-md"
 			role="menu"
 			aria-orientation="vertical"
 			aria-labelledby="menu-button"

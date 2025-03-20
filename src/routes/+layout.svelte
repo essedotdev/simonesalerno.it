@@ -32,7 +32,7 @@
 	<meta name="author" content="Simone Salerno" />
 </svelte:head>
 
-<div class="w-[95%] lg:w-[90%] xl:w-[85%] 2xl:w-[75%] mx-auto relative">
+<div class="relative mx-auto w-[95%] lg:w-[90%] xl:w-[85%] 2xl:w-[75%]">
 	<Navbar />
 	<FloatingNav />
 

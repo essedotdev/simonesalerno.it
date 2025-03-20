@@ -20,7 +20,7 @@
 	}}
 	class="relative flex flex-col items-center {isInView ? 'animate' : 'opacity-0'}"
 >
-	<div class="overflow-hidden mb-12">
+	<div class="mb-12 overflow-hidden">
 		<h1 class="title {isInView ? 'slide-in' : ''}">
 			{data.welcome.title}
 		</h1>
@@ -40,24 +40,3 @@
 		{/each}
 	</div>
 </div>
-
-<style lang="postcss">
-	.title {
-		@apply tracking-tight font-medium text-[4rem] sm:text-[7rem] xl:text-[8rem] 2xl:text-[10rem] text-center -mt-2 lg:-mt-3 xl:-mt-4 2xl:-mt-6 leading-[1.1];
-	}
-
-	.description {
-		@apply flex flex-col text-center text-xl sm:text-2xl lg:text-[1.7rem] 2xl:text-[1.8rem] gap-y-4 xl:gap-y-6;
-	}
-
-	/* .typewriter {
-		--cursor-color: rgb(249 250 251 / var(--tw-text-opacity));
-		--cursor-width: 0.5rem;
-	}
-
-	.typing::after {
-		vertical-align: sub !important;
-		margin-left: 0.4rem;
-		margin-bottom: 0.2rem;
-	} */
-</style>

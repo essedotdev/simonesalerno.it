@@ -25,7 +25,7 @@
 		{data.projects[0].translations[0].title}
 	</h2>
 
-	<div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6 sm:gap-10">
+	<div class="grid grid-cols-1 gap-6 sm:gap-10 md:grid-cols-2 2xl:grid-cols-3">
 		{#each data.projects.slice(1) as project}
 			<ProjectCard
 				title={project.translations[0].title}

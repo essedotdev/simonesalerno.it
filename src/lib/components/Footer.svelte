@@ -9,8 +9,8 @@
 	const isLanguageCodeValid = Object.keys(pages).includes(page.url.pathname.split('/')[1]);
 </script>
 
-<footer class="border-t border-white border-opacity-5 px-4 sm:px-8 lg:px-14">
-	<nav class="flex items-start py-8 sm:pt-10 sm:pb-8 justify-between text-xl sm:text-2xl">
+<footer class="border-t border-white/5 px-4 sm:px-8 lg:px-14">
+	<nav class="flex items-start justify-between py-8 text-xl sm:pt-10 sm:pb-8 sm:text-2xl">
 		<a
 			href={page.url.pathname.split('/')[2]
 				? '/' + language
@@ -23,14 +23,14 @@
 			<Logo />
 		</a>
 
-		<div class="flex flex-col md:flex-row gap-x-7 opacity-80">
+		<div class="flex flex-col gap-x-7 opacity-80 md:flex-row">
 			{#each data.global.navigation as route (route.name)}
 				<a href={'/' + language + route.link} onclick={handleAnchorClick}>{route.name}</a>
 			{/each}
 		</div>
 	</nav>
 	<div
-		class="flex items-center justify-between text-md sm:text-lg text-neutral-200 pt-2 pb-7 opacity-70"
+		class="text-md flex items-center justify-between pt-2 pb-7 text-neutral-200 opacity-70 sm:text-lg"
 	>
 		Copyright © 2025 • Simone Salerno
 	</div>

@@ -2,10 +2,10 @@
 	import { page } from '$app/state';
 </script>
 
-<div class="flex flex-col items-center justify-center min-h-[70vh]">
+<div class="flex min-h-[70vh] flex-col items-center justify-center">
 	<h1 class="text-9xl font-bold">{page.status}</h1>
 	<p class="mt-2 text-4xl">{page.error?.message}</p>
-	<a data-sveltekit-reload href="/" class="flex items-center gap-x-1 mt-8 text-2xl hover:underline">
+	<a data-sveltekit-reload href="/" class="mt-8 flex items-center gap-x-1 text-2xl hover:underline">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"

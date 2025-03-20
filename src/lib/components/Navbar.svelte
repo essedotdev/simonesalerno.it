@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import MenuClose from './icons/CloseMenu.svelte';
-	import MenuOpen from './icons/OpenMenu.svelte';
-	import { handleAnchorClick, pages, selectedLanguage, translation } from '$lib/utils';
+	import { handleAnchorClick, menuStatus, pages, selectedLanguage, translation } from '$lib/utils';
 	import { get } from 'svelte/store';
 	import { fade } from 'svelte/transition';
-	import { menuStatus } from '$lib/utils';
+	import MenuClose from './icons/CloseMenu.svelte';
+	import MenuOpen from './icons/OpenMenu.svelte';
 	import LanguageSelector from './LanguageSelector.svelte';
 	import Logo from './Logo.svelte';
 
@@ -18,8 +17,8 @@
 	const isLanguageCodeValid = Object.keys(pages).includes(page.url.pathname.split('/')[1]);
 </script>
 
-<header id="top" class="border-b border-white border-opacity-5">
-	<nav class="flex items-center px-4 sm:px-8 lg:px-14 py-8 justify-between">
+<header id="top" class="border-b border-white/5">
+	<nav class="flex items-center justify-between px-4 py-8 sm:px-8 lg:px-14">
 		<a
 			href={page.url.pathname.split('/')[2]
 				? '/' + language
@@ -33,7 +32,7 @@
 		</a>
 
 		<div
-			class="hidden md:flex gap-x-6 lg:gap-x-7 items-center text-[1.3rem] lg:text-[1.5rem] 2xl:text-[1.7rem]"
+			class="hidden items-center gap-x-6 text-[1.3rem] md:flex lg:gap-x-7 lg:text-[1.5rem] 2xl:text-[1.7rem]"
 		>
 			{#each data.global.navigation as route (route.name)}
 				<a href={'/' + language + route.link} onclick={handleAnchorClick}>{route.name}</a>
@@ -44,9 +43,9 @@
 			</div>
 		</div>
 
-		<div class="flex md:hidden w-[40px] h-[40px]">
+		<div class="flex h-[40px] w-[40px] md:hidden">
 			{#if $menuStatus}
-				<div class="fixed z-20 left-7 top-10" transition:fade={{ duration: 300 }}>
+				<div class="fixed top-10 left-7 z-20" transition:fade={{ duration: 300 }}>
 					<LanguageSelector />
 				</div>
 
@@ -55,7 +54,7 @@
 				</button>
 
 				<div
-					class="fixed top-0 left-0 w-screen h-screen z-10 flex flex-col items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm text-2xl"
+					class="bg-opacity-60 fixed top-0 left-0 z-10 flex h-screen w-screen flex-col items-center justify-center bg-black text-2xl backdrop-blur-sm"
 					transition:fade={{ duration: 300 }}
 				>
 					<div class="flex flex-col gap-y-3">
