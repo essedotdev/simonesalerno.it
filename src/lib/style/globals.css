@@ -67,11 +67,3 @@ body::before {
 		transform: translateY(0);
 	}
 }
-
-.title {
-	@apply -mt-2 text-center text-[4rem] leading-[1.1] font-medium tracking-tight sm:text-[7rem] lg:-mt-3 xl:-mt-4 xl:text-[8rem] 2xl:-mt-6 2xl:text-[10rem];
-}
-
-.description {
-	@apply flex flex-col gap-y-4 text-center text-lg sm:text-xl lg:text-[1.7rem] xl:gap-y-6 2xl:text-[1.8rem];
-}

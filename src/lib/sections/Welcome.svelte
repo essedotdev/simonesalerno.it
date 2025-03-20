@@ -21,7 +21,11 @@
 	class="relative flex flex-col items-center {isInView ? 'animate' : 'opacity-0'}"
 >
 	<div class="mb-12 overflow-hidden">
-		<h1 class="title {isInView ? 'slide-in' : ''}">
+		<h1
+			class="-mt-2 text-center text-[4rem] leading-[1.1] font-medium tracking-tight sm:text-[7rem] lg:-mt-3 xl:-mt-4 xl:text-[8rem] 2xl:-mt-6 2xl:text-[10rem] {isInView
+				? 'slide-in'
+				: ''}"
+		>
 			{data.welcome.title}
 		</h1>
 	</div>
@@ -34,7 +38,9 @@
 		{/await}
 	</div> -->
 
-	<div class="description">
+	<div
+		class="flex flex-col gap-y-4 text-center text-lg sm:text-xl lg:text-[1.7rem] xl:gap-y-6 2xl:text-[1.8rem]"
+	>
 		{#each data.welcome.description.blocks as paragraph}
 			<p>{@html paragraph.data.text}</p>
 		{/each}
