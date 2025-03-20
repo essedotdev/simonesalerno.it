@@ -16,8 +16,6 @@
 	const project = data.projects.find(
 		(project) => project.translations[0].name === page.url.pathname.split('/')[3]
 	);
-
-	console.log(project);
 </script>
 
 <div
@@ -28,7 +26,7 @@
 	}}
 	class={isInView ? 'animate' : 'opacity-0'}
 >
-	<div class="flex pb-8 text-2xl sm:pb-10 2xl:pb-14">
+	<div class="flex pb-10 text-2xl 2xl:pb-14">
 		<a href="/" class="flex items-center gap-x-[0.15rem]">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

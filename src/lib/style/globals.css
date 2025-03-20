@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 body {
-	@apply overflow-x-hidden text-gray-100;
+	@apply overflow-x-hidden overscroll-none text-gray-100;
 	font-family: 'Geist', fantasy;
 	font-optical-sizing: auto;
 	font-weight: 300;
@@ -73,5 +73,5 @@ body::before {
 }
 
 .description {
-	@apply flex flex-col gap-y-4 text-center text-xl sm:text-2xl lg:text-[1.7rem] xl:gap-y-6 2xl:text-[1.8rem];
+	@apply flex flex-col gap-y-4 text-center text-lg sm:text-xl lg:text-[1.7rem] xl:gap-y-6 2xl:text-[1.8rem];
 }

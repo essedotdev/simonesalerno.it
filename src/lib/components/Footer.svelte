@@ -10,7 +10,9 @@
 </script>
 
 <footer class="border-t border-white/5 px-4 sm:px-8 lg:px-14">
-	<nav class="flex items-start justify-between py-8 text-xl sm:pt-10 sm:pb-8 sm:text-2xl">
+	<nav
+		class="flex items-start justify-between py-8 text-lg sm:pt-10 sm:pb-8 sm:text-xl md:text-2xl"
+	>
 		<a
 			href={page.url.pathname.split('/')[2]
 				? '/' + language
@@ -23,7 +25,7 @@
 			<Logo />
 		</a>
 
-		<div class="flex flex-col gap-x-7 opacity-80 md:flex-row">
+		<div class="flex flex-col gap-x-7 gap-y-2 leading-none opacity-80 md:flex-row">
 			{#each data.global.navigation as route (route.name)}
 				<a href={'/' + language + route.link} onclick={handleAnchorClick}>{route.name}</a>
 			{/each}

@@ -54,7 +54,7 @@
 				</button>
 
 				<div
-					class="bg-opacity-60 fixed top-0 left-0 z-10 flex h-screen w-screen flex-col items-center justify-center bg-black text-2xl backdrop-blur-sm"
+					class="fixed top-0 left-0 z-10 flex h-screen w-screen flex-col items-center justify-center bg-black/60 text-2xl backdrop-blur-sm"
 					transition:fade={{ duration: 300 }}
 				>
 					<div class="flex flex-col gap-y-3">
