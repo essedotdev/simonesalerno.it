@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { inview, type Options } from 'svelte-inview';
-	import { get } from 'svelte/store';
-	import { translation } from '$lib/utils';
 	import { page } from '$app/state';
 	import Link from '$lib/components/icons/Link.svelte';
+	import { translation } from '$lib/utils';
+	import { inview, type Options } from 'svelte-inview';
+	import { get } from 'svelte/store';
 
 	let isInView: boolean;
 	const options: Options = {
@@ -29,13 +29,13 @@
 	class={isInView ? 'animate' : 'opacity-0'}
 >
 	<div class="flex pb-8 text-2xl sm:pb-10 2xl:pb-14">
-		<a href="/" class="flex items-center gap-x-1">
+		<a href="/" class="flex items-center gap-x-[0.15rem]">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="24"
 				height="24"
 				viewBox="0 0 24 24"
-				style="fill: #f3f4f6;transform: ;msFilter:;margin-bottom: -0.2rem;"
+				style="fill: #f3f4f6;transform: ;msFilter:;margin-bottom: -0.1rem;"
 				><path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
 				></path></svg
 			>
