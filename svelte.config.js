@@ -9,12 +9,7 @@ const config = {
 				include: ['/*'],
 				exclude: ['<all>']
 			}
-		}),
-		vite: {
-			ssr: {
-				noExternal: ['@directus/sdk']
-			}
-		}
+		})
 	},
 	preprocess: vitePreprocess()
 };
