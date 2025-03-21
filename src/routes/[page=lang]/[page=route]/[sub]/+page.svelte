@@ -1,13 +1,17 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import Project from '$lib/sections/Project.svelte';
 	import { translation } from '$lib/utils';
 	import { get } from 'svelte/store';
 
 	const data = get(translation);
+
+	// Titolo della pagina
+	const pageTitle = data.projects[0].translations[0].title;
 </script>
 
 <svelte:head>
-	<title>Simone Salerno • {data.projects[0].translations[0].title}</title>
+	<title>Simone Salerno • {pageTitle}</title>
 </svelte:head>
 
 <div class="px-4 pt-8 pb-52 sm:px-8 sm:pt-10 sm:pb-64 lg:px-14 2xl:pt-14 2xl:pb-72">
