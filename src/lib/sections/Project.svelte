@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/state';
 	import Link from '$lib/components/icons/Link.svelte';
 	import { translation } from '$lib/utils';
 	import { inview, type Options } from 'svelte-inview';
@@ -13,9 +12,7 @@
 
 	const data = get(translation);
 
-	const project = data.projects.find(
-		(project) => project.translations[0].name === page.url.pathname.split('/')[3]
-	);
+	export let project;
 </script>
 
 <div
@@ -68,7 +65,7 @@
 				{/if}
 
 				{#if project.link}
-					<a href={project.link} class="flex items-center gap-x-2 text-2xl underline">
+					<a href={project.link} class="flex w-min items-center gap-x-2 text-2xl underline">
 						<span class="-mb-[0.2rem]"><Link /></span>
 						{project.link}
 					</a>
@@ -83,7 +80,5 @@
 				{/if}
 			</div>
 		</div>
-	{:else}
-		<h2 class="text-5xl font-normal sm:text-6xl 2xl:text-7xl">Project not found</h2>
 	{/if}
 </div>

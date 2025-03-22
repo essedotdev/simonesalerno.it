@@ -51,7 +51,7 @@
 	<div>
 		<button
 			type="button"
-			class="flex w-16 justify-center gap-x-1.5 rounded-md border border-white/5 bg-white/[.02] py-3 text-base backdrop-blur-md"
+			class="flex w-16 cursor-pointer justify-center gap-x-1.5 rounded-md border border-white/5 bg-white/[.02] py-3 text-base backdrop-blur-md"
 			id="menu-button"
 			aria-expanded={isOpen}
 			aria-haspopup="true"

@@ -22,9 +22,6 @@
 		if (browser) {
 			document.documentElement.classList.toggle('overflow-hidden', $menuStatus);
 			document.documentElement.classList.toggle('sm:overflow-auto', $menuStatus);
-
-			// Imposta l'attributo lang in base alla lingua selezionata
-			document.documentElement.lang = $selectedLanguage;
 		}
 	});
 </script>

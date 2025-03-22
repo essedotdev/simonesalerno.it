@@ -1,19 +1,19 @@
-import type { LayoutServerLoad } from './$types';
-import getDirectusInstance from '$lib/utils/directus';
-import { readItems } from '@directus/sdk';
-import type {
-	Global,
-	Welcome,
-	Language,
-	GlobalTranslation,
-	WelcomeTranslation,
-	AboutTranslation,
-	About,
-	ContactTranslation,
-	Contact,
-	Project
-} from '$lib/utils/types';
 import { pages } from '$lib/utils';
+import getDirectusInstance from '$lib/utils/directus';
+import type {
+	About,
+	AboutTranslation,
+	Contact,
+	ContactTranslation,
+	Global,
+	GlobalTranslation,
+	Language,
+	Project,
+	Welcome,
+	WelcomeTranslation
+} from '$lib/utils/types';
+import { readItems } from '@directus/sdk';
+import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({
 	url
@@ -29,99 +29,62 @@ export const load = (async ({
 	const directus = getDirectusInstance(fetch);
 	const languageCode = url.pathname.split('/')[1];
 	const isLanguageCodeValid = Object.keys(pages).includes(languageCode);
-	const languages = await directus.request<Language[]>(readItems('languages'));
+	const validLanguageCode = isLanguageCodeValid ? languageCode : 'en';
 
-	const global = await directus.request<Global>(
-		readItems('global', {
-			deep: {
-				translations: {
-					_filter: {
-						_and: [
-							{
-								languages_code: { _eq: isLanguageCodeValid ? languageCode : 'en' }
-							}
-						]
-					}
-				}
-			},
-			fields: [{ translations: ['*'] }],
-			limit: 1
-		})
-	);
+	// Configurazione comune per le richieste di contenuto
+	const translationFilter = {
+		_and: [{ languages_code: { _eq: validLanguageCode } }]
+	};
 
-	const welcome = await directus.request<Welcome>(
-		readItems('welcome', {
-			deep: {
-				translations: {
-					_filter: {
-						_and: [
-							{
-								languages_code: { _eq: isLanguageCodeValid ? languageCode : 'en' }
-							}
-						]
-					}
-				}
-			},
-			fields: [{ translations: ['*'] }],
-			limit: 1
-		})
-	);
+	// Esegue tutte le richieste in parallelo
+	const [languages, global, welcome, about, contact, projects] = await Promise.all([
+		// Richiesta delle lingue
+		directus.request<Language[]>(readItems('languages')),
 
-	const projects = await directus.request<Project[]>(
-		readItems('projects', {
-			deep: {
-				translations: {
-					_filter: {
-						_and: [
-							{
-								languages_code: { _eq: isLanguageCodeValid ? languageCode : 'en' }
-							}
-						]
-					}
-				}
-			},
-			fields: [{ images: ['*'], translations: ['*'] }, 'link']
-		})
-	);
+		// Richieste dei contenuti principali
+		directus.request<Global>(
+			readItems('global', {
+				deep: { translations: { _filter: translationFilter } },
+				fields: [{ translations: ['*'] }],
+				limit: 1
+			})
+		),
 
-	const about = await directus.request<About>(
-		readItems('about', {
-			deep: {
-				translations: {
-					_filter: {
-						_and: [
-							{
-								languages_code: { _eq: isLanguageCodeValid ? languageCode : 'en' }
-							}
-						]
-					}
-				}
-			},
-			fields: [{ translations: ['*'] }],
-			limit: 1
-		})
-	);
+		directus.request<Welcome>(
+			readItems('welcome', {
+				deep: { translations: { _filter: translationFilter } },
+				fields: [{ translations: ['*'] }],
+				limit: 1
+			})
+		),
 
-	const contact = await directus.request<Contact>(
-		readItems('contact', {
-			deep: {
-				translations: {
-					_filter: {
-						_and: [
-							{
-								languages_code: { _eq: isLanguageCodeValid ? languageCode : 'en' }
-							}
-						]
-					}
-				}
-			},
-			fields: [{ translations: ['*'] }],
-			limit: 1
-		})
-	);
+		directus.request<About>(
+			readItems('about', {
+				deep: { translations: { _filter: translationFilter } },
+				fields: [{ translations: ['*'] }],
+				limit: 1
+			})
+		),
+
+		directus.request<Contact>(
+			readItems('contact', {
+				deep: { translations: { _filter: translationFilter } },
+				fields: [{ translations: ['*'] }],
+				limit: 1
+			})
+		),
+
+		// Richiesta dei progetti (con campi aggiuntivi)
+		directus.request<Project[]>(
+			readItems('projects', {
+				deep: { translations: { _filter: translationFilter } },
+				fields: [{ images: ['*'], translations: ['*'] }, 'link']
+			})
+		)
+	]);
 
 	return {
-		selectedLanguage: isLanguageCodeValid ? languageCode : 'en',
+		selectedLanguage: validLanguageCode,
 		languages,
 		global: global.translations[0],
 		welcome: welcome.translations[0],
