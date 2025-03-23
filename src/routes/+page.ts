@@ -4,5 +4,6 @@ import { get } from 'svelte/store';
 import type { PageLoad } from './$types';
 
 export const load = (async () => {
-	return redirect(302, `/${get(selectedLanguage)}`);
+	const lang = get(selectedLanguage) || 'en';
+	return redirect(302, `/${lang}`);
 }) satisfies PageLoad;
