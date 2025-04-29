@@ -44,11 +44,13 @@
 	<meta name="twitter:image" content="/logo/logo.png" />
 </svelte:head>
 
-<div class="relative mx-auto w-[95%] lg:w-[90%] xl:w-[85%] 2xl:w-[75%]">
+<div class="relative mx-auto flex min-h-screen w-[95%] flex-col lg:w-[90%] xl:w-[85%] 2xl:w-[75%]">
 	<Navbar />
 	<FloatingNav />
 
-	{@render children()}
+	<main class="flex-grow">
+		{@render children()}
+	</main>
 
 	<Footer />
 </div>
