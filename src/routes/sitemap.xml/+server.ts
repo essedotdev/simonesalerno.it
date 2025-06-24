@@ -174,7 +174,8 @@ async function generateSitemapPages(
 		if (pages[langCode]?.projects) {
 			for (const project of projects) {
 				const translation = project.translations.find((t) => t.languages_code === langCode);
-				if (translation) {
+				// Escludi progetti con slug uguale alla route padre per evitare duplicazioni
+				if (translation && translation.name !== pages[langCode].projects) {
 					sitemapPages.push({
 						slug: `${langCode}/${pages[langCode].projects}/${translation.name}`,
 						lastMod: getProjectLastModForLanguage(project, langCode),
@@ -187,7 +188,7 @@ async function generateSitemapPages(
 								const altTranslation = project.translations.find(
 									(t) => t.languages_code === l.code
 								);
-								return altTranslation
+								return altTranslation && altTranslation.name !== pages[l.code].projects
 									? {
 											hreflang: l.code,
 											href: `${site}/${l.code}/${pages[l.code].projects}/${altTranslation.name}`
@@ -249,7 +250,7 @@ const sitemap = (
 <?xml-stylesheet type="text/css" href="/sitemap.css"?>
 <urlset
   xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhtml="https://www.w3.org/1999/xhtml"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
 >
   ${pages
 		.map(
