@@ -257,8 +257,8 @@ const sitemap = (
 			(page) => `
   <url>
     <loc>${site}/${page.slug}</loc>
-    <changefreq>${page.changefreq}</changefreq>
     <lastmod>${page.lastMod}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority.toFixed(1)}</priority>
     ${
 			page.alternates
