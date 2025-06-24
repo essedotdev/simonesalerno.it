@@ -5,7 +5,8 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "simonesalerno",
-	"compatibility_date": "2025-03-12",
+	"compatibility_date": "2025-05-05",
+	"compatibility_flags": ["nodejs_compat"],
 	"pages_build_output_dir": ".svelte-kit/cloudflare",
 	"observability": {
 		"enabled": true
@@ -27,7 +28,7 @@
 	 * Environment Variables
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 	 */
-	"vars": { "NODE_VERSION": "22.14.0", "PUBLIC_APIURL": "https://directus.simonesalerno.it" }
+	"vars": { "NODE_VERSION": "22.16.0", "PUBLIC_APIURL": "https://directus.simonesalerno.it" }
 	/**
 	 * Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
