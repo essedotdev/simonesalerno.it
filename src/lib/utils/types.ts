@@ -35,6 +35,7 @@ export interface GlobalTranslation {
 	keywords: string[];
 	navigation: LinkItem[];
 	interface: InterfaceItem[];
+	date_updated?: string;
 }
 
 export interface Global {
@@ -48,6 +49,7 @@ export interface WelcomeTranslation {
 	title: string;
 	description: BlockEditor;
 	typewriter: string[];
+	date_updated?: string;
 }
 
 export interface Welcome {
@@ -60,6 +62,7 @@ export interface AboutTranslation {
 	languages_code: string;
 	title: string;
 	description: BlockEditor;
+	date_updated?: string;
 }
 
 export interface About {
@@ -73,6 +76,7 @@ export interface ContactTranslation {
 	title: string;
 	subtitle: string;
 	links: LinkItem[];
+	date_updated?: string;
 }
 
 export interface Contact {
@@ -94,6 +98,7 @@ export interface ProjectTranslation {
 	description: string;
 	body: BlockEditor;
 	image_captions: string[];
+	date_updated?: string;
 }
 
 export interface Project {

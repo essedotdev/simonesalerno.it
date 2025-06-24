@@ -1,0 +1,137 @@
+/* Stili per rendere la sitemap più leggibile nel browser - Tema scuro */
+urlset {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px;
+	background: #1a1a1a;
+	color: #e0e0e0;
+	line-height: 1.6;
+}
+
+urlset::before {
+	content: '🗺️ Sitemap XML - simonesalerno.it';
+	display: block;
+	font-size: 24px;
+	font-weight: bold;
+	color: #ffffff;
+	margin-bottom: 30px;
+	text-align: center;
+	padding: 20px;
+	background: #2d2d2d;
+	border-radius: 8px;
+	border: 1px solid #404040;
+}
+
+url {
+	display: block;
+	background: #2d2d2d;
+	margin: 15px 0;
+	padding: 20px;
+	border-radius: 8px;
+	border: 1px solid #404040;
+	border-left: 4px solid #64b5f6;
+}
+
+loc {
+	display: block;
+	font-weight: 600;
+	color: #64b5f6;
+	font-size: 16px;
+	margin-bottom: 10px;
+	word-break: break-all;
+}
+
+loc::before {
+	content: '🔗 ';
+}
+
+lastmod {
+	display: inline-block;
+	background: #2e5d31;
+	color: #81c784;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 12px;
+	margin-right: 10px;
+	font-weight: 500;
+	border: 1px solid #4caf50;
+}
+
+lastmod::before {
+	content: '📅 ';
+}
+
+changefreq {
+	display: inline-block;
+	background: #5d4e00;
+	color: #ffcc02;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 12px;
+	margin-right: 10px;
+	font-weight: 500;
+	border: 1px solid #ffc107;
+}
+
+changefreq::before {
+	content: '🔄 ';
+}
+
+priority {
+	display: inline-block;
+	background: #1e3a5f;
+	color: #90caf9;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 12px;
+	margin-right: 10px;
+	font-weight: 500;
+	border: 1px solid #2196f3;
+}
+
+priority::before {
+	content: '⭐ ';
+}
+
+/* Stili per i link alternativi hreflang */
+url:has(link) {
+	border-left-color: #ba68c8;
+}
+
+link {
+	display: block;
+	margin-top: 10px;
+	padding: 12px;
+	background: #3d2f4a;
+	border-radius: 4px;
+	font-size: 14px;
+	color: #e1bee7;
+	border: 1px solid #6a4c93;
+	font-weight: 500;
+}
+
+link::before {
+	content: '🌐 ' attr(hreflang) ' → ' attr(href);
+	font-weight: 500;
+	color: #e1bee7;
+}
+
+link::after {
+	content: '';
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	urlset {
+		padding: 10px;
+	}
+
+	url {
+		padding: 15px;
+	}
+
+	loc {
+		font-size: 14px;
+	}
+}

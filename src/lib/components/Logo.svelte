@@ -23,18 +23,20 @@
 </script>
 
 <div class="flex items-end gap-x-2">
-	<div>
+	<div class="relative h-16 w-16 sm:h-20 sm:w-20">
 		<enhanced:img
-			class="h-16 w-min sm:h-20"
+			class="absolute inset-0 h-full w-full object-contain"
 			src="/static/logo/logo.png"
 			alt="Logo"
-			class:hidden={!showLogo1}
+			class:opacity-0={!showLogo1}
+			class:opacity-100={showLogo1}
 		/>
 		<enhanced:img
-			class="h-16 w-min sm:h-20"
+			class="absolute inset-0 h-full w-full object-contain"
 			src="/static/logo/logo2.png"
 			alt="Logo"
-			class:hidden={showLogo1}
+			class:opacity-0={showLogo1}
+			class:opacity-100={!showLogo1}
 		/>
 	</div>
 

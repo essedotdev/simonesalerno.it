@@ -5,7 +5,7 @@ export async function handle({ event, resolve }) {
 	const pathSegments = pathname.split('/').filter(Boolean);
 
 	// Determina la lingua corrente dalla URL
-	let currentLang = 'en'; // Default
+	let currentLang = Object.keys(pages)[0]; // Prima lingua disponibile come default
 	if (pathSegments.length > 0) {
 		const firstSegment = pathSegments[0];
 		if (pages[firstSegment as keyof typeof pages]) {
