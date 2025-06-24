@@ -264,7 +264,7 @@ const sitemap = (
 			page.alternates
 				?.map(
 					(alt) => `
-    <xhtml:link
+    <link
       rel="alternate"
       hreflang="${alt.hreflang}"
       href="${alt.href}"
