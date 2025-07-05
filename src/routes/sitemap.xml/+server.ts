@@ -151,9 +151,7 @@ async function generateSitemapPages(
 			priority: 1.0,
 			changefreq: 'monthly',
 			hreflang: langCode,
-			alternates: languages
-				.filter((l) => l.code !== langCode)
-				.map((l) => ({ hreflang: l.code, href: `${site}/${l.code}` }))
+			alternates: languages.map((l) => ({ hreflang: l.code, href: `${site}/${l.code}` }))
 		});
 
 		// Rimuovi le pagine delle sezioni di primo livello
@@ -175,7 +173,7 @@ async function generateSitemapPages(
 						changefreq: 'monthly',
 						hreflang: langCode,
 						alternates: languages
-							.filter((l) => l.code !== langCode && pages[l.code]?.projects)
+							.filter((l) => pages[l.code]?.projects)
 							.map((l) => {
 								const altTranslation = project.translations.find(
 									(t) => t.languages_code === l.code
@@ -207,7 +205,7 @@ async function generateSitemapPages(
 						changefreq: 'monthly',
 						hreflang: langCode,
 						alternates: languages
-							.filter((l) => l.code !== langCode && pages[l.code]?.articles)
+							.filter((l) => pages[l.code]?.articles)
 							.map((l) => {
 								const altTranslation = article.translations.find(
 									(t) => t.languages_code === l.code
