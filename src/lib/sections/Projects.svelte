@@ -12,8 +12,7 @@
 	let data = $derived($translation || { projects: [], global: { interface: [] } });
 
 	let noProjectText = $derived(
-		data.global.interface.find((item) => item.name === 'no_project')?.value ||
-			'No projects available'
+		data.global.interface.find((item) => item.name === 'no_project')?.value
 	);
 </script>
 

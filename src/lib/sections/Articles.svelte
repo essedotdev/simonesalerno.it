@@ -13,8 +13,7 @@
 	let articles = $derived(data.articles || []);
 
 	let noArticleText = $derived(
-		data.global.interface.find((item) => item.name === 'no_article')?.value ||
-			'No articles available'
+		data.global.interface.find((item) => item.name === 'no_article')?.value
 	);
 </script>
 
