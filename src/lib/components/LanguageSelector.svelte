@@ -3,9 +3,9 @@
 	import { languages, pages, selectedLanguage } from '$lib/utils';
 	import type { PageMap } from '$lib/utils/types';
 	import { onMount } from 'svelte';
-	import { get } from 'svelte/store';
 	import { fade, fly } from 'svelte/transition';
-	let isOpen = false;
+
+	let isOpen = $state(false);
 
 	function toggleDropdown() {
 		isOpen = !isOpen;
@@ -43,8 +43,8 @@
 		};
 	});
 
-	const data = get(languages);
-	const selected = get(selectedLanguage);
+	let data = $derived($languages || []);
+	let selected = $derived($selectedLanguage || 'en');
 </script>
 
 <div class="relative inline-block text-left">

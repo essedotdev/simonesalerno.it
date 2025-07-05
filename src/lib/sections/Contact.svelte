@@ -1,20 +1,19 @@
 <script lang="ts">
 	import { translation } from '$lib/utils';
 	import { inview, type Options } from 'svelte-inview';
-	import { get } from 'svelte/store';
 
-	let isInView: boolean;
+	let isInView = $state(false);
 	const options: Options = {
 		rootMargin: '-100px',
 		unobserveOnEnter: true
 	};
 
-	const data = get(translation);
+	let data = $derived($translation || { contact: { title: '', subtitle: '', links: [] } });
 </script>
 
 <div
 	use:inview={options}
-	on:inview_change={(event) => {
+	oninview_change={(event) => {
 		const { inView } = event.detail;
 		isInView = inView;
 	}}

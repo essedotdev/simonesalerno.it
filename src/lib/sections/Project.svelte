@@ -2,29 +2,32 @@
 	import Link from '$lib/components/icons/Link.svelte';
 	import { translation } from '$lib/utils';
 	import { inview, type Options } from 'svelte-inview';
-	import { get } from 'svelte/store';
 
-	let isInView: boolean;
+	let { project, currentLang } = $props();
+
+	let isInView = $state(false);
 	const options: Options = {
 		rootMargin: '-100px',
 		unobserveOnEnter: true
 	};
 
-	const data = get(translation);
-
-	export let project;
+	let data = $derived($translation || { global: { interface: [] } });
+	let backText = $derived(
+		data.global.interface.find((item) => item.name === 'back')?.value || 'back'
+	);
+	let homeUrl = $derived(currentLang === 'en' ? '/' : `/${currentLang}`);
 </script>
 
 <div
 	use:inview={options}
-	on:inview_change={(event) => {
+	oninview_change={(event) => {
 		const { inView } = event.detail;
 		isInView = inView;
 	}}
 	class={isInView ? 'animate' : 'opacity-0'}
 >
 	<div class="flex pb-10 text-2xl 2xl:pb-14">
-		<a href="/" class="flex items-center gap-x-[0.15rem]">
+		<a href={homeUrl} class="flex items-center gap-x-[0.15rem]">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="24"
@@ -34,9 +37,7 @@
 				><path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
 				></path></svg
 			>
-			<span class="hover:underline"
-				>{data.global.interface.find((item) => item.name === 'back')?.value}</span
-			>
+			<span class="hover:underline">{backText}</span>
 		</a>
 	</div>
 

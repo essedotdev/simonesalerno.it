@@ -1,9 +1,8 @@
-import { pages, translation } from '$lib/utils';
+import { pages } from '$lib/utils';
 import { error } from '@sveltejs/kit';
-import { get } from 'svelte/store';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = ({ url }) => {
+export const load: PageServerLoad = async ({ url, parent }) => {
 	// Ottieni lingua e route correnti dalla URL
 	const pathParts = url.pathname.split('/');
 	const currentLang = pathParts[1];
@@ -20,15 +19,20 @@ export const load: PageServerLoad = ({ url }) => {
 		});
 	}
 
-	// Verify project exists
-	const data = get(translation);
-	const project = data.projects.find((project) => project.translations[0].name === projectName);
+	// Ottieni i dati dal parent per verificare che il progetto esista
+	const parentData = await parent();
+	const project = parentData.projects.find((p) => p.translations[0].name === projectName);
 
+	// Se il progetto non esiste, restituisci 404
 	if (!project) {
 		error(404, {
 			message: 'Project Not Found'
 		});
 	}
 
-	return { project };
+	return {
+		currentLang,
+		projectName,
+		project
+	};
 };

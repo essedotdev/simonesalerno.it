@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { handleAnchorClick, pages, selectedLanguage, translation } from '$lib/utils';
-	import { get } from 'svelte/store';
 	import Logo from './Logo.svelte';
 
-	const data = get(translation);
-	const language = get(selectedLanguage);
-	const isLanguageCodeValid = Object.keys(pages).includes(page.url.pathname.split('/')[1]);
+	let data = $derived($translation || { global: { navigation: [] } });
+	let language = $derived($selectedLanguage || 'en');
+	let isLanguageCodeValid = $derived(Object.keys(pages).includes(page.url.pathname.split('/')[1]));
 </script>
 
 <footer class="border-t border-white/5 px-4 sm:px-8 lg:px-14">

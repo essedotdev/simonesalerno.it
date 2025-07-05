@@ -2,9 +2,9 @@
 	import { onDestroy, onMount } from 'svelte';
 
 	// Intervallo in millisecondi tra ogni cambio di immagine
-	export let intervalTime = 600;
+	let { intervalTime = 600 }: { intervalTime?: number } = $props();
 
-	let showLogo1 = true;
+	let showLogo1 = $state(true);
 	let interval: NodeJS.Timeout;
 
 	function toggleLogo() {

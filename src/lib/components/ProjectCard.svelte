@@ -1,8 +1,15 @@
 <script lang="ts">
-	export let title: string;
-	export let description: string;
-	export let image: string;
-	export let link: string;
+	let {
+		title,
+		description,
+		image,
+		link
+	}: {
+		title: string;
+		description: string;
+		image: string;
+		link: string;
+	} = $props();
 </script>
 
 <div class="flex justify-center">

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Typewriter from 'svelte-typewriter';
 
-	export let text: string[];
+	let { text }: { text: string[] } = $props();
 </script>
 
 <div class="typewriter">

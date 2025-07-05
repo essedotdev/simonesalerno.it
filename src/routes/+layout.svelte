@@ -1,21 +1,27 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { page } from '$app/stores';
 	import FloatingNav from '$lib/components/FloatingNav.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import '$lib/style/globals.css';
 	import { languages, menuStatus, selectedLanguage, translation } from '$lib/utils';
+	import { initializeAnalytics, isAnalyticsReady, trackPageView } from '$lib/utils/analytics';
+	import { setContext } from 'svelte';
 
 	let { children, data } = $props();
 
-	selectedLanguage.set(data.selectedLanguage);
-	languages.set(data.languages);
-	translation.set({
-		global: data.global,
-		welcome: data.welcome,
-		projects: data.projects,
-		about: data.about,
-		contact: data.contact
+	// Aggiorna gli store quando cambiano i dati (mantengo per compatibilità)
+	$effect(() => {
+		selectedLanguage.set(data.selectedLanguage);
+		languages.set(data.languages);
+		translation.set({
+			global: data.global,
+			welcome: data.welcome,
+			projects: data.projects,
+			about: data.about,
+			contact: data.contact
+		});
 	});
 
 	$effect(() => {
@@ -23,6 +29,26 @@
 			document.documentElement.classList.toggle('overflow-hidden', $menuStatus);
 			document.documentElement.classList.toggle('sm:overflow-auto', $menuStatus);
 		}
+	});
+
+	// Initialize analytics on mount
+	$effect(() => {
+		if (browser) {
+			initializeAnalytics();
+		}
+	});
+
+	// Track page views on navigation
+	$effect(() => {
+		if (browser && $page.url && isAnalyticsReady()) {
+			trackPageView($page.url.pathname + $page.url.search);
+		}
+	});
+
+	// Fornisce i dati globali come context per i componenti figli
+	setContext('layoutData', {
+		global: data.global,
+		selectedLanguage: data.selectedLanguage
 	});
 </script>
 

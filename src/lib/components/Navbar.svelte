@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { handleAnchorClick, menuStatus, pages, selectedLanguage, translation } from '$lib/utils';
-	import { get } from 'svelte/store';
 	import { fade } from 'svelte/transition';
 	import MenuClose from './icons/CloseMenu.svelte';
 	import MenuOpen from './icons/OpenMenu.svelte';
@@ -12,9 +11,9 @@
 		menuStatus.update((value) => !value);
 	}
 
-	const data = get(translation);
-	const language = get(selectedLanguage);
-	const isLanguageCodeValid = Object.keys(pages).includes(page.url.pathname.split('/')[1]);
+	let data = $derived($translation || { global: { navigation: [] } });
+	let language = $derived($selectedLanguage || 'en');
+	let isLanguageCodeValid = $derived(Object.keys(pages).includes(page.url.pathname.split('/')[1]));
 </script>
 
 <header id="top" class="border-b border-white/5">

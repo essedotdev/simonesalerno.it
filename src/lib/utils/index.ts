@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { Language, Translation, PageMap } from './types';
+import type { Language, PageMap, Translation } from './types';
 
 export function handleAnchorClick(event: MouseEvent) {
 	const link = event.currentTarget as HTMLAnchorElement;
@@ -40,3 +40,6 @@ export const menuStatus = writable(false);
 export const translation = writable<Translation>();
 export const languages = writable<Language[]>();
 export const selectedLanguage = writable<string>();
+
+// Re-export analytics utilities
+export { initializeAnalytics, isAnalyticsReady, trackEvent, trackPageView } from './analytics';
