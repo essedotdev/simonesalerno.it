@@ -156,68 +156,14 @@ async function generateSitemapPages(
 				.map((l) => ({ hreflang: l.code, href: `${site}/${l.code}` }))
 		});
 
-		// Pagine delle sezioni (projects, about)
-		if (pages[langCode]) {
-			const pageRoutes = pages[langCode];
-
-			// Pagina progetti
-			if (pageRoutes.projects) {
-				sitemapPages.push({
-					slug: `${langCode}/${pageRoutes.projects}`,
-					lastMod: projectsLastMod,
-					priority: 0.8,
-					changefreq: 'weekly',
-					hreflang: langCode,
-					alternates: languages
-						.filter((l) => l.code !== langCode && pages[l.code]?.projects)
-						.map((l) => ({
-							hreflang: l.code,
-							href: `${site}/${l.code}/${pages[l.code].projects}`
-						}))
-				});
-			}
-
-			// Pagina about
-			if (pageRoutes.about) {
-				sitemapPages.push({
-					slug: `${langCode}/${pageRoutes.about}`,
-					lastMod: aboutLastMod,
-					priority: 0.7,
-					changefreq: 'monthly',
-					hreflang: langCode,
-					alternates: languages
-						.filter((l) => l.code !== langCode && pages[l.code]?.about)
-						.map((l) => ({
-							hreflang: l.code,
-							href: `${site}/${l.code}/${pages[l.code].about}`
-						}))
-				});
-			}
-
-			// Pagina articoli
-			if (pageRoutes.articles) {
-				sitemapPages.push({
-					slug: `${langCode}/${pageRoutes.articles}`,
-					lastMod: articlesLastMod,
-					priority: 0.8,
-					changefreq: 'weekly',
-					hreflang: langCode,
-					alternates: languages
-						.filter((l) => l.code !== langCode && pages[l.code]?.articles)
-						.map((l) => ({
-							hreflang: l.code,
-							href: `${site}/${l.code}/${pages[l.code].articles}`
-						}))
-				});
-			}
-		}
+		// Rimuovi le pagine delle sezioni di primo livello
 
 		// Pagine dei progetti individuali
 		if (pages[langCode]?.projects) {
 			for (const project of projects) {
 				const translation = project.translations.find((t) => t.languages_code === langCode);
-				// Escludi progetti con slug uguale alla route padre per evitare duplicazioni
-				if (translation && translation.slug !== pages[langCode].projects) {
+				// Escludi progetti con slug uguale alla route padre per evitare duplicazioni e progetti con slug null
+				if (translation && translation.slug !== pages[langCode].projects && translation.slug !== null) {
 					sitemapPages.push({
 						slug: `${langCode}/${pages[langCode].projects}/${translation.slug}`,
 						lastMod: getProjectLastModForLanguage(project, langCode),
@@ -230,7 +176,7 @@ async function generateSitemapPages(
 								const altTranslation = project.translations.find(
 									(t) => t.languages_code === l.code
 								);
-								return altTranslation && altTranslation.slug !== pages[l.code].projects
+								return altTranslation && altTranslation.slug !== pages[l.code].projects && altTranslation.slug !== null
 									? {
 											hreflang: l.code,
 											href: `${site}/${l.code}/${pages[l.code].projects}/${altTranslation.slug}`
@@ -247,7 +193,7 @@ async function generateSitemapPages(
 		if (pages[langCode]?.articles) {
 			for (const article of articles) {
 				const translation = article.translations.find((t) => t.languages_code === langCode);
-				if (translation) {
+				if (translation && translation.slug !== null) {
 					sitemapPages.push({
 						slug: `${langCode}/${pages[langCode].articles}/${translation.slug}`,
 						lastMod: getArticleLastModForLanguage(article, langCode),
@@ -260,7 +206,7 @@ async function generateSitemapPages(
 								const altTranslation = article.translations.find(
 									(t) => t.languages_code === l.code
 								);
-								return altTranslation
+								return altTranslation && altTranslation.slug !== null
 									? {
 											hreflang: l.code,
 											href: `${site}/${l.code}/${pages[l.code].articles}/${altTranslation.slug}`
