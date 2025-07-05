@@ -163,7 +163,11 @@ async function generateSitemapPages(
 			for (const project of projects) {
 				const translation = project.translations.find((t) => t.languages_code === langCode);
 				// Escludi progetti con slug uguale alla route padre per evitare duplicazioni e progetti con slug null
-				if (translation && translation.slug !== pages[langCode].projects && translation.slug !== null) {
+				if (
+					translation &&
+					translation.slug !== pages[langCode].projects &&
+					translation.slug !== null
+				) {
 					sitemapPages.push({
 						slug: `${langCode}/${pages[langCode].projects}/${translation.slug}`,
 						lastMod: getProjectLastModForLanguage(project, langCode),
@@ -176,7 +180,9 @@ async function generateSitemapPages(
 								const altTranslation = project.translations.find(
 									(t) => t.languages_code === l.code
 								);
-								return altTranslation && altTranslation.slug !== pages[l.code].projects && altTranslation.slug !== null
+								return altTranslation &&
+									altTranslation.slug !== pages[l.code].projects &&
+									altTranslation.slug !== null
 									? {
 											hreflang: l.code,
 											href: `${site}/${l.code}/${pages[l.code].projects}/${altTranslation.slug}`

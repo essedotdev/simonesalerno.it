@@ -9,13 +9,12 @@
 		unobserveOnEnter: true
 	};
 
-	let data = $derived(
-		$translation || { articles: [], global: { interface: [] } }
-	);
+	let data = $derived($translation || { articles: [], global: { interface: [] } });
 	let articles = $derived(data.articles || []);
 
 	let noArticleText = $derived(
-		data.global.interface.find((item) => item.name === 'no_article')?.value || 'No articles available'
+		data.global.interface.find((item) => item.name === 'no_article')?.value ||
+			'No articles available'
 	);
 </script>
 
@@ -26,7 +25,9 @@
 			const { inView } = event.detail;
 			isInView = inView;
 		}}
-		class="flex flex-col gap-y-10 sm:gap-y-16 2xl:gap-y-[4.5rem] {isInView ? 'animate' : 'opacity-0'}"
+		class="flex flex-col gap-y-10 sm:gap-y-16 2xl:gap-y-[4.5rem] {isInView
+			? 'animate'
+			: 'opacity-0'}"
 	>
 		<h2 class="text-[2.5rem] leading-none font-normal sm:text-5xl md:text-6xl 2xl:text-7xl">
 			{articles[articles.length - 1].translations[0].title}
@@ -52,7 +53,7 @@
 				{/each}
 			</div>
 		{:else}
-			<p class="text-lg text-white/70 text-center py-12">
+			<p class="py-12 text-center text-lg text-white/70">
 				{noArticleText}
 			</p>
 		{/if}
