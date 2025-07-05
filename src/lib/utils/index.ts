@@ -32,8 +32,8 @@ export function calculateOffset(anchorId: string): number {
 
 // Pages map
 export const pages: PageMap = {
-	en: { projects: 'projects', about: 'about' },
-	it: { projects: 'progetti', about: 'informazioni' }
+	en: { projects: 'projects', about: 'about', articles: 'blog' },
+	it: { projects: 'progetti', about: 'informazioni', articles: 'blog' }
 };
 
 export const menuStatus = writable(false);

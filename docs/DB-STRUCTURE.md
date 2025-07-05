@@ -1,9 +1,11 @@
 # Documentazione Struttura Database - simonesalerno.it
 
 ## Panoramica
+
 Questo documento descrive la struttura del database Directus utilizzato per il sito web simonesalerno.it. Il database è configurato per supportare contenuti multilingue (Italiano e Inglese) e gestisce informazioni personali, progetti e contatti.
 
 ## Connessione MCP Directus
+
 ✅ **Stato connessione**: Attiva  
 👤 **Utente corrente**: Admin User (doppiaesse@proton.me)  
 🆔 **ID Utente**: 4d04f155-01cc-498a-b7f9-8ab683147d67
@@ -13,22 +15,27 @@ Questo documento descrive la struttura del database Directus utilizzato per il s
 ## Struttura delle Collezioni
 
 ### 1. 🌐 **languages**
+
 Gestisce le lingue supportate dal sito web.
 
 **Campi:**
+
 - `code` (string, PK) - Codice lingua (es. "en", "it")
 - `name` (string) - Nome della lingua (es. "English", "Italiano")
 
 **Dati attuali:**
+
 - Inglese (`en`)
 - Italiano (`it`)
 
 ---
 
 ### 2. 🌍 **global**
+
 Configurazioni globali del sito con supporto multilingue.
 
 **Campi:**
+
 - `id` (integer, PK) - Identificatore univoco
 - `translations` (alias) - Relazione alle traduzioni
 
@@ -37,9 +44,11 @@ Configurazioni globali del sito con supporto multilingue.
 ---
 
 ### 3. 🌍 **global_translations**
+
 Traduzioni per le configurazioni globali.
 
 **Campi:**
+
 - `id` (integer, PK) - Identificatore univoco
 - `global_id` (integer) - Riferimento a global
 - `languages_code` (string) - Codice lingua
@@ -52,9 +61,11 @@ Traduzioni per le configurazioni globali.
 ---
 
 ### 4. 🏠 **welcome**
+
 Sezione di benvenuto/homepage.
 
 **Campi:**
+
 - `id` (integer, PK) - Identificatore univoco
 - `translations` (alias) - Relazione alle traduzioni
 
@@ -63,9 +74,11 @@ Sezione di benvenuto/homepage.
 ---
 
 ### 5. 🏠 **welcome_translations**
+
 Traduzioni per la sezione welcome.
 
 **Campi:**
+
 - `id` (integer, PK) - Identificatore univoco
 - `welcome_id` (integer) - Riferimento a welcome
 - `languages_code` (string) - Codice lingua
@@ -76,9 +89,11 @@ Traduzioni per la sezione welcome.
 ---
 
 ### 6. 👤 **about**
+
 Sezione "Chi sono".
 
 **Campi:**
+
 - `id` (integer, PK) - Identificatore univoco
 - `translations` (alias) - Relazione alle traduzioni
 
@@ -87,9 +102,11 @@ Sezione "Chi sono".
 ---
 
 ### 7. 👤 **about_translations**
+
 Traduzioni per la sezione about.
 
 **Campi:**
+
 - `id` (integer, PK) - Identificatore univoco
 - `about_id` (integer) - Riferimento a about
 - `languages_code` (string) - Codice lingua
@@ -99,9 +116,11 @@ Traduzioni per la sezione about.
 ---
 
 ### 8. 📞 **contact**
+
 Sezione contatti.
 
 **Campi:**
+
 - `id` (integer, PK) - Identificatore univoco
 - `translations` (alias) - Relazione alle traduzioni
 
@@ -110,9 +129,11 @@ Sezione contatti.
 ---
 
 ### 9. 📞 **contact_translations**
+
 Traduzioni per la sezione contact.
 
 **Campi:**
+
 - `id` (integer, PK) - Identificatore univoco
 - `contact_id` (integer) - Riferimento a contact
 - `languages_code` (string) - Codice lingua
@@ -123,15 +144,18 @@ Traduzioni per la sezione contact.
 ---
 
 ### 10. 💼 **projects**
+
 Progetti del portfolio.
 
 **Campi:**
+
 - `id` (integer, PK) - Identificatore univoco
 - `link` (string) - URL del progetto
 - `translations` (alias) - Relazione alle traduzioni
 - `images` (alias) - Relazione alle immagini
 
 **Relazioni:**
+
 - `projects_files` - Collegamento con file/immagini
 - `projects_translations` - Traduzioni
 
@@ -140,9 +164,11 @@ Progetti del portfolio.
 ---
 
 ### 11. 💼 **projects_translations**
+
 Traduzioni per i progetti.
 
 **Campi:**
+
 - `id` (integer, PK) - Identificatore univoco
 - `projects_id` (integer) - Riferimento a projects
 - `languages_code` (string) - Codice lingua
@@ -155,9 +181,11 @@ Traduzioni per i progetti.
 ---
 
 ### 12. 📁 **projects_files**
+
 Relazione molti-a-molti tra progetti e file.
 
 **Campi:**
+
 - `id` (integer, PK) - Identificatore univoco
 - `projects_id` (integer) - Riferimento a projects
 - `directus_files_id` (string) - Riferimento ai file Directus
@@ -165,18 +193,22 @@ Relazione molti-a-molti tra progetti e file.
 ---
 
 ### 13. 📂 **directus_files**
+
 Sistema di gestione file di Directus.
 
 **Campi principali:**
+
 - `uploaded_by` (string) - Utente che ha caricato il file
 - `modified_by` (string) - Ultimo utente che ha modificato
 
 ---
 
 ### 14. 👥 **directus_users**
+
 Utenti del sistema Directus.
 
 **Campi principali:**
+
 - `avatar` (string) - Avatar dell'utente (file)
 
 ---
@@ -190,7 +222,9 @@ Il sistema utilizza un approccio di traduzione basato su tabelle separate:
 3. **Tabella lingue** (`languages`)
 
 ### Relazioni di Traduzione
+
 Ogni tabella principale ha una relazione `translations` che punta alla rispettiva tabella di traduzione, collegata tramite:
+
 - `{table}_id` - Riferimento alla tabella principale
 - `languages_code` - Codice lingua dalla tabella `languages`
 
@@ -199,12 +233,14 @@ Ogni tabella principale ha una relazione `translations` che punta alla rispettiv
 ## Tipi di Campo Utilizzati
 
 ### Campi Base
+
 - `string` - Testo breve
 - `text` - Testo lungo
 - `integer` - Numeri interi
 - `json` - Dati strutturati
 
 ### Interfacce Specializzate
+
 - `input` - Input di testo semplice
 - `input-multiline` - Area di testo
 - `input-block-editor` - Editor a blocchi avanzato
@@ -220,13 +256,16 @@ Ogni tabella principale ha una relazione `translations` che punta alla rispettiv
 ## Note Tecniche
 
 ### Chiavi Primarie
+
 - Tutte le tabelle utilizzano chiavi primarie `id` di tipo `integer`
 - La tabella `languages` utilizza `code` (string) come chiave primaria
 
 ### Relazioni
+
 - **One-to-Many**: Tabelle principali → Traduzioni
 - **Many-to-Many**: Projects ↔ Files (tramite `projects_files`)
 - **Many-to-One**: Files → Users (per tracking modifiche)
 
 ### Gestione File
+
 Il sistema utilizza il sistema di file nativo di Directus con tracking delle modifiche e supporto per relazioni multiple.

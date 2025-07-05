@@ -25,7 +25,7 @@
 	<div
 		class="flex flex-col gap-y-4 text-xl sm:text-2xl lg:gap-y-6 lg:text-[1.7rem] 2xl:gap-y-8 2xl:text-3xl"
 	>
-		{#each data.about.description.blocks as paragraph}
+		{#each data.about.description.blocks as paragraph (paragraph.data.text)}
 			<p>{paragraph.data.text}</p>
 		{/each}
 	</div>

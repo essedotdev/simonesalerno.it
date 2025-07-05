@@ -1,17 +1,31 @@
 <script lang="ts">
 	let {
 		title,
-		description,
+		excerpt,
 		image,
 		link,
+		publishedDate,
+		tags,
 		slug
 	}: {
 		title: string;
-		description: string;
+		excerpt: string;
 		image?: string;
 		link: string;
+		publishedDate: string;
+		tags: string[];
 		slug: string;
 	} = $props();
+
+	// Format date for display
+	const formatDate = (dateString: string) => {
+		const date = new Date(dateString);
+		return date.toLocaleDateString('en-US', {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		});
+	};
 </script>
 
 <div
@@ -28,6 +42,10 @@
 		</a>
 	{/if}
 	<div class="px-6 py-5">
+		<div class="mb-3 text-sm text-gray-400">
+			{formatDate(publishedDate)}
+		</div>
+
 		<a href={link}>
 			<h5 class="mb-2 text-2xl font-medium text-gray-100">
 				{title}
@@ -35,7 +53,17 @@
 		</a>
 
 		<p class="mb-3 text-base text-gray-300 lg:text-xl">
-			{description}
+			{excerpt}
 		</p>
+
+		{#if tags && tags.length > 0}
+			<div class="flex flex-wrap gap-2">
+				{#each tags as tag (tag)}
+					<span class="rounded-full bg-white/5 px-3 py-1 text-xs text-gray-400">
+						{tag}
+					</span>
+				{/each}
+			</div>
+		{/if}
 	</div>
 </div>

@@ -49,7 +49,7 @@
 					src={'https://directus.simonesalerno.it/assets/' +
 						project.images[0].directus_files_id +
 						'/' +
-						project.translations[0].name +
+						project.translations[0].slug +
 						'.jpg'}
 					alt={project.translations[0].title}
 				/>
@@ -74,7 +74,7 @@
 
 				{#if project.translations[0].body}
 					<div class="flex flex-col gap-y-4 text-2xl">
-						{#each project.translations[0].body.blocks as paragraph}
+						{#each project.translations[0].body.blocks as paragraph (paragraph.data.text)}
 							<p>{paragraph.data.text}</p>
 						{/each}
 					</div>

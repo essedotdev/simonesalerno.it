@@ -31,7 +31,7 @@
 	</div>
 
 	<div class="flex flex-col gap-y-2 text-xl sm:text-2xl">
-		{#each data.contact.links as link, index}
+		{#each data.contact.links as link, index (link.name)}
 			<a
 				class="group flex transition-all duration-300 ease-in-out
 					{index === 0 ? 'mb-2 text-2xl sm:text-3xl md:text-4xl' : ''}"

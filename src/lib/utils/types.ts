@@ -93,7 +93,7 @@ export interface ProjectTranslation {
 	id: number;
 	project_id: number;
 	languages_code: string;
-	name: string;
+	slug: string;
 	title: string;
 	description: string;
 	body: BlockEditor;
@@ -102,15 +102,45 @@ export interface ProjectTranslation {
 }
 
 export interface Project {
+	id: number;
 	images: ProjectImage[];
 	translations: ProjectTranslation[];
 	link: string;
+}
+
+export interface ArticleImage {
+	directus_files_id: string;
+	id: number;
+	article_id: number;
+}
+
+export interface ArticleTranslation {
+	id: number;
+	article_id: number;
+	languages_code: string;
+	title: string;
+	slug: string;
+	excerpt: string;
+	content: BlockEditor;
+	meta_description: string;
+	tags: string[];
+	date_updated?: string;
+	date_created?: string;
+}
+
+export interface Article {
+	id: number;
+	featured_image?: string;
+	published_date: string;
+	published: boolean;
+	translations: ArticleTranslation[];
 }
 
 export interface Translation {
 	global: GlobalTranslation;
 	welcome: WelcomeTranslation;
 	projects: Project[];
+	articles: Article[];
 	about: AboutTranslation;
 	contact: ContactTranslation;
 }

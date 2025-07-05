@@ -3,7 +3,7 @@ import { browser, dev } from '$app/environment';
 declare global {
 	interface Window {
 		umami?: {
-			track: (event?: string, data?: Record<string, any>) => void;
+			track: (event?: string, data?: Record<string, unknown>) => void;
 		};
 	}
 }
@@ -20,7 +20,7 @@ export function trackPageView(url?: string) {
 	}
 }
 
-export function trackEvent(event: string, data?: Record<string, any>) {
+export function trackEvent(event: string, data?: Record<string, unknown>) {
 	if (!browser || !window.umami || dev) return;
 
 	try {

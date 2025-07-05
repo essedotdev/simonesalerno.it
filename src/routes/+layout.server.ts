@@ -3,6 +3,7 @@ import getDirectusInstance from '$lib/utils/directus';
 import type {
 	About,
 	AboutTranslation,
+	Article,
 	Contact,
 	ContactTranslation,
 	Global,
@@ -23,6 +24,7 @@ export const load = (async ({
 	global: GlobalTranslation;
 	welcome: WelcomeTranslation;
 	projects: Project[];
+	articles: Article[];
 	about: AboutTranslation;
 	contact: ContactTranslation;
 }> => {
@@ -37,7 +39,7 @@ export const load = (async ({
 	};
 
 	// Esegue tutte le richieste in parallelo
-	const [languages, global, welcome, about, contact, projects] = await Promise.all([
+	const [languages, global, welcome, about, contact, projects, articles] = await Promise.all([
 		// Richiesta delle lingue
 		directus.request<Language[]>(readItems('languages')),
 
@@ -78,10 +80,22 @@ export const load = (async ({
 		directus.request<Project[]>(
 			readItems('projects', {
 				deep: { translations: { _filter: translationFilter } },
-				fields: [{ images: ['*'], translations: ['*'] }, 'link']
+				fields: ['id', { images: ['*'], translations: ['*'] }, 'link']
+			})
+		),
+
+		// Richiesta degli articoli (solo pubblicati)
+		directus.request<Article[]>(
+			readItems('articles', {
+				deep: { translations: { _filter: translationFilter } },
+				fields: ['id', { translations: ['*'] }, 'featured_image', 'published_date', 'published'],
+				filter: { published: { _eq: true } },
+				sort: ['-published_date']
 			})
 		)
 	]);
+
+	console.log(projects[1].translations[0]);
 
 	return {
 		selectedLanguage: validLanguageCode,
@@ -89,6 +103,7 @@ export const load = (async ({
 		global: global.translations[0],
 		welcome: welcome.translations[0],
 		projects,
+		articles,
 		about: about.translations[0],
 		contact: contact.translations[0]
 	};

@@ -9,6 +9,7 @@ This is **simonesalerno.it**, a personal portfolio website built with **SvelteKi
 ## Commands
 
 ### Development
+
 ```bash
 pnpm dev          # Start development server
 pnpm build        # Build for production
@@ -19,6 +20,7 @@ pnpm format       # Format code
 ```
 
 ### Deployment
+
 ```bash
 pnpm run deploy   # Deploy to Cloudflare Pages
 ```
@@ -26,6 +28,7 @@ pnpm run deploy   # Deploy to Cloudflare Pages
 ## Architecture
 
 ### Tech Stack
+
 - **Frontend**: SvelteKit 5 with TypeScript
 - **Styling**: Tailwind CSS v4
 - **CMS**: Directus (headless CMS at directus.simonesalerno.it)
@@ -34,14 +37,16 @@ pnpm run deploy   # Deploy to Cloudflare Pages
 - **Package Manager**: pnpm
 
 ### Internationalization
+
 - **Languages**: English (`en`) and Italian (`it`)
 - **Routing**: Dynamic with `[page=lang]` parameter
-- **Page mappings**: 
+- **Page mappings**:
   - English: `/en/projects`, `/en/about`
   - Italian: `/it/progetti`, `/it/informazioni`
 - **Param matchers**: Custom validation in `src/params/`
 
 ### Routing Structure
+
 ```
 /[page=lang]/                     # Home (e.g., /en, /it)
 /[page=lang]/[page=route]/[sub]/  # Project details (e.g., /en/projects/project-name)
@@ -49,12 +54,14 @@ pnpm run deploy   # Deploy to Cloudflare Pages
 ```
 
 ### Content Management
+
 - **Directus CMS**: All content fully translatable
 - **Content types**: Global settings, Welcome, Projects, About, Contact
 - **Server-side loading**: All content fetched in `+layout.server.ts`
 - **Block editor**: Rich content with structured blocks
 
 ### Key Directories
+
 - `src/lib/components/` - Reusable UI components
 - `src/lib/sections/` - Page sections (Welcome, Projects, About, Contact)
 - `src/lib/stores/` - Svelte stores for state management
@@ -62,6 +69,7 @@ pnpm run deploy   # Deploy to Cloudflare Pages
 - `src/params/` - Custom param matchers for routing
 
 ### Configuration Files
+
 - `svelte.config.js` - Cloudflare adapter configuration
 - `vite.config.ts` - Vite with Tailwind and enhanced images
 - `wrangler.jsonc` - Cloudflare Workers configuration

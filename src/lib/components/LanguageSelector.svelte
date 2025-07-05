@@ -11,8 +11,9 @@
 		isOpen = !isOpen;
 	}
 
-	function closeDropdown(event: any) {
-		if (event.target.closest('#menu-button') === null) {
+	function closeDropdown(event: Event) {
+		const target = event.target as HTMLElement;
+		if (target && target.closest('#menu-button') === null) {
 			isOpen = false;
 		}
 	}
@@ -57,7 +58,7 @@
 			aria-haspopup="true"
 			onclick={toggleDropdown}
 		>
-			{#each data as language}
+			{#each data as language (language.code)}
 				{#if selected === language.code}
 					{language.code.toUpperCase()}
 				{/if}
@@ -88,7 +89,7 @@
 			tabindex="-1"
 		>
 			<div class="py-1" role="none">
-				{#each data as language}
+				{#each data as language (language.code)}
 					{#if selected !== language.code}
 						<a
 							data-sveltekit-reload

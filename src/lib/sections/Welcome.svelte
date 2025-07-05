@@ -40,7 +40,7 @@
 	<div
 		class="flex flex-col gap-y-4 text-center text-lg sm:text-xl lg:text-[1.7rem] xl:gap-y-6 2xl:text-[1.8rem]"
 	>
-		{#each data.welcome.description.blocks as paragraph}
+		{#each data.welcome.description.blocks as paragraph (paragraph.data.text)}
 			<p>{@html paragraph.data.text}</p>
 		{/each}
 	</div>

@@ -19,6 +19,7 @@
 			global: data.global,
 			welcome: data.welcome,
 			projects: data.projects,
+			articles: data.articles,
 			about: data.about,
 			contact: data.contact
 		});

@@ -5,7 +5,7 @@
 	let { intervalTime = 600 }: { intervalTime?: number } = $props();
 
 	let showLogo1 = $state(true);
-	let interval: NodeJS.Timeout;
+	let interval: ReturnType<typeof setInterval>;
 
 	function toggleLogo() {
 		showLogo1 = !showLogo1;
