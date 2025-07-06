@@ -31,7 +31,7 @@ pnpm run deploy   # Deploy to Cloudflare Pages
 
 - **Frontend**: SvelteKit 5 with TypeScript
 - **Styling**: Tailwind CSS v4
-- **CMS**: Directus (headless CMS at directus.simonesalerno.it)
+- **Content Management**: Local JSON-based system
 - **Analytics**: Umami analytics
 - **Deployment**: Cloudflare Pages
 - **Package Manager**: pnpm
@@ -55,17 +55,18 @@ pnpm run deploy   # Deploy to Cloudflare Pages
 
 ### Content Management
 
-- **Directus CMS**: All content fully translatable
-- **Content types**: Global settings, Welcome, Projects, About, Contact
-- **Server-side loading**: All content fetched in `+layout.server.ts`
-- **Block editor**: Rich content with structured blocks
+- **Local JSON files**: All content stored in `src/lib/content/`
+- **Content types**: Global settings, Welcome, Projects, About, Contact, Articles
+- **Server-side loading**: All content fetched in `+layout.server.ts` via ContentLoader
+- **Block editor**: Rich content with structured blocks (EditorJS format)
+- **Multi-language**: Each content piece has separate JSON files per language
 
 ### Key Directories
 
 - `src/lib/components/` - Reusable UI components
 - `src/lib/sections/` - Page sections (Welcome, Projects, About, Contact)
-- `src/lib/stores/` - Svelte stores for state management
-- `src/lib/utils/` - Utility functions and CMS integration
+- `src/lib/content/` - JSON content files organized by type
+- `src/lib/utils/` - Utility functions including ContentLoader
 - `src/params/` - Custom param matchers for routing
 
 ### Configuration Files
@@ -79,7 +80,7 @@ pnpm run deploy   # Deploy to Cloudflare Pages
 
 - **Package Manager**: Uses pnpm exclusively
 - **Node Version**: 22.16.0 (specified in wrangler.jsonc)
-- **Environment**: Cloudflare Pages environment variables required
 - **Analytics**: Umami integration (disabled in development)
 - **Images**: Using `@sveltejs/enhanced-img` for optimization
 - **SEO**: Dynamic sitemap generation with hreflang tags
+- **Content Loading**: Uses Vite's `import.meta.glob` for dynamic JSON imports

@@ -95,8 +95,6 @@ export const load = (async ({
 		)
 	]);
 
-	console.log(projects[1].translations[0]);
-
 	return {
 		selectedLanguage: validLanguageCode,
 		languages,
