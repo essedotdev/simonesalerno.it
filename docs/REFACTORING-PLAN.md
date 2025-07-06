@@ -328,7 +328,7 @@ import { ContentLoader } from '$lib/utils/content';
 
 let cachedLanguages: string[] | null = null;
 
-ogge// ⚠️ IMPORTANTE: Questo viene eseguito durante il BUILD PROCESS.
+ogge; // ⚠️ IMPORTANTE: Questo viene eseguito durante il BUILD PROCESS.
 // Il build fallirà se 'languages.json' non è accessibile, garantendo
 // che il sito non venga mai deployato con una configurazione invalida.
 export async function match(param: string) {
@@ -901,7 +901,7 @@ export { ContentLoader, getImagePath, getThumbnailPath, getFeaturedImagePath } f
 		>
 			{selectedLanguage.toUpperCase()}
 			<svg
-				class="-mr-1 mt-[0.15rem] h-5 w-5 text-white/15"
+				class="mt-[0.15rem] -mr-1 h-5 w-5 text-white/15"
 				viewBox="0 0 20 20"
 				fill="currentColor"
 				aria-hidden="true"
@@ -1236,7 +1236,7 @@ export const GET: RequestHandler = async () => {
 		<!-- Menu mobile logic rimane identica -->
 		<div class="flex h-[40px] w-[40px] md:hidden">
 			{#if $menuStatus}
-				<div class="fixed left-7 top-10 z-20" transition:fade={{ duration: 300 }}>
+				<div class="fixed top-10 left-7 z-20" transition:fade={{ duration: 300 }}>
 					<LanguageSelector
 						languages={data.languages}
 						selectedLanguage={data.selectedLanguage}
@@ -1251,7 +1251,7 @@ export const GET: RequestHandler = async () => {
 				</button>
 
 				<div
-					class="fixed left-0 top-0 z-10 flex h-screen w-screen flex-col items-center justify-center bg-black/60 text-2xl backdrop-blur-sm"
+					class="fixed top-0 left-0 z-10 flex h-screen w-screen flex-col items-center justify-center bg-black/60 text-2xl backdrop-blur-sm"
 					transition:fade={{ duration: 300 }}
 				>
 					<div class="flex flex-col gap-y-3">
@@ -1297,7 +1297,7 @@ export const GET: RequestHandler = async () => {
 </script>
 
 <div
-	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:rotate-1 hover:scale-105"
+	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
 >
 	{#if thumbnail}
 		<a href={link}>
@@ -1352,7 +1352,7 @@ export const GET: RequestHandler = async () => {
 </script>
 
 <div
-	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:rotate-1 hover:scale-105"
+	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
 >
 	{#if featuredImage}
 		<a href={link}>

@@ -1,0 +1,13 @@
+{
+	"id": "portfolio-website",
+	"images": [
+		"images/projects/portfolio-website/screenshot-1.jpg",
+		"images/projects/portfolio-website/screenshot-2.jpg"
+	],
+	"thumbnail": "images/projects/portfolio-website/thumbnail.jpg",
+	"thumbnailPlaceholder": true,
+	"link": "https://simonesalerno.it",
+	"published": true,
+	"created_date": "2024-01-15",
+	"updated_date": "2024-02-01"
+}

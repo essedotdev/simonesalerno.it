@@ -1,108 +1,42 @@
-import { pages } from '$lib/utils';
-import getDirectusInstance from '$lib/utils/directus';
-import type {
-	About,
-	AboutTranslation,
-	Article,
-	Contact,
-	ContactTranslation,
-	Global,
-	GlobalTranslation,
-	Language,
-	Project,
-	Welcome,
-	WelcomeTranslation
-} from '$lib/utils/types';
-import { readItems } from '@directus/sdk';
+import { ContentLoader } from '$lib/utils/content';
 import type { LayoutServerLoad } from './$types';
+import type { LayoutData, WelcomeContent, AboutContent, ContactContent } from '$lib/types';
 
-export const load = (async ({
-	url
-}): Promise<{
-	selectedLanguage: string;
-	languages: Language[];
-	global: GlobalTranslation;
-	welcome: WelcomeTranslation;
-	projects: Project[];
-	articles: Article[];
-	about: AboutTranslation;
-	contact: ContactTranslation;
-}> => {
-	const directus = getDirectusInstance(fetch);
-	const languageCode = url.pathname.split('/')[1];
-	const isLanguageCodeValid = Object.keys(pages).includes(languageCode);
-	const validLanguageCode = isLanguageCodeValid ? languageCode : 'en';
+export const load: LayoutServerLoad = async ({ url }): Promise<LayoutData> => {
+	const loader = new ContentLoader();
+	const pathParts = url.pathname.split('/');
+	const lang = pathParts[1] || 'en';
 
-	// Configurazione comune per le richieste di contenuto
-	const translationFilter = {
-		_and: [{ languages_code: { _eq: validLanguageCode } }]
-	};
+	// Verifica che la lingua sia valida
+	const languages = await loader.loadConfig('languages');
+	const validLang = languages.find((l) => l.code === lang)?.code || 'en';
 
-	// Esegue tutte le richieste in parallelo
-	const [languages, global, welcome, about, contact, projects, articles] = await Promise.all([
-		// Richiesta delle lingue
-		directus.request<Language[]>(readItems('languages')),
+	// Carica configurazione
+	const navigation = await loader.loadConfig('navigation');
 
-		// Richieste dei contenuti principali
-		directus.request<Global>(
-			readItems('global', {
-				deep: { translations: { _filter: translationFilter } },
-				fields: [{ translations: ['*'] }],
-				limit: 1
-			})
-		),
+	// Carica contenuti
+	const global = await loader.loadGlobal(validLang);
+	const welcome = (await loader.loadPage('welcome', validLang)) as WelcomeContent;
+	const about = (await loader.loadPage('about', validLang)) as AboutContent;
+	const contact = (await loader.loadPage('contact', validLang)) as ContactContent;
+	const projectsPage = await loader.loadPage('projects', validLang);
+	const blogPage = await loader.loadPage('blog', validLang);
 
-		directus.request<Welcome>(
-			readItems('welcome', {
-				deep: { translations: { _filter: translationFilter } },
-				fields: [{ translations: ['*'] }],
-				limit: 1
-			})
-		),
-
-		directus.request<About>(
-			readItems('about', {
-				deep: { translations: { _filter: translationFilter } },
-				fields: [{ translations: ['*'] }],
-				limit: 1
-			})
-		),
-
-		directus.request<Contact>(
-			readItems('contact', {
-				deep: { translations: { _filter: translationFilter } },
-				fields: [{ translations: ['*'] }],
-				limit: 1
-			})
-		),
-
-		// Richiesta dei progetti (con campi aggiuntivi)
-		directus.request<Project[]>(
-			readItems('projects', {
-				deep: { translations: { _filter: translationFilter } },
-				fields: ['id', { images: ['*'], translations: ['*'] }, 'link']
-			})
-		),
-
-		// Richiesta degli articoli (solo pubblicati)
-		directus.request<Article[]>(
-			readItems('articles', {
-				deep: { translations: { _filter: translationFilter } },
-				fields: ['id', { translations: ['*'] }, 'featured_image', 'published_date', 'published'],
-				filter: { published: { _eq: true } },
-				sort: ['-published_date']
-			})
-		)
-	]);
+	// Carica collezioni con tutte le traduzioni per il language switcher
+	const projects = await loader.loadProjects(); // Tutte le lingue
+	const articles = await loader.loadArticles(); // Tutte le lingue
 
 	return {
-		selectedLanguage: validLanguageCode,
+		selectedLanguage: validLang,
 		languages,
-		global: global.translations[0],
-		welcome: welcome.translations[0],
+		navigation,
+		global,
+		welcome,
+		about,
+		contact,
+		projectsPage,
+		blogPage,
 		projects,
-		articles,
-		about: about.translations[0],
-		contact: contact.translations[0]
+		articles
 	};
-}) satisfies LayoutServerLoad;
+};

@@ -1,16 +1,20 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { handleAnchorClick, menuStatus, pages, selectedLanguage, translation } from '$lib/utils';
+	import { page } from '$app/stores';
+	import { handleAnchorClick, menuStatus } from '$lib/utils';
 	import { fade } from 'svelte/transition';
 	import MenuOpen from './icons/OpenMenu.svelte';
+	import type { FloatingNavProps } from '$lib/types';
+
+	// Receive data as props from parent layout
+	let { data }: FloatingNavProps = $props();
 
 	function handleMenuClick() {
 		menuStatus.update((value) => !value);
 	}
 
-	let data = $derived($translation || { global: { navigation: [] } });
-	let language = $derived($selectedLanguage || 'en');
-	let isLanguageCodeValid = $derived(Object.keys(pages).includes(page.url.pathname.split('/')[1]));
+	let isLanguageCodeValid = $derived(
+		data.languages.some((l) => l.code === $page.url.pathname.split('/')[1])
+	);
 
 	let scroll = $state(0);
 	let show = $derived(() => scroll > 350 && !$menuStatus);
@@ -28,10 +32,10 @@
 				class="flex items-center justify-between rounded-s-full rounded-e-none border border-white/5 bg-white/[.01] ps-8 pe-[calc(0.95rem+5vw)] text-lg backdrop-blur-md sm:rounded-full sm:bg-white/[.02] sm:px-4"
 			>
 				<a
-					href={page.url.pathname.split('/')[2]
-						? '/' + language
+					href={$page.url.pathname.split('/')[2]
+						? '/' + data.selectedLanguage
 						: isLanguageCodeValid
-							? '/' + language + '#top'
+							? '/' + data.selectedLanguage + '#top'
 							: '/' + 'en'}
 					class="me-4 pt-[0.95rem] pb-4 sm:px-3"
 					onclick={handleAnchorClick}
@@ -41,8 +45,10 @@
 				</a>
 
 				{#each data.global.navigation as route (route.name)}
-					<a href={route.link} class="hidden px-3 sm:flex" onclick={handleAnchorClick}
-						>{route.name}</a
+					<a
+						href={'/' + data.selectedLanguage + route.link}
+						class="hidden px-3 sm:flex"
+						onclick={handleAnchorClick}>{route.name}</a
 					>
 				{/each}
 

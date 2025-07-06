@@ -1,0 +1,19 @@
+{
+	"title": "Soluzioni web & software",
+	"description": "Ciao! Sono Simone, sviluppatore appassionato di tecnologia e creativo problem-solver. Questo è il mio portfolio, dove puoi trovare qualcosa su di me e sui miei progetti. Connettiamoci!",
+	"keywords": ["sviluppatore", "designer", "portfolio"],
+	"navigation": [
+		{ "name": "Progetti", "link": "#projects" },
+		{ "name": "Chi sono", "link": "#about" },
+		{ "name": "Blog", "link": "#blog" },
+		{ "name": "Contatti", "link": "#contact" }
+	],
+	"interface": [
+		{ "name": "readMore", "value": "Leggi di più" },
+		{ "name": "viewProject", "value": "Vedi progetto" },
+		{ "name": "backToHome", "value": "Torna alla home" },
+		{ "name": "loading", "value": "Caricamento..." },
+		{ "name": "noProjects", "value": "Nessun progetto disponibile" },
+		{ "name": "noArticles", "value": "Nessun articolo disponibile" }
+	]
+}

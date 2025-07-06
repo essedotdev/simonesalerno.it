@@ -1,9 +1,3 @@
-export interface Language {
-	id: number;
-	code: string;
-	name: string;
-}
-
 export interface BlockEditor {
 	blocks: {
 		id: string;
@@ -26,125 +20,6 @@ export interface InterfaceItem {
 	value: string;
 }
 
-export interface GlobalTranslation {
-	id: number;
-	global_id: number;
-	languages_code: string;
-	title: string;
-	description: string;
-	keywords: string[];
-	navigation: LinkItem[];
-	interface: InterfaceItem[];
-	date_updated?: string;
-}
-
-export interface Global {
-	translations: GlobalTranslation[];
-}
-
-export interface WelcomeTranslation {
-	id: number;
-	welcome_id: number;
-	languages_code: string;
-	title: string;
-	description: BlockEditor;
-	typewriter: string[];
-	date_updated?: string;
-}
-
-export interface Welcome {
-	translations: WelcomeTranslation[];
-}
-
-export interface AboutTranslation {
-	id: number;
-	about_id: number;
-	languages_code: string;
-	title: string;
-	description: BlockEditor;
-	date_updated?: string;
-}
-
-export interface About {
-	translations: AboutTranslation[];
-}
-
-export interface ContactTranslation {
-	id: number;
-	contact_id: number;
-	languages_code: string;
-	title: string;
-	subtitle: string;
-	links: LinkItem[];
-	date_updated?: string;
-}
-
-export interface Contact {
-	translations: ContactTranslation[];
-}
-
-export interface ProjectImage {
-	directus_files_id: string;
-	id: number;
-	project_id: number;
-}
-
-export interface ProjectTranslation {
-	id: number;
-	project_id: number;
-	languages_code: string;
-	slug: string;
-	title: string;
-	description: string;
-	body: BlockEditor;
-	image_captions: string[];
-	date_updated?: string;
-}
-
-export interface Project {
-	id: number;
-	images: ProjectImage[];
-	translations: ProjectTranslation[];
-	link: string;
-}
-
-export interface ArticleImage {
-	directus_files_id: string;
-	id: number;
-	article_id: number;
-}
-
-export interface ArticleTranslation {
-	id: number;
-	article_id: number;
-	languages_code: string;
-	title: string;
-	slug: string;
-	excerpt: string;
-	content: BlockEditor;
-	meta_description: string;
-	tags: string[];
-	date_updated?: string;
-	date_created?: string;
-}
-
-export interface Article {
-	id: number;
-	featured_image?: string;
-	published_date: string;
-	published: boolean;
-	translations: ArticleTranslation[];
-}
-
-export interface Translation {
-	global: GlobalTranslation;
-	welcome: WelcomeTranslation;
-	projects: Project[];
-	articles: Article[];
-	about: AboutTranslation;
-	contact: ContactTranslation;
-}
-
 // Sitemap page object
 export interface Page {
 	slug: string;
@@ -153,7 +28,95 @@ export interface Page {
 	hreflang: string;
 }
 
-// Pages map
-export type PageMap = {
-	[key: string]: { [key: string]: string };
-};
+// Local content types
+export interface Language {
+	code: string;
+	name: string;
+}
+
+export interface GlobalContent {
+	title: string;
+	description: string;
+	keywords: string[];
+	navigation: LinkItem[];
+	interface: InterfaceItem[];
+}
+
+export interface WelcomeContent {
+	title?: string;
+	subtitle?: string;
+	typewriter?: string[];
+	description?: BlockEditor;
+}
+
+export interface AboutContent {
+	title?: string;
+	subtitle?: string;
+	description?: BlockEditor;
+}
+
+export interface ContactContent {
+	title?: string;
+	subtitle?: string;
+	links?: LinkItem[];
+}
+
+export interface ProjectMeta {
+	id: string;
+	images?: string[];
+	thumbnail?: string;
+	link?: string;
+	published: boolean;
+	created_date?: string;
+	updated_date?: string;
+}
+
+export interface ArticleMeta {
+	id: string;
+	featured_image?: string;
+	images?: string[];
+	published: boolean;
+	created_date?: string;
+	updated_date?: string;
+	published_date?: string;
+}
+
+export interface ProjectTranslation {
+	slug: string;
+	title: string;
+	description?: string;
+	body?: BlockEditor;
+	image_captions?: string[];
+	tags?: string[];
+}
+
+export interface ArticleTranslation {
+	slug: string;
+	title: string;
+	excerpt?: string;
+	content?: BlockEditor;
+	tags?: string[];
+	meta_description?: string;
+}
+
+export interface ProjectItem {
+	translations: Record<string, ProjectTranslation>;
+	meta: ProjectMeta;
+}
+
+export interface ArticleItem {
+	translations: Record<string, ArticleTranslation>;
+	meta: ArticleMeta;
+}
+
+export interface LayoutData {
+	selectedLanguage: string;
+	languages: Language[];
+	navigation: Record<string, Record<string, string>>;
+	global: GlobalContent;
+	welcome: WelcomeContent;
+	about: AboutContent;
+	contact: ContactContent;
+	projects: ProjectItem[];
+	articles: ArticleItem[];
+}

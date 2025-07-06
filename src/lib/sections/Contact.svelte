@@ -1,14 +1,15 @@
 <script lang="ts">
-	import { translation } from '$lib/utils';
 	import { inview, type Options } from 'svelte-inview';
+	import type { ContactSectionProps } from '$lib/types';
+
+	// Receive contact data as props
+	let { contact }: ContactSectionProps = $props();
 
 	let isInView = $state(false);
 	const options: Options = {
 		rootMargin: '-100px',
 		unobserveOnEnter: true
 	};
-
-	let data = $derived($translation || { contact: { title: '', subtitle: '', links: [] } });
 </script>
 
 <div
@@ -23,15 +24,15 @@
 >
 	<div class="flex flex-col gap-y-4 sm:gap-y-6">
 		<h3 class="text-[2.5rem] leading-none font-normal sm:text-5xl md:text-6xl 2xl:text-7xl">
-			{data.contact.title}
+			{contact.title}
 		</h3>
 		<p class="text-xl sm:text-2xl md:text-[1.7rem] xl:text-3xl">
-			{data.contact.subtitle}
+			{contact.subtitle}
 		</p>
 	</div>
 
 	<div class="flex flex-col gap-y-2 text-xl sm:text-2xl">
-		{#each data.contact.links as link, index (link.name)}
+		{#each contact.links as link, index (link.name)}
 			<a
 				class="group flex transition-all duration-300 ease-in-out
 					{index === 0 ? 'mb-2 text-2xl sm:text-3xl md:text-4xl' : ''}"

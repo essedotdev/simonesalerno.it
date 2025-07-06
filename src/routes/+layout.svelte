@@ -5,25 +5,14 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import '$lib/style/globals.css';
-	import { languages, menuStatus, selectedLanguage, translation } from '$lib/utils';
+	import { menuStatus } from '$lib/utils';
 	import { initializeAnalytics, isAnalyticsReady, trackPageView } from '$lib/utils/analytics';
 	import { setContext } from 'svelte';
 
 	let { children, data } = $props();
 
-	// Aggiorna gli store quando cambiano i dati (mantengo per compatibilità)
-	$effect(() => {
-		selectedLanguage.set(data.selectedLanguage);
-		languages.set(data.languages);
-		translation.set({
-			global: data.global,
-			welcome: data.welcome,
-			projects: data.projects,
-			articles: data.articles,
-			about: data.about,
-			contact: data.contact
-		});
-	});
+	// Fornisce i dati come context invece di store
+	setContext('layoutData', data);
 
 	$effect(() => {
 		if (browser) {
@@ -45,18 +34,13 @@
 			trackPageView($page.url.pathname + $page.url.search);
 		}
 	});
-
-	// Fornisce i dati globali come context per i componenti figli
-	setContext('layoutData', {
-		global: data.global,
-		selectedLanguage: data.selectedLanguage
-	});
 </script>
 
 <svelte:head>
 	<meta name="description" content={data.global.description} />
 	<meta name="keywords" content={data.global.keywords.join(', ')} />
 	<meta name="author" content="Simone Salerno" />
+	<title>Simone Salerno • {data.global.title}</title>
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
@@ -71,13 +55,12 @@
 	<meta name="twitter:image" content="/logo/logo.png" />
 </svelte:head>
 
-<div class="relative mx-auto flex min-h-screen w-[95%] flex-col lg:w-[90%] xl:w-[85%] 2xl:w-[75%]">
-	<Navbar />
-	<FloatingNav />
+<div class="overflow-x-hidden scroll-smooth text-white antialiased selection:bg-white/10">
+	<!-- Passa dati come props ai componenti -->
+	<Navbar {data} />
+	<FloatingNav {data} />
 
-	<main class="flex-grow">
-		{@render children()}
-	</main>
+	{@render children()}
 
-	<Footer />
+	<Footer {data} />
 </div>

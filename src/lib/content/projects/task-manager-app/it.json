@@ -1,0 +1,23 @@
+{
+	"slug": "app-gestione-task",
+	"title": "App Gestione Task",
+	"description": "Un'applicazione collaborativa per la gestione delle attività con aggiornamenti in tempo reale",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Un'applicazione moderna per la gestione delle attività progettata per i team. Include bacheche di progetto, assegnazione task, scadenze e collaborazione in tempo reale."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "L'app utilizza WebSocket per aggiornamenti in tempo reale, implementa un'interfaccia stile Kanban e include funzionalità come commenti, allegati file e tracciamento attività."
+				}
+			}
+		]
+	},
+	"image_captions": ["Vista dashboard", "Bacheca Kanban", "Dettagli task", "Collaborazione team"],
+	"tags": ["React", "WebSockets", "Collaborazione", "Produttività"]
+}

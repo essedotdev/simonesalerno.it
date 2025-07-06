@@ -1,0 +1,23 @@
+{
+	"slug": "typescript-best-practices",
+	"title": "TypeScript Best Practices",
+	"excerpt": "Master TypeScript with these essential best practices for writing clean, maintainable, and type-safe code.",
+	"content": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "TypeScript brings static typing to JavaScript, helping catch errors early and improve code quality."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "In this article, we'll cover essential TypeScript patterns, type utilities, and common pitfalls to avoid."
+				}
+			}
+		]
+	},
+	"meta_description": "Essential TypeScript best practices for modern web development",
+	"tags": ["TypeScript", "JavaScript", "Best Practices"]
+}

@@ -1,0 +1,23 @@
+{
+	"slug": "task-manager-app",
+	"title": "Task Manager App",
+	"description": "A collaborative task management application with real-time updates",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "A modern task management application designed for teams. Features include project boards, task assignments, due dates, and real-time collaboration."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "The app uses WebSockets for real-time updates, implements a Kanban-style board interface, and includes features like task comments, file attachments, and activity tracking."
+				}
+			}
+		]
+	},
+	"image_captions": ["Dashboard view", "Kanban board", "Task details", "Team collaboration"],
+	"tags": ["React", "WebSockets", "Collaboration", "Productivity"]
+}

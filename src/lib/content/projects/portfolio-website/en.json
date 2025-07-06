@@ -1,0 +1,17 @@
+{
+	"slug": "portfolio-website",
+	"title": "Portfolio Website",
+	"description": "A modern portfolio built with SvelteKit and Tailwind CSS",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "This portfolio showcases my work as a full-stack developer. Built with modern technologies like SvelteKit, TypeScript, and Tailwind CSS."
+				}
+			}
+		]
+	},
+	"image_captions": ["Homepage", "Projects section", "About page"],
+	"tags": ["SvelteKit", "TypeScript", "Tailwind CSS"]
+}

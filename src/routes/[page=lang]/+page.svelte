@@ -4,13 +4,13 @@
 	import ContactSection from '$lib/sections/Contact.svelte';
 	import ProjectsSection from '$lib/sections/Projects.svelte';
 	import WelcomeSection from '$lib/sections/Welcome.svelte';
-	import { translation } from '$lib/utils';
+
+	// Get data from parent layout
+	let { data } = $props();
 
 	function sanitizeId(link: string): string {
 		return link.startsWith('#') ? link.slice(1) : link;
 	}
-
-	let data = $derived($translation || { global: { title: '', navigation: [] } });
 </script>
 
 <svelte:head>
@@ -21,33 +21,43 @@
 	id="top"
 	class="flex min-h-[80vh] items-center justify-center border-b border-white/5 px-4 sm:px-8 lg:px-14"
 >
-	<WelcomeSection />
+	<WelcomeSection welcome={data.welcome} />
 </div>
 
 <div
 	id={sanitizeId(data.global.navigation[0]?.link || '#')}
 	class="px-4 pt-20 pb-24 sm:px-8 sm:pt-28 sm:pb-32 lg:px-14 2xl:py-36"
 >
-	<ProjectsSection />
+	<ProjectsSection
+		projects={data.projects}
+		selectedLanguage={data.selectedLanguage}
+		navigation={data.navigation}
+		projectsPage={data.projectsPage}
+	/>
 </div>
 
 <div
 	id={sanitizeId(data.global.navigation[1]?.link || '#')}
 	class="border-t border-white/5 px-4 pt-20 pb-24 sm:px-8 sm:pt-28 sm:pb-32 lg:px-14 2xl:py-36"
 >
-	<AboutSection />
+	<AboutSection about={data.about} />
 </div>
 
 <div
 	id={sanitizeId(data.global.navigation[2]?.link || '#')}
 	class="border-t border-white/5 px-4 pt-20 pb-24 sm:px-8 sm:pt-28 sm:pb-32 lg:px-14 2xl:py-36"
 >
-	<ArticlesSection />
+	<ArticlesSection
+		articles={data.articles}
+		selectedLanguage={data.selectedLanguage}
+		navigation={data.navigation}
+		blogPage={data.blogPage}
+	/>
 </div>
 
 <div
 	id={sanitizeId(data.global.navigation[3]?.link || '#')}
 	class="border-t border-white/5 px-4 pt-20 pb-24 sm:px-8 sm:pt-28 sm:pb-32 lg:px-14 2xl:py-36"
 >
-	<ContactSection />
+	<ContactSection contact={data.contact} />
 </div>

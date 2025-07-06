@@ -1,9 +1,17 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { languages, pages, selectedLanguage } from '$lib/utils';
-	import type { PageMap } from '$lib/utils/types';
+	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
+	import type { LanguageSelectorProps } from '$lib/types';
+
+	// Props ricevuti dal layout parent
+	let {
+		languages = [],
+		selectedLanguage = 'en',
+		navigation = {},
+		projects = [],
+		articles = []
+	}: LanguageSelectorProps = $props();
 
 	let isOpen = $state(false);
 
@@ -18,23 +26,46 @@
 		}
 	}
 
-	function buildLanguageUrl(languageCode: string): string {
-		const currentPath = page.url.pathname.split('/');
-		const currentLanguage = currentPath[1];
-		const subpage = currentPath[2];
+	function buildLanguageUrl(targetLang: string): string {
+		const currentPath = $page.url.pathname.split('/');
+		const currentLang = currentPath[1];
+		const route = currentPath[2];
+		const slug = currentPath[3];
 
-		const currentSubpageKey = Object.keys(pages[currentLanguage] as PageMap[string]).find(
-			(key) => pages[currentLanguage][key] === subpage
-		);
-		const targetSubpage = pages[languageCode][currentSubpageKey as string] || '';
+		if (!route || !slug) {
+			// Pagina principale o sezione - mantieni il path
+			return `/${targetLang}${currentPath.slice(2).join('/')}`;
+		}
 
-		return (
-			'/' +
-			languageCode +
-			'/' +
-			targetSubpage +
-			(currentPath.slice(3).length ? '/' + currentPath.slice(3).join('/') : '')
+		// Trova il tipo di route corrente
+		const currentRouteKey = Object.keys(navigation[currentLang] || {}).find(
+			(key) => navigation[currentLang][key] === route
 		);
+
+		if (!currentRouteKey) {
+			// Route non riconosciuta, vai alla homepage
+			return `/${targetLang}`;
+		}
+
+		const targetRoute = navigation[targetLang]?.[currentRouteKey];
+		if (!targetRoute) {
+			// Route non disponibile nella lingua target
+			return `/${targetLang}`;
+		}
+
+		// Trova il contenuto con lo slug corrente
+		const collections = currentRouteKey === 'projects' ? projects : articles;
+		const content = collections.find((item) => item.translations[currentLang]?.slug === slug);
+
+		if (!content || !content.translations[targetLang]) {
+			// Contenuto non disponibile nella lingua target
+			// Vai alla sezione principale (es. /en/projects)
+			return `/${targetLang}/${targetRoute}`;
+		}
+
+		// Contenuto disponibile, vai alla pagina specifica
+		const targetSlug = content.translations[targetLang].slug;
+		return `/${targetLang}/${targetRoute}/${targetSlug}`;
 	}
 
 	onMount(() => {
@@ -43,9 +74,6 @@
 			document.removeEventListener('click', closeDropdown);
 		};
 	});
-
-	let data = $derived($languages || []);
-	let selected = $derived($selectedLanguage || 'en');
 </script>
 
 <div class="relative inline-block text-left">
@@ -58,11 +86,7 @@
 			aria-haspopup="true"
 			onclick={toggleDropdown}
 		>
-			{#each data as language (language.code)}
-				{#if selected === language.code}
-					{language.code.toUpperCase()}
-				{/if}
-			{/each}
+			{selectedLanguage.toUpperCase()}
 			<svg
 				class="mt-[0.15rem] -mr-1 h-5 w-5 text-white/15"
 				viewBox="0 0 20 20"
@@ -89,13 +113,14 @@
 			tabindex="-1"
 		>
 			<div class="py-1" role="none">
-				{#each data as language (language.code)}
-					{#if selected !== language.code}
+				{#each languages as language (language.code)}
+					{#if selectedLanguage !== language.code}
 						<a
 							data-sveltekit-reload
 							href={buildLanguageUrl(language.code)}
-							class="block px-4 py-2 text-sm"
+							class="block px-4 py-2 text-sm hover:bg-white/5"
 							role="menuitem"
+							onclick={() => (isOpen = false)}
 						>
 							{language.code.toUpperCase()}
 						</a>

@@ -1,0 +1,13 @@
+{
+	"title": "About Me",
+	"description": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "I'm a passionate full-stack developer with a focus on creating modern, efficient web applications."
+				}
+			}
+		]
+	}
+}

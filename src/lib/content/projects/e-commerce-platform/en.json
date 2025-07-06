@@ -1,0 +1,23 @@
+{
+	"slug": "e-commerce-platform",
+	"title": "E-Commerce Platform",
+	"description": "A full-featured e-commerce platform built with modern web technologies",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "This e-commerce platform provides a complete solution for online retail, featuring product management, shopping cart, secure checkout, and order tracking."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Built with SvelteKit for the frontend, Node.js for the backend, and PostgreSQL for data persistence. The platform includes an admin dashboard for inventory management and sales analytics."
+				}
+			}
+		]
+	},
+	"image_captions": ["Homepage", "Product catalog", "Shopping cart", "Admin dashboard"],
+	"tags": ["SvelteKit", "Node.js", "PostgreSQL", "E-commerce"]
+}

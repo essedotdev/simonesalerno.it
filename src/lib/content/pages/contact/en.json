@@ -1,0 +1,18 @@
+{
+	"title": "Get in Touch",
+	"subtitle": "I'd love to hear from you! Whether you have a project in mind or just want to connect.",
+	"links": [
+		{
+			"name": "simone@simonesalerno.it",
+			"link": "mailto:simone@simonesalerno.it"
+		},
+		{
+			"name": "LinkedIn",
+			"link": "https://linkedin.com/in/simonesalerno"
+		},
+		{
+			"name": "GitHub",
+			"link": "https://github.com/simonesalerno"
+		}
+	]
+}

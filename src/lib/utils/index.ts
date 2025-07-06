@@ -1,5 +1,4 @@
 import { writable } from 'svelte/store';
-import type { Language, PageMap, Translation } from './types';
 
 export function handleAnchorClick(event: MouseEvent) {
 	const link = event.currentTarget as HTMLAnchorElement;
@@ -30,16 +29,17 @@ export function calculateOffset(anchorId: string): number {
 	return offsets[anchorId] || 50;
 }
 
-// Pages map
-export const pages: PageMap = {
-	en: { projects: 'projects', about: 'about', articles: 'blog' },
-	it: { projects: 'progetti', about: 'informazioni', articles: 'blog' }
-};
-
+// Mantieni solo gli store essenziali per la transizione
 export const menuStatus = writable(false);
-export const translation = writable<Translation>();
-export const languages = writable<Language[]>();
-export const selectedLanguage = writable<string>();
 
-// Re-export analytics utilities
+// Gli altri store saranno gradualmente rimossi in favore di props/context
+// export const translation = writable<Translation>(); // DA RIMUOVERE
+// export const languages = writable<Language[]>(); // DA RIMUOVERE
+// export const selectedLanguage = writable<string>(); // DA RIMUOVERE
+
+// Rimuovi anche l'oggetto pages hardcodato
+// export const pages: PageMap = { ... }; // DA RIMUOVERE
+
+// Re-export utilities
 export { initializeAnalytics, isAnalyticsReady, trackEvent, trackPageView } from './analytics';
+export { ContentLoader, getImagePath, getThumbnailPath, getFeaturedImagePath } from './content';

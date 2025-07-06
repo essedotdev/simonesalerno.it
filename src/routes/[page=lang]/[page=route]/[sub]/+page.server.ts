@@ -1,64 +1,56 @@
-import { pages } from '$lib/utils';
 import { error } from '@sveltejs/kit';
+import { ContentLoader } from '$lib/utils/content';
 import type { PageServerLoad } from './$types';
+import type { DetailPageData } from '$lib/types';
 
-export const load: PageServerLoad = async ({ url, parent }) => {
-	// Ottieni lingua e route correnti dalla URL
-	const pathParts = url.pathname.split('/');
-	const currentLang = pathParts[1];
-	const currentRoute = pathParts[2];
-	const slug = pathParts[3];
-
-	// Verifica se la route corrente è "projects", "progetti", "articles" in base alla lingua
-	const isProjectsRoute = currentRoute === pages[currentLang]?.projects;
-	const isArticlesRoute = currentRoute === pages[currentLang]?.articles;
-
-	// Se non siamo in una route supportata, lanciamo un errore 404
-	if (!isProjectsRoute && !isArticlesRoute) {
-		error(404, {
-			message: 'Not Found'
-		});
-	}
-
-	// Ottieni i dati dal parent
+export const load: PageServerLoad = async ({ params, parent }): Promise<DetailPageData> => {
+	// Handle the param naming issue in SvelteKit routing
+	const lang = params.page as string;
+	const route = (params as Record<string, string>).route;
+	const slug = params.sub as string;
+	const loader = new ContentLoader();
 	const parentData = await parent();
 
+	// Determina il tipo di contenuto dalla route
+	const routeMap = parentData.navigation[lang];
+	if (!routeMap) {
+		throw error(404, 'Language not found');
+	}
+
+	const isProjectsRoute = route === routeMap.projects;
+	const isArticlesRoute = route === routeMap.articles;
+
+	if (!isProjectsRoute && !isArticlesRoute) {
+		throw error(404, 'Page not found');
+	}
+
 	if (isProjectsRoute) {
-		// Cerca il progetto
-		const project = parentData.projects.find((p) => p.translations[0].slug === slug);
-
+		const project = await loader.findContentBySlug(slug, lang, 'project');
 		if (!project) {
-			error(404, {
-				message: 'Project Not Found'
-			});
+			throw error(404, 'Project not found');
 		}
 
 		return {
-			currentLang,
-			slug,
-			project,
-			type: 'project'
-		};
-	} else if (isArticlesRoute) {
-		// Cerca l'articolo
-		const article = parentData.articles.find((a) => a.translations[0].slug === slug);
-
-		if (!article) {
-			error(404, {
-				message: 'Article Not Found'
-			});
-		}
-
-		return {
-			currentLang,
-			slug,
-			article,
-			type: 'article'
+			type: 'project' as const,
+			content: project,
+			currentLang: lang,
+			availableLanguages: await loader.getAvailableLanguages('project', project.meta.id)
 		};
 	}
 
-	// Fallback (non dovrebbe mai essere raggiunto)
-	error(404, {
-		message: 'Not Found'
-	});
+	if (isArticlesRoute) {
+		const article = await loader.findContentBySlug(slug, lang, 'article');
+		if (!article) {
+			throw error(404, 'Article not found');
+		}
+
+		return {
+			type: 'article' as const,
+			content: article,
+			currentLang: lang,
+			availableLanguages: await loader.getAvailableLanguages('article', article.meta.id)
+		};
+	}
+
+	throw error(404, 'Page not found');
 };

@@ -1,0 +1,18 @@
+{
+	"title": "Contattami",
+	"subtitle": "Mi piacerebbe sentirti! Che tu abbia un progetto in mente o voglia semplicemente connetterti.",
+	"links": [
+		{
+			"name": "simone@simonesalerno.it",
+			"link": "mailto:simone@simonesalerno.it"
+		},
+		{
+			"name": "LinkedIn",
+			"link": "https://linkedin.com/in/simonesalerno"
+		},
+		{
+			"name": "GitHub",
+			"link": "https://github.com/simonesalerno"
+		}
+	]
+}

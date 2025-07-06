@@ -1,14 +1,15 @@
 <script lang="ts">
-	import { translation } from '$lib/utils';
 	import { inview, type Options } from 'svelte-inview';
+	import type { WelcomeSectionProps } from '$lib/types';
+
+	// Receive welcome data as props
+	let { welcome }: WelcomeSectionProps = $props();
 
 	let isInView = $state(false);
 	const options: Options = {
 		rootMargin: '-50px',
 		unobserveOnEnter: true
 	};
-
-	let data = $derived($translation || { welcome: { title: '', description: { blocks: [] } } });
 </script>
 
 <div
@@ -25,7 +26,7 @@
 				? 'slide-in'
 				: ''}"
 		>
-			{data.welcome.title}
+			{welcome.title}
 		</h1>
 	</div>
 
@@ -33,14 +34,14 @@
 		{#await import('$lib/components/Typewriter.svelte')}
 			<span>Loading...</span>
 		{:then c}
-			<svelte:component this={c.default} text={data.welcome.typewriter} />
+			<svelte:component this={c.default} text={welcome.typewriter} />
 		{/await}
 	</div> -->
 
 	<div
 		class="flex flex-col gap-y-4 text-center text-lg sm:text-xl lg:text-[1.7rem] xl:gap-y-6 2xl:text-[1.8rem]"
 	>
-		{#each data.welcome.description.blocks as paragraph (paragraph.data.text)}
+		{#each welcome.description.blocks as paragraph (paragraph.data.text)}
 			<p>{@html paragraph.data.text}</p>
 		{/each}
 	</div>

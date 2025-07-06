@@ -1,0 +1,14 @@
+{
+	"title": "Ciao, sono Simone",
+	"typewriter": ["Sviluppatore", "Designer", "Problem Solver"],
+	"description": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Benvenuto nel mio portfolio! Sono appassionato di creare soluzioni web innovative."
+				}
+			}
+		]
+	}
+}

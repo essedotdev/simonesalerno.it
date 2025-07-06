@@ -1,21 +1,8 @@
 <script lang="ts">
-	let {
-		title,
-		excerpt,
-		image,
-		link,
-		publishedDate,
-		tags,
-		slug
-	}: {
-		title: string;
-		excerpt: string;
-		image?: string;
-		link: string;
-		publishedDate: string;
-		tags: string[];
-		slug: string;
-	} = $props();
+	import type { ArticleCardProps } from '$lib/types';
+	import Image from './Image.svelte';
+
+	let { title, excerpt, featuredImage, featuredImagePlaceholder, link, publishedDate, tags }: ArticleCardProps = $props();
 
 	// Format date for display
 	const formatDate = (dateString: string) => {
@@ -31,16 +18,14 @@
 <div
 	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
 >
-	{#if image}
-		<a href={link}>
-			<img
-				loading="lazy"
-				class="aspect-video rounded-t-3xl object-cover"
-				src="https://directus.simonesalerno.it/assets/{image}/{slug}.jpg"
-				alt={title}
-			/>
-		</a>
-	{/if}
+	<a href={link}>
+		<Image
+			src={featuredImage}
+			alt={title}
+			cssClass="aspect-video rounded-t-3xl"
+			showPlaceholder={featuredImagePlaceholder}
+		/>
+	</a>
 	<div class="px-6 py-5">
 		<div class="mb-3 text-sm text-gray-400">
 			{formatDate(publishedDate)}

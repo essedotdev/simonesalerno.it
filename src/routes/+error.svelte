@@ -1,18 +1,13 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { translation } from '$lib/utils';
+	import { page } from '$app/stores';
 
-	let data = $derived($translation || { global: { interface: [] } });
-	let notFoundText = $derived(
-		data.global.interface.find((item) => item.name === '404')?.value || 'Page Not Found'
-	);
-	let backHomeText = $derived(
-		data.global.interface.find((item) => item.name === 'back_home')?.value || 'Back Home'
-	);
+	// Simple fallback text - error pages should be minimal and not depend on complex data loading
+	let notFoundText = 'Page Not Found';
+	let backHomeText = 'Back Home';
 </script>
 
 <div class="flex min-h-[80vh] flex-col items-center justify-center">
-	<h1 class="text-9xl font-bold">{page.status}</h1>
+	<h1 class="text-9xl font-bold">{$page.status}</h1>
 	<p class="mt-2 text-4xl">{notFoundText}</p>
 	<a data-sveltekit-reload href="/" class="mt-8 flex items-center gap-x-1 text-2xl hover:underline">
 		<svg

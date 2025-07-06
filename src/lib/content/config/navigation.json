@@ -1,0 +1,12 @@
+{
+	"en": {
+		"projects": "projects",
+		"about": "about",
+		"articles": "blog"
+	},
+	"it": {
+		"projects": "progetti",
+		"about": "informazioni",
+		"articles": "blog"
+	}
+}

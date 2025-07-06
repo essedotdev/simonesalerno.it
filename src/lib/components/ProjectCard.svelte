@@ -1,32 +1,21 @@
 <script lang="ts">
-	let {
-		title,
-		description,
-		image,
-		link,
-		slug
-	}: {
-		title: string;
-		description: string;
-		image?: string;
-		link: string;
-		slug: string;
-	} = $props();
+	import type { ProjectCardProps } from '$lib/types';
+	import Image from './Image.svelte';
+
+	let { title, description, thumbnail, thumbnailPlaceholder, link }: ProjectCardProps = $props();
 </script>
 
 <div
 	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
 >
-	{#if image}
-		<a href={link}>
-			<img
-				loading="lazy"
-				class="aspect-video rounded-t-3xl object-cover"
-				src="https://directus.simonesalerno.it/assets/{image}/{slug}.jpg"
-				alt={title}
-			/>
-		</a>
-	{/if}
+	<a href={link}>
+		<Image
+			src={thumbnail}
+			alt={title}
+			cssClass="aspect-video rounded-t-3xl"
+			showPlaceholder={thumbnailPlaceholder}
+		/>
+	</a>
 	<div class="px-6 py-5">
 		<a href={link}>
 			<h5 class="mb-2 text-2xl font-medium text-gray-100">

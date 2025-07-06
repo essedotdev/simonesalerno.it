@@ -1,0 +1,13 @@
+{
+	"title": "Chi Sono",
+	"description": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Sono uno sviluppatore full-stack appassionato con un focus sulla creazione di applicazioni web moderne ed efficienti."
+				}
+			}
+		]
+	}
+}
