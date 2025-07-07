@@ -1,18 +1,26 @@
 {
-	"title": "Contattami",
-	"subtitle": "Mi piacerebbe sentirti! Che tu abbia un progetto in mente o voglia semplicemente connetterti.",
+	"title": "Disponibile per selezionate opportunità freelance",
+	"subtitle": "Hai in mente un progetto coinvolgente? Sentiti libero di contattarmi tramite e-mail o messaggio.",
 	"links": [
 		{
-			"name": "simone@simonesalerno.it",
-			"link": "mailto:simone@simonesalerno.it"
+			"name": "contact@simonesalerno.it",
+			"link": "mailto:contact@simonesalerno.it"
 		},
 		{
 			"name": "LinkedIn",
-			"link": "https://linkedin.com/in/simonesalerno"
+			"link": "https://www.linkedin.com/in/simone-salerno"
 		},
 		{
 			"name": "GitHub",
-			"link": "https://github.com/simonesalerno"
+			"link": "https://github.com/essedev/"
+		},
+		{
+			"name": "Instagram",
+			"link": "https://www.instagram.com/essesdev/"
+		},
+		{
+			"name": "X",
+			"link": "https://x.com/essesdev/"
 		}
 	]
 }

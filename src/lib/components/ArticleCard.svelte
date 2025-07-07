@@ -2,7 +2,15 @@
 	import type { ArticleCardProps } from '$lib/types';
 	import Image from './Image.svelte';
 
-	let { title, excerpt, featuredImage, featuredImagePlaceholder, link, publishedDate, tags }: ArticleCardProps = $props();
+	let {
+		title,
+		excerpt,
+		featuredImage,
+		featuredImagePlaceholder,
+		link,
+		publishedDate,
+		tags
+	}: ArticleCardProps = $props();
 
 	// Format date for display
 	const formatDate = (dateString: string) => {

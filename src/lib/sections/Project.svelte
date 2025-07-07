@@ -2,6 +2,7 @@
 	import Link from '$lib/components/icons/Link.svelte';
 	import { inview, type Options } from 'svelte-inview';
 	import type { ProjectSectionProps } from '$lib/types';
+	import Image from '$lib/components/Image.svelte';
 
 	// Receive props from parent
 	let { content, currentLang }: ProjectSectionProps = $props();
@@ -42,11 +43,12 @@
 	{#if content && currentTranslation}
 		<div class="flex flex-col gap-y-6 xl:flex-row xl:gap-x-14">
 			<div class="w-full xl:w-1/2">
-				{#if content.meta.images && content.meta.images.length > 0}
-					<img
-						class="h-full w-full rounded-3xl object-cover"
-						src={content.meta.images[0]}
+				{#if (content.meta.images && content.meta.images.length > 0) || content.meta.thumbnailPlaceholder}
+					<Image
+						src={content.meta.images?.[0]}
 						alt={currentTranslation.title}
+						cssClass="aspect-video rounded-3xl"
+						showPlaceholder={content.meta.thumbnailPlaceholder || false}
 					/>
 				{/if}
 			</div>

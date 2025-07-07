@@ -1,12 +1,18 @@
 {
 	"title": "Hi, I'm Simone",
-	"typewriter": ["Developer", "Designer", "Problem Solver"],
+	"typewriter": ["Full-Stack Developer", "Tech enthusiast", "Perpetually curious"],
 	"description": {
 		"blocks": [
 			{
 				"type": "paragraph",
 				"data": {
-					"text": "Welcome to my portfolio! I'm passionate about creating innovative web solutions."
+					"text": "Full-Stack developer who loves diving into innovative projects and solving problems."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Following the latest industry trends, I aim to design intuitive,efficient and scalable solutions that truly make a difference."
 				}
 			}
 		]

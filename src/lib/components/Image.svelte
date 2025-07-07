@@ -9,9 +9,7 @@
 
 <div class="relative overflow-hidden {cssClass}">
 	{#if showPlaceholder}
-		<div
-			class="flex h-full w-full items-center justify-center bg-white/10 backdrop-blur-md"
-		>
+		<div class="flex h-full w-full items-center justify-center bg-white/10 backdrop-blur-md">
 			<img
 				src={placeholderIcon}
 				alt="Placeholder"
@@ -20,10 +18,6 @@
 			/>
 		</div>
 	{:else if src}
-		<img
-			{src}
-			{alt}
-			class="h-full w-full object-cover"
-		/>
+		<img {src} {alt} class="h-full w-full object-cover" />
 	{/if}
 </div>

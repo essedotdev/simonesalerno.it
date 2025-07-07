@@ -1,12 +1,18 @@
 {
 	"title": "Ciao, sono Simone",
-	"typewriter": ["Sviluppatore", "Designer", "Problem Solver"],
+	"typewriter": ["Sviluppatore Full-Stack", "Amante della tecnologia", "Sempre curioso"],
 	"description": {
 		"blocks": [
 			{
 				"type": "paragraph",
 				"data": {
-					"text": "Benvenuto nel mio portfolio! Sono appassionato di creare soluzioni web innovative."
+					"text": "Sviluppatore full-stack che ama immergersi in progetti innovativi e risolvere problemi."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Seguendo le ultime tendenze del settore, miro a creare soluzioni intuitive, efficienti e scalabili che fanno davvero la differenza."
 				}
 			}
 		]

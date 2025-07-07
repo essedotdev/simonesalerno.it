@@ -4,9 +4,8 @@ import type { PageServerLoad } from './$types';
 import type { DetailPageData } from '$lib/types';
 
 export const load: PageServerLoad = async ({ params, parent }): Promise<DetailPageData> => {
-	// Handle the param naming issue in SvelteKit routing
 	const lang = params.page as string;
-	const route = (params as Record<string, string>).route;
+	const route = params.route as string;
 	const slug = params.sub as string;
 	const loader = new ContentLoader();
 	const parentData = await parent();

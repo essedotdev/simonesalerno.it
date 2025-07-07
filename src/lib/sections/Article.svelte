@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { inview, type Options } from 'svelte-inview';
 	import type { ArticleSectionProps } from '$lib/types';
+	import Image from '$lib/components/Image.svelte';
 
 	// Receive props from parent
 	let { content, currentLang }: ArticleSectionProps = $props();
@@ -80,12 +81,13 @@
 			</header>
 
 			<!-- Featured image if available -->
-			{#if content.meta.featured_image}
+			{#if content.meta.featured_image || content.meta.featuredImagePlaceholder}
 				<div class="w-full">
-					<img
-						class="h-full w-full rounded-3xl object-cover"
+					<Image
 						src={content.meta.featured_image}
 						alt={currentTranslation.title}
+						cssClass="aspect-video rounded-3xl"
+						showPlaceholder={content.meta.featuredImagePlaceholder || false}
 					/>
 				</div>
 			{/if}

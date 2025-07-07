@@ -1,11 +1,29 @@
 {
-	"title": "About Me",
+	"title": "About me",
 	"description": {
 		"blocks": [
 			{
 				"type": "paragraph",
 				"data": {
-					"text": "I'm a passionate full-stack developer with a focus on creating modern, efficient web applications."
+					"text": "Hey there! Nice to meet you."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "I'm a tech-loving software developer who's always eager to learn and grow. With experience in both software development and hardware, I'm a versatile problem solver."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Right now, I'm super excited to be exploring the world of freelancing and solopreneurship while also learning the ins and outs of building a startup with a team."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Let's connect and continue the conversation!"
 				}
 			}
 		]

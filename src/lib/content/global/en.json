@@ -1,12 +1,12 @@
 {
 	"title": "Web & software solutions",
 	"description": "Hi! I'm Simone, a passionate tech enthusiast and creative problem solver. This is my portfolio, where you can find something about me and my projects. Let's connect!",
-	"keywords": ["developer", "designer", "portfolio"],
+	"keywords": ["Simone Salerno", "essedev", "developer", "portfolio", "web developer", "software developer", "freelancer", "build website", "build app", "build software", "affordable website", "affordable app", "affordable software"],
 	"navigation": [
-		{ "name": "Projects", "link": "#projects" },
-		{ "name": "About", "link": "#about" },
-		{ "name": "Blog", "link": "#blog" },
-		{ "name": "Contact", "link": "#contact" }
+		{ "name": "// projects", "link": "#projects" },
+		{ "name": "// about", "link": "#about" },
+		{ "name": "// blog", "link": "#blog" },
+		{ "name": "// contact", "link": "#contact" }
 	],
 	"interface": [
 		{ "name": "readMore", "value": "Read More" },
