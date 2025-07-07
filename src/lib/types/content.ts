@@ -224,11 +224,13 @@ export interface ArticlesSectionProps {
 export interface ProjectSectionProps {
 	content: ProjectItem;
 	currentLang: string;
+	global?: GlobalContent;
 }
 
 export interface ArticleSectionProps {
 	content: ArticleItem;
 	currentLang: string;
+	global?: GlobalContent;
 }
 
 export interface WelcomeSectionProps {

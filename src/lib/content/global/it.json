@@ -23,10 +23,30 @@
 	"interface": [
 		{ "name": "readMore", "value": "Leggi di più" },
 		{ "name": "viewProject", "value": "Vedi progetto" },
-		{ "name": "backToHome", "value": "Torna alla home" },
+		{ "name": "backHome", "value": "Torna alla home" },
 		{ "name": "loading", "value": "Caricamento..." },
 		{ "name": "noProjects", "value": "Nessun progetto disponibile" },
 		{ "name": "noArticles", "value": "Nessun articolo disponibile" },
-		{ "name": "viewAll", "value": "Vedi tutti" }
+		{ "name": "viewAll", "value": "Vedi tutti" },
+		{ "name": "tags", "value": "Tag" },
+		{ "name": "searchTags", "value": "Cerca tag..." },
+		{ "name": "clearFilters", "value": "Pulisci tutto" },
+		{ "name": "sortNewest", "value": "Più recenti" },
+		{ "name": "sortOldest", "value": "Più vecchi" },
+		{ "name": "sortTitleAZ", "value": "Titolo a-z" },
+		{ "name": "sortTitleZA", "value": "Titolo z-a" },
+		{ "name": "searchProjects", "value": "Cerca progetti..." },
+		{ "name": "searchArticles", "value": "Cerca articoli..." },
+		{ "name": "removeFilter", "value": "Rimuovi filtro" },
+		{ "name": "closeTagDropdown", "value": "Chiudi menu tag" },
+		{ "name": "backToTop", "value": "Torna su" },
+		{ "name": "copyright", "value": "Copyright © 2025 • Simone Salerno" },
+		{ "name": "logo", "value": "Logo" },
+		{ "name": "placeholder", "value": "Segnaposto" },
+		{ "name": "simoneSalerno", "value": "Simone Salerno" },
+		{ "name": "noResultsFound", "value": "Nessun risultato trovato per i filtri selezionati" },
+		{ "name": "tryAdjusting", "value": "Prova a modificare la ricerca o cancellare i filtri" },
+		{ "name": "pageNotFound", "value": "Pagina non trovata" },
+		{ "name": "back", "value": "Indietro" }
 	]
 }

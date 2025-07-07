@@ -6,8 +6,8 @@
 		filters: FilterState;
 		availableTags: string[];
 		showDateFilter?: boolean;
-		placeholder?: string;
-		interface?: { [key: string]: string };
+		placeholder: string;
+		global?: any;
 		onUpdateFilters?: (filters: FilterState) => void;
 		onClearFilters?: () => void;
 	}
@@ -16,11 +16,40 @@
 		filters,
 		availableTags,
 		showDateFilter = false,
-		placeholder = 'Search...',
-		interface: ui = {},
+		placeholder,
+		global,
 		onUpdateFilters,
 		onClearFilters
 	}: Props = $props();
+
+	// Derive individual interface values from global
+	let tagsText = $derived(
+		global?.interface?.find((item: any) => item.name === 'tags')?.value
+	);
+	let searchTagsText = $derived(
+		global?.interface?.find((item: any) => item.name === 'searchTags')?.value
+	);
+	let clearFiltersText = $derived(
+		global?.interface?.find((item: any) => item.name === 'clearFilters')?.value
+	);
+	let sortNewestText = $derived(
+		global?.interface?.find((item: any) => item.name === 'sortNewest')?.value
+	);
+	let sortOldestText = $derived(
+		global?.interface?.find((item: any) => item.name === 'sortOldest')?.value
+	);
+	let sortTitleAZText = $derived(
+		global?.interface?.find((item: any) => item.name === 'sortTitleAZ')?.value
+	);
+	let sortTitleZAText = $derived(
+		global?.interface?.find((item: any) => item.name === 'sortTitleZA')?.value
+	);
+	let removeFilterText = $derived(
+		global?.interface?.find((item: any) => item.name === 'removeFilter')?.value
+	);
+	let closeTagDropdownText = $derived(
+		global?.interface?.find((item: any) => item.name === 'closeTagDropdown')?.value
+	);
 
 	// Local state for UI
 	let showTagDropdown = $state(false);
@@ -161,7 +190,7 @@
 							d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.99 1.99 0 013 12V7a4 4 0 014-4z"
 						/>
 					</svg>
-					{ui.tags || 'Tags'}
+					{tagsText}
 					{#if filters.selectedTags.length > 0}
 						<span class="ml-1 rounded-full bg-white/10 px-2 py-1 text-xs">
 							{filters.selectedTags.length}
@@ -204,10 +233,10 @@
 			value={`${filters.sortBy}-${filters.sortOrder}`}
 			class="rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white focus:border-white/20 focus:outline-none"
 		>
-			<option value="date-desc">{ui.sortNewest || 'Newest First'}</option>
-			<option value="date-asc">{ui.sortOldest || 'Oldest First'}</option>
-			<option value="title-asc">{ui.sortTitleAZ || 'Title A-Z'}</option>
-			<option value="title-desc">{ui.sortTitleZA || 'Title Z-A'}</option>
+			<option value="date-desc">{sortNewestText}</option>
+			<option value="date-asc">{sortOldestText}</option>
+			<option value="title-asc">{sortTitleAZText}</option>
+			<option value="title-desc">{sortTitleZAText}</option>
 		</select>
 
 		<!-- Clear Filters -->
@@ -216,7 +245,7 @@
 				onclick={clearAllFilters}
 				class="rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04]"
 			>
-				{ui.clearFilters || 'Clear All'}
+				{clearFiltersText}
 			</button>
 		{/if}
 	</div>
@@ -232,7 +261,7 @@
 					<button
 						onclick={() => handleTagToggle(tag)}
 						class="rounded-full p-1 hover:bg-white/10"
-						aria-label="Remove {tag} filter"
+						aria-label="{removeFilterText} {tag}"
 					>
 						<svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -258,7 +287,7 @@
 		onkeydown={(e) => e.key === 'Escape' && (showTagDropdown = false)}
 		role="button"
 		tabindex="-1"
-		aria-label="Close tag dropdown"
+		aria-label={closeTagDropdownText}
 	></div>
 
 	<!-- Tag dropdown portal -->
@@ -270,7 +299,7 @@
 			<input
 				type="text"
 				bind:value={tagSearchQuery}
-				placeholder={ui.searchTags || 'Search tags...'}
+				placeholder={searchTagsText}
 				class="w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white placeholder-white/50 focus:border-white/20 focus:outline-none"
 			/>
 		</div>

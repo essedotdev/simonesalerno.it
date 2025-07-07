@@ -14,6 +14,7 @@
 			navigation={data.navigation}
 			projectsPage={data.projectsPage}
 			showFilters={true}
+			global={data.global}
 		/>
 	{:else}
 		<Articles
@@ -22,6 +23,7 @@
 			navigation={data.navigation}
 			blogPage={data.blogPage}
 			showFilters={true}
+			global={data.global}
 		/>
 	{/if}
 </section>

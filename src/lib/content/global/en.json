@@ -23,12 +23,32 @@
 		{ "name": "// contact", "link": "#contact" }
 	],
 	"interface": [
-		{ "name": "readMore", "value": "Read More" },
-		{ "name": "viewProject", "value": "View Project" },
-		{ "name": "backToHome", "value": "Back to Home" },
+		{ "name": "readMore", "value": "Read more" },
+		{ "name": "viewProject", "value": "View project" },
+		{ "name": "backHome", "value": "Back home" },
 		{ "name": "loading", "value": "Loading..." },
 		{ "name": "noProjects", "value": "No projects available" },
 		{ "name": "noArticles", "value": "No articles available" },
-		{ "name": "viewAll", "value": "View all" }
+		{ "name": "viewAll", "value": "View all" },
+		{ "name": "tags", "value": "Tags" },
+		{ "name": "searchTags", "value": "Search tags..." },
+		{ "name": "clearFilters", "value": "Clear all" },
+		{ "name": "sortNewest", "value": "Newest first" },
+		{ "name": "sortOldest", "value": "Oldest first" },
+		{ "name": "sortTitleAZ", "value": "Title a-z" },
+		{ "name": "sortTitleZA", "value": "Title z-a" },
+		{ "name": "searchProjects", "value": "Search projects..." },
+		{ "name": "searchArticles", "value": "Search articles..." },
+		{ "name": "removeFilter", "value": "Remove filter" },
+		{ "name": "closeTagDropdown", "value": "Close tag dropdown" },
+		{ "name": "backToTop", "value": "Back to top" },
+		{ "name": "copyright", "value": "Copyright © 2025 • Simone Salerno" },
+		{ "name": "logo", "value": "Logo" },
+		{ "name": "placeholder", "value": "Placeholder" },
+		{ "name": "simoneSalerno", "value": "Simone Salerno" },
+		{ "name": "noResultsFound", "value": "No results found matching your filters" },
+		{ "name": "tryAdjusting", "value": "Try adjusting your search or clearing filters" },
+		{ "name": "pageNotFound", "value": "Page not found" },
+		{ "name": "back", "value": "Back" }
 	]
 }

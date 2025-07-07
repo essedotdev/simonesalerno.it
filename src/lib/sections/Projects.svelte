@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import SearchFilter from '$lib/components/SearchFilter.svelte';
 	import { projectsFilterStore } from '$lib/stores/filterStore';
 	import type { ProjectsSectionProps } from '$lib/types/content';
 	import { applyFilters, extractTags } from '$lib/utils/searchUtils';
 	import type { FilterState } from '$lib/utils/types';
+	import { onMount } from 'svelte';
 	import { inview, type Options } from 'svelte-inview';
 
 	// Receive data as props
@@ -19,10 +21,31 @@
 	}: ProjectsSectionProps = $props();
 
 	let isInView = $state(false);
+	let screenSize = $state('desktop'); // 'mobile' | 'tablet' | 'desktop'
+
 	const options: Options = {
 		rootMargin: '-100px',
 		unobserveOnEnter: true
 	};
+
+	// Check screen size for responsive project limits
+	onMount(() => {
+		if (browser) {
+			const updateScreenSize = () => {
+				if (window.matchMedia('(min-width: 1280px)').matches) {
+					screenSize = 'desktop';
+				} else if (window.matchMedia('(min-width: 768px)').matches) {
+					screenSize = 'tablet';
+				} else {
+					screenSize = 'mobile';
+				}
+			};
+
+			updateScreenSize();
+			window.addEventListener('resize', updateScreenSize);
+			return () => window.removeEventListener('resize', updateScreenSize);
+		}
+	});
 
 	// Filter projects that have translation for current language
 	let languageFilteredProjects = $derived(
@@ -39,14 +62,17 @@
 			: languageFilteredProjects
 	);
 
-	// Limit projects to 6 if showViewAllButton is enabled (home page)
-	let currentProjects = $derived(
-		showViewAllButton ? filteredProjects.slice(0, 6) : filteredProjects
-	);
+	// Limit projects based on screen size if showViewAllButton is enabled (home page)
+	let currentProjects = $derived.by(() => {
+		if (!showViewAllButton) return filteredProjects;
+
+		const limit = screenSize === 'mobile' ? 3 : screenSize === 'tablet' ? 4 : 6;
+		return filteredProjects.slice(0, limit);
+	});
 
 	// Get view all button text from global interface
 	let viewAllText = $derived(
-		global?.interface?.find((item) => item.name === 'viewAll')?.value || 'View All'
+		global?.interface?.find((item) => item.name === 'viewAll')?.value
 	);
 
 	// Generate link to projects page
@@ -61,6 +87,19 @@
 	const handleClearFilters = () => {
 		projectsFilterStore.reset();
 	};
+
+	// Derive search placeholder from global
+	let searchProjectsText = $derived(
+		global?.interface?.find((item) => item.name === 'searchProjects')?.value
+	);
+	
+	// Derive error messages from global
+	let noResultsFoundText = $derived(
+		global?.interface?.find((item) => item.name === 'noResultsFound')?.value
+	);
+	let tryAdjustingText = $derived(
+		global?.interface?.find((item) => item.name === 'tryAdjusting')?.value
+	);
 </script>
 
 <div
@@ -82,7 +121,8 @@
 				filters={$projectsFilterStore}
 				{availableTags}
 				showDateFilter={false}
-				placeholder="Search projects..."
+				placeholder={searchProjectsText}
+				{global}
 				onUpdateFilters={handleFilterUpdate}
 				onClearFilters={handleClearFilters}
 			/>
@@ -108,7 +148,7 @@
 		</div>
 
 		<!-- View All Button - only show if in home page and there are more projects -->
-		{#if showViewAllButton && filteredProjects.length > 6}
+		{#if showViewAllButton && filteredProjects.length > (screenSize === 'mobile' ? 3 : screenSize === 'tablet' ? 4 : 6)}
 			<div class="flex justify-center">
 				<a
 					href={projectsPageLink}
@@ -143,8 +183,8 @@
 				/>
 			</svg>
 			<div class="text-white/60">
-				<p class="text-lg">No projects found matching your filters</p>
-				<p class="mt-2 text-sm">Try adjusting your search or clearing filters</p>
+				<p class="text-lg">{noResultsFoundText}</p>
+				<p class="mt-2 text-sm">{tryAdjustingText}</p>
 			</div>
 		</div>
 	{/if}

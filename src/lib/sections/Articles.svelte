@@ -46,7 +46,7 @@
 
 	// Get view all button text from global interface
 	let viewAllText = $derived(
-		global?.interface?.find((item) => item.name === 'viewAll')?.value || 'View All'
+		global?.interface?.find((item) => item.name === 'viewAll')?.value
 	);
 
 	// Generate link to blog page
@@ -61,6 +61,19 @@
 	const handleClearFilters = () => {
 		articlesFilterStore.reset();
 	};
+
+	// Derive search placeholder from global
+	let searchArticlesText = $derived(
+		global?.interface?.find((item) => item.name === 'searchArticles')?.value
+	);
+	
+	// Derive error messages from global
+	let noResultsFoundText = $derived(
+		global?.interface?.find((item) => item.name === 'noResultsFound')?.value
+	);
+	let tryAdjustingText = $derived(
+		global?.interface?.find((item) => item.name === 'tryAdjusting')?.value
+	);
 </script>
 
 <div
@@ -82,7 +95,8 @@
 				filters={$articlesFilterStore}
 				{availableTags}
 				showDateFilter={true}
-				placeholder="Search articles..."
+				placeholder={searchArticlesText}
+				{global}
 				onUpdateFilters={handleFilterUpdate}
 				onClearFilters={handleClearFilters}
 			/>
@@ -145,8 +159,8 @@
 				/>
 			</svg>
 			<div class="text-white/60">
-				<p class="text-lg">No articles found matching your filters</p>
-				<p class="mt-2 text-sm">Try adjusting your search or clearing filters</p>
+				<p class="text-lg">{noResultsFoundText}</p>
+				<p class="mt-2 text-sm">{tryAdjustingText}</p>
 			</div>
 		</div>
 	{/if}

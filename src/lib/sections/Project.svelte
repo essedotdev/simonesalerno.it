@@ -5,7 +5,12 @@
 	import Image from '$lib/components/Image.svelte';
 
 	// Receive props from parent
-	let { content, currentLang }: ProjectSectionProps = $props();
+	let { content, currentLang, global }: ProjectSectionProps = $props();
+	
+	// Derive back text from global
+	let backText = $derived(
+		global?.interface?.find((item: any) => item.name === 'back')?.value
+	);
 
 	let isInView = $state(false);
 	const options: Options = {
@@ -36,7 +41,7 @@
 				><path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
 				></path></svg
 			>
-			<span class="hover:underline">Back</span>
+			<span class="hover:underline">{backText}</span>
 		</a>
 	</div>
 

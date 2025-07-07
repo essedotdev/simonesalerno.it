@@ -12,11 +12,13 @@
 		<Project
 			content={data.content as import('$lib/types').ProjectItem}
 			currentLang={data.currentLang}
+			global={data.global}
 		/>
 	{:else if data.type === 'article'}
 		<Article
 			content={data.content as import('$lib/types').ArticleItem}
 			currentLang={data.currentLang}
+			global={data.global}
 		/>
 	{/if}
 </div>

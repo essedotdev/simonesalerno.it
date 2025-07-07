@@ -37,7 +37,7 @@
 		</a>
 
 		<div
-			class="hidden items-center gap-x-6 text-[1.3rem] md:flex lg:gap-x-7 lg:text-[1.5rem] 2xl:text-[1.7rem]"
+			class="hidden items-center gap-x-6 text-[1.3rem] md:flex lg:gap-x-7 lg:text-[1.5rem] xl:gap-x-8"
 		>
 			{#each data.global.navigation as route (route.name)}
 				<a href={'/' + data.selectedLanguage + route.link} onclick={handleAnchorClick}

@@ -118,6 +118,6 @@
 	<Footer {data} />
 
 	{#if scrollY > 200}
-		<BackToTop />
+		<BackToTop global={data.global} />
 	{/if}
 </div>

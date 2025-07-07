@@ -10,6 +10,11 @@
 	let isLanguageCodeValid = $derived(
 		data.languages.some((l) => l.code === $page.url.pathname.split('/')[1])
 	);
+	
+	// Derive copyright text from global
+	let copyrightText = $derived(
+		data.global?.interface?.find((item: any) => item.name === 'copyright')?.value
+	);
 </script>
 
 <footer class="mx-auto w-full max-w-[90vw] border-t border-white/5">
@@ -40,7 +45,7 @@
 		<div
 			class="text-md flex items-center justify-between pt-2 pb-7 text-neutral-200 opacity-70 sm:text-lg"
 		>
-			Copyright © 2025 • Simone Salerno
+			{copyrightText}
 		</div>
 	</div>
 </footer>
