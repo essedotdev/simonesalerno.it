@@ -1,7 +1,19 @@
 {
 	"title": "Soluzioni web & software",
 	"description": "Ciao! Sono Simone, sviluppatore appassionato di tecnologia e creativo problem-solver. Questo è il mio portfolio, dove puoi trovare qualcosa su di me e sui miei progetti. Connettiamoci!",
-	"keywords": ["Simone Salerno", "essedev", "sviluppatore", "programmatore", "portfolio", "sviluppatore web", "sviluppatore software", "freelancer", "sviluppa sito web", "sviluppa app", "sviluppa software"],
+	"keywords": [
+		"Simone Salerno",
+		"essedev",
+		"sviluppatore",
+		"programmatore",
+		"portfolio",
+		"sviluppatore web",
+		"sviluppatore software",
+		"freelancer",
+		"sviluppa sito web",
+		"sviluppa app",
+		"sviluppa software"
+	],
 	"navigation": [
 		{ "name": "// progetti", "link": "#projects" },
 		{ "name": "// chi-sono", "link": "#about" },

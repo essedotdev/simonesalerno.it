@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
+	import BackToTop from '$lib/components/BackToTop.svelte';
 	import FloatingNav from '$lib/components/FloatingNav.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
@@ -11,6 +12,8 @@
 
 	let { children, data } = $props();
 
+	let scrollY = $state(0);
+
 	// Fornisce i dati come context invece di store
 	setContext('layoutData', data);
 
@@ -18,6 +21,16 @@
 		if (browser) {
 			document.documentElement.classList.toggle('overflow-hidden', $menuStatus);
 			document.documentElement.classList.toggle('sm:overflow-auto', $menuStatus);
+		}
+	});
+
+	$effect(() => {
+		if (browser) {
+			const handleScroll = () => {
+				scrollY = window.scrollY;
+			};
+			window.addEventListener('scroll', handleScroll);
+			return () => window.removeEventListener('scroll', handleScroll);
 		}
 	});
 
@@ -55,12 +68,18 @@
 	<meta name="twitter:image" content="/logo/logo.png" />
 </svelte:head>
 
-<div class="overflow-x-hidden scroll-smooth text-white antialiased selection:bg-white/10">
+<div class="flex min-h-screen flex-col overflow-x-hidden scroll-smooth text-white antialiased selection:bg-white/10">
 	<!-- Passa dati come props ai componenti -->
 	<Navbar {data} />
 	<FloatingNav {data} />
 
-	{@render children()}
+	<main class="flex-1">
+		{@render children()}
+	</main>
 
 	<Footer {data} />
+
+	{#if scrollY > 200}
+		<BackToTop />
+	{/if}
 </div>
