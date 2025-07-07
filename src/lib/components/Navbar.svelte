@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { handleAnchorClick, menuStatus } from '$lib/utils';
+	import { handleAnchorClick } from '$lib/utils';
 	import { fade } from 'svelte/transition';
 	import MenuClose from './icons/CloseMenu.svelte';
 	import MenuOpen from './icons/OpenMenu.svelte';
 	import LanguageSelector from './LanguageSelector.svelte';
 	import Logo from './Logo.svelte';
-	import type { NavbarProps } from '$lib/types';
+	import type { NavbarProps } from '$lib/types/content';
 
 	// Ricevi dati come props
-	let { data }: NavbarProps = $props();
+	let { data, menuOpen }: NavbarProps = $props();
 
 	function handleMenuClick() {
-		menuStatus.update((value) => !value);
+		menuOpen = !menuOpen;
 	}
 
 	let isLanguageCodeValid = $derived(
@@ -55,7 +55,7 @@
 		</div>
 
 		<div class="flex h-[40px] w-[40px] md:hidden">
-			{#if $menuStatus}
+			{#if menuOpen}
 				<div class="fixed top-10 left-7 z-20" transition:fade={{ duration: 300 }}>
 					<LanguageSelector
 						languages={data.languages}

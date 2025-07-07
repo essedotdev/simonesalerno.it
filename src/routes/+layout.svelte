@@ -6,21 +6,21 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import '$lib/style/globals.css';
-	import { menuStatus } from '$lib/utils';
 	import { initializeAnalytics, isAnalyticsReady, trackPageView } from '$lib/utils/analytics';
 	import { setContext } from 'svelte';
 
 	let { children, data } = $props();
 
 	let scrollY = $state(0);
+	let menuOpen = $state(false);
 
 	// Fornisce i dati come context invece di store
 	setContext('layoutData', data);
 
 	$effect(() => {
 		if (browser) {
-			document.documentElement.classList.toggle('overflow-hidden', $menuStatus);
-			document.documentElement.classList.toggle('sm:overflow-auto', $menuStatus);
+			document.documentElement.classList.toggle('overflow-hidden', menuOpen);
+			document.documentElement.classList.toggle('sm:overflow-auto', menuOpen);
 		}
 	});
 
@@ -106,8 +106,8 @@
 
 <div class="flex min-h-screen flex-col overflow-x-hidden scroll-smooth text-white antialiased selection:bg-white/10">
 	<!-- Passa dati come props ai componenti -->
-	<Navbar {data} />
-	<FloatingNav {data} />
+	<Navbar {data} {menuOpen} />
+	<FloatingNav {data} {menuOpen} />
 
 	<main class="flex-1">
 		{@render children()}

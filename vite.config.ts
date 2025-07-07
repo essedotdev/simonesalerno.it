@@ -4,8 +4,5 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [tailwindcss(), enhancedImages(), sveltekit()],
-	ssr: {
-		noExternal: ['@directus/sdk']
-	}
+	plugins: [tailwindcss(), enhancedImages(), sveltekit()]
 });

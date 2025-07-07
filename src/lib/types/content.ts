@@ -240,6 +240,7 @@ export interface ContactSectionProps {
 // Navigation Component Props
 export interface NavbarProps {
 	data: LayoutData;
+	menuOpen: boolean;
 }
 
 export interface FooterProps {
@@ -248,6 +249,7 @@ export interface FooterProps {
 
 export interface FloatingNavProps {
 	data: LayoutData;
+	menuOpen: boolean;
 }
 
 // ==================================================

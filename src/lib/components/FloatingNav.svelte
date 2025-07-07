@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { handleAnchorClick, menuStatus } from '$lib/utils';
+	import { handleAnchorClick } from '$lib/utils';
 	import { fade } from 'svelte/transition';
 	import MenuOpen from './icons/OpenMenu.svelte';
-	import type { FloatingNavProps } from '$lib/types';
+	import type { FloatingNavProps } from '$lib/types/content';
 
 	// Receive data as props from parent layout
-	let { data }: FloatingNavProps = $props();
+	let { data, menuOpen }: FloatingNavProps = $props();
 
 	function handleMenuClick() {
-		menuStatus.update((value) => !value);
+		menuOpen = !menuOpen;
 	}
 
 	let isLanguageCodeValid = $derived(
@@ -17,7 +17,7 @@
 	);
 
 	let scroll = $state(0);
-	let show = $derived(() => scroll > 350 && !$menuStatus);
+	let show = $derived(() => scroll > 350 && !menuOpen);
 </script>
 
 <svelte:window bind:scrollY={scroll} />
@@ -53,7 +53,7 @@
 				{/each}
 
 				<div class="flex h-[40px] w-[40px] sm:hidden">
-					{#if !$menuStatus}
+					{#if !menuOpen}
 						<button class="absolute" transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
 							<MenuOpen />
 						</button>

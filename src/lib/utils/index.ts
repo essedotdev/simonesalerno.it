@@ -1,5 +1,3 @@
-import { writable } from 'svelte/store';
-
 export function handleAnchorClick(event: MouseEvent) {
 	const link = event.currentTarget as HTMLAnchorElement;
 	const anchorId = new URL(link.href).hash;
@@ -28,17 +26,6 @@ export function calculateOffset(anchorId: string): number {
 
 	return offsets[anchorId] || 50;
 }
-
-// Mantieni solo gli store essenziali per la transizione
-export const menuStatus = writable(false);
-
-// Gli altri store saranno gradualmente rimossi in favore di props/context
-// export const translation = writable<Translation>(); // DA RIMUOVERE
-// export const languages = writable<Language[]>(); // DA RIMUOVERE
-// export const selectedLanguage = writable<string>(); // DA RIMUOVERE
-
-// Rimuovi anche l'oggetto pages hardcodato
-// export const pages: PageMap = { ... }; // DA RIMUOVERE
 
 // Re-export utilities
 export { initializeAnalytics, isAnalyticsReady, trackEvent, trackPageView } from './analytics';
