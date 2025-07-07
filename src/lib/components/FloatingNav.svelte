@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import type { FloatingNavProps } from '$lib/types/content';
 	import { handleAnchorClick } from '$lib/utils';
 	import { fade } from 'svelte/transition';
 	import MenuOpen from './icons/OpenMenu.svelte';
-	import type { FloatingNavProps } from '$lib/types/content';
 
 	// Receive data as props from parent layout
 	let { data, menuOpen }: FloatingNavProps = $props();
@@ -24,7 +24,7 @@
 
 {#if show()}
 	<header
-		class="fixed top-[1.7rem] z-10 flex w-full justify-end sm:top-4 sm:left-0 sm:justify-center"
+		class="fixed top-[1.7rem] z-50 flex w-full justify-end sm:top-4 sm:left-0 sm:justify-center"
 		transition:fade={{ duration: 150 }}
 	>
 		<nav class="rounded-s-full rounded-e-none bg-neutral-900/20 sm:rounded-full">

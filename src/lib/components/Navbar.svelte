@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import type { NavbarProps } from '$lib/types/content';
 	import { handleAnchorClick } from '$lib/utils';
 	import { fade } from 'svelte/transition';
 	import MenuClose from './icons/CloseMenu.svelte';
 	import MenuOpen from './icons/OpenMenu.svelte';
 	import LanguageSelector from './LanguageSelector.svelte';
 	import Logo from './Logo.svelte';
-	import type { NavbarProps } from '$lib/types/content';
 
 	// Ricevi dati come props
 	let { data, menuOpen }: NavbarProps = $props();
@@ -20,8 +20,10 @@
 	);
 </script>
 
-<header id="top" class="border-b border-white/5">
-	<nav class="flex items-center justify-between px-4 py-8 sm:px-8 lg:px-14">
+<header id="top" class="mx-auto w-full max-w-[90vw] border-b border-white/5">
+	<nav
+		class="mx-auto flex w-full max-w-screen-2xl items-center justify-between px-4 py-8 sm:px-8 lg:px-14"
+	>
 		<a
 			href={$page.url.pathname.split('/')[2]
 				? '/' + data.selectedLanguage

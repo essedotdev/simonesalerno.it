@@ -13,16 +13,17 @@
 	}
 </script>
 
-<div
-	id="top"
-	class="flex min-h-[80vh] items-center justify-center border-b border-white/5 px-4 sm:px-8 lg:px-14"
->
-	<WelcomeSection welcome={data.welcome} />
+<div id="top" class="mx-auto w-full max-w-[90vw] border-b border-white/5">
+	<div
+		class="mx-auto flex min-h-[80vh] w-full max-w-screen-2xl items-center justify-center px-4 sm:px-8 lg:px-14"
+	>
+		<WelcomeSection welcome={data.welcome} />
+	</div>
 </div>
 
 <div
 	id={sanitizeId(data.global.navigation[0]?.link || '#')}
-	class="px-4 pt-20 pb-24 sm:px-8 sm:pt-28 sm:pb-32 lg:px-14 2xl:py-36"
+	class="mx-auto w-full max-w-screen-2xl px-4 pt-20 pb-24 sm:px-8 sm:pt-28 sm:pb-32 lg:px-14 2xl:py-36"
 >
 	<ProjectsSection
 		projects={data.projects}
@@ -36,28 +37,40 @@
 
 <div
 	id={sanitizeId(data.global.navigation[1]?.link || '#')}
-	class="border-t border-white/5 px-4 pt-20 pb-24 sm:px-8 sm:pt-28 sm:pb-32 lg:px-14 2xl:py-36"
+	class="mx-auto w-full max-w-[90vw] border-t border-white/5"
 >
-	<AboutSection about={data.about} />
+	<div
+		class="mx-auto w-full max-w-screen-2xl px-4 pt-20 pb-24 sm:px-8 sm:pt-28 sm:pb-32 lg:px-14 2xl:py-36"
+	>
+		<AboutSection about={data.about} />
+	</div>
 </div>
 
 <div
 	id={sanitizeId(data.global.navigation[2]?.link || '#')}
-	class="border-t border-white/5 px-4 pt-20 pb-24 sm:px-8 sm:pt-28 sm:pb-32 lg:px-14 2xl:py-36"
+	class="mx-auto w-full max-w-[90vw] border-t border-white/5"
 >
-	<ArticlesSection
-		articles={data.articles}
-		selectedLanguage={data.selectedLanguage}
-		navigation={data.navigation}
-		blogPage={data.blogPage}
-		showViewAllButton={true}
-		global={data.global}
-	/>
+	<div
+		class="mx-auto w-full max-w-screen-2xl px-4 pt-20 pb-24 sm:px-8 sm:pt-28 sm:pb-32 lg:px-14 2xl:py-36"
+	>
+		<ArticlesSection
+			articles={data.articles}
+			selectedLanguage={data.selectedLanguage}
+			navigation={data.navigation}
+			blogPage={data.blogPage}
+			showViewAllButton={true}
+			global={data.global}
+		/>
+	</div>
 </div>
 
 <div
 	id={sanitizeId(data.global.navigation[3]?.link || '#')}
-	class="border-t border-white/5 px-4 pt-20 pb-24 sm:px-8 sm:pt-28 sm:pb-32 lg:px-14 2xl:py-36"
+	class="mx-auto w-full max-w-[90vw] border-t border-white/5"
 >
-	<ContactSection contact={data.contact} />
+	<div
+		class="mx-auto w-full max-w-screen-2xl px-4 pt-20 pb-24 sm:px-8 sm:pt-28 sm:pb-32 lg:px-14 2xl:py-36"
+	>
+		<ContactSection contact={data.contact} />
+	</div>
 </div>
