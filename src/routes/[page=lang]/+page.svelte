@@ -13,9 +13,6 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Simone Salerno • {data.global.title}</title>
-</svelte:head>
 
 <div
 	id="top"
