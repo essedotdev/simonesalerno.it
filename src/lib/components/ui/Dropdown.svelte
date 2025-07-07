@@ -46,7 +46,7 @@
 {#if isOpen && browser}
 	<div
 		bind:this={dropdownElement}
-		class="absolute mt-2 overflow-hidden rounded-xl border border-white/10 bg-white/[.05]"
+		class="absolute mt-2 overflow-hidden rounded-xl border border-white/10 bg-white/[.02] backdrop-blur-md"
 		style="top: 100%; left: 0; width: {width}; max-height: {maxHeight}; z-index: {zIndex};"
 	>
 		{@render children()}
