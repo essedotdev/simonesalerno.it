@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import type { LanguageSelectorProps } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
-	import type { LanguageSelectorProps } from '$lib/types';
 
 	// Props ricevuti dal layout parent
 	let {
@@ -32,9 +32,9 @@
 		const route = currentPath[2];
 		const slug = currentPath[3];
 
-		if (!route || !slug) {
-			// Pagina principale o sezione - mantieni il path
-			return `/${targetLang}${currentPath.slice(2).join('/')}`;
+		// Se non c'è una route (homepage)
+		if (!route) {
+			return `/${targetLang}`;
 		}
 
 		// Trova il tipo di route corrente
@@ -51,6 +51,11 @@
 		if (!targetRoute) {
 			// Route non disponibile nella lingua target
 			return `/${targetLang}`;
+		}
+
+		// Se non c'è slug (pagina di sezione come /en/blog)
+		if (!slug) {
+			return `/${targetLang}/${targetRoute}`;
 		}
 
 		// Trova il contenuto con lo slug corrente

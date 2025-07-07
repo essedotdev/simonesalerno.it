@@ -1,0 +1,29 @@
+{
+	"slug": "modern-css-techniques",
+	"title": "Modern CSS Techniques for 2024",
+	"excerpt": "Discover the most advanced and modern CSS techniques to create responsive and performant web interfaces in 2024.",
+	"content": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Modern CSS offers powerful tools for creating complex layouts and smooth animations. In this article, we'll explore Grid, Flexbox, Custom Properties, and Container Queries."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "We'll see how to use these techniques to improve CSS code performance and maintainability, with practical examples and best practices."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "From the introduction of Container Queries to new mathematical functions, CSS continues to evolve to meet the needs of the modern web."
+				}
+			}
+		]
+	},
+	"meta_description": "Complete guide to modern CSS techniques for web developers",
+	"tags": ["CSS", "Grid", "Flexbox", "Container Queries", "Web Design"]
+}

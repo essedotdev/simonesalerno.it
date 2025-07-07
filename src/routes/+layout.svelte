@@ -51,15 +51,15 @@
 	// Dynamic title based on current route
 	let pageTitle = $derived.by(() => {
 		if (!data?.global?.title) return 'Simone Salerno';
-		
+
 		const currentRoute = $page.route.id;
 		const params = $page.params;
-		
+
 		// Home page
 		if (currentRoute === '/[page=lang]') {
 			return `Simone Salerno • ${data.global.title}`;
 		}
-		
+
 		// Projects/Articles listing pages
 		if (currentRoute === '/[page=lang]/[route=route]') {
 			const pageType = params.route;
@@ -69,7 +69,7 @@
 				return `${data.blogPage?.title || 'Blog'} - ${data.global.title}`;
 			}
 		}
-		
+
 		// Individual project/article pages - get title from page data
 		if (currentRoute === '/[page=lang]/[route=route]/[sub]') {
 			// Try to get page data from page store
@@ -79,7 +79,7 @@
 			}
 			return `Simone Salerno • ${data.global.title}`;
 		}
-		
+
 		// Fallback
 		return `Simone Salerno • ${data.global.title}`;
 	});
@@ -104,7 +104,9 @@
 	<meta name="twitter:image" content="/logo/logo.png" />
 </svelte:head>
 
-<div class="flex min-h-screen flex-col overflow-x-hidden scroll-smooth text-white antialiased selection:bg-white/10">
+<div
+	class="flex min-h-screen flex-col overflow-x-hidden scroll-smooth text-white antialiased selection:bg-white/10"
+>
 	<!-- Passa dati come props ai componenti -->
 	<Navbar {data} {menuOpen} />
 	<FloatingNav {data} {menuOpen} />

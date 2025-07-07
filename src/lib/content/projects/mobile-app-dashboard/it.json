@@ -1,0 +1,23 @@
+{
+	"slug": "mobile-app-dashboard",
+	"title": "Dashboard per App Mobile",
+	"description": "Una dashboard moderna per il monitoraggio e gestione di applicazioni mobile",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Dashboard completa per il monitoraggio delle performance delle app mobile, con analytics in tempo reale, gestione utenti e notifiche push."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Realizzata con React e D3.js per visualizzazioni interattive, integrata con Firebase per l'autenticazione e database real-time."
+				}
+			}
+		]
+	},
+	"image_captions": ["Dashboard principale", "Analytics", "Gestione utenti"],
+	"tags": ["React", "D3.js", "Firebase", "Dashboard"]
+}

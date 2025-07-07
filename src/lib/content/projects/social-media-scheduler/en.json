@@ -1,0 +1,23 @@
+{
+	"slug": "social-media-scheduler",
+	"title": "Social Media Scheduler",
+	"description": "Tool for automated social media content scheduling and management",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Complete social media management platform with automatic scheduling, advanced analytics, and collaborative team management."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Built with Vue.js and Laravel, supporting Facebook, Instagram, Twitter, LinkedIn, and TikTok. Features content editor, editorial calendar, and detailed reporting."
+				}
+			}
+		]
+	},
+	"image_captions": ["Main dashboard", "Editorial calendar", "Content editor", "Analytics"],
+	"tags": ["Vue.js", "Laravel", "Social Media", "Analytics"]
+}

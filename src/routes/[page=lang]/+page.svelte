@@ -13,7 +13,6 @@
 	}
 </script>
 
-
 <div
 	id="top"
 	class="flex min-h-[80vh] items-center justify-center border-b border-white/5 px-4 sm:px-8 lg:px-14"
@@ -30,6 +29,8 @@
 		selectedLanguage={data.selectedLanguage}
 		navigation={data.navigation}
 		projectsPage={data.projectsPage}
+		showViewAllButton={true}
+		global={data.global}
 	/>
 </div>
 
@@ -49,6 +50,8 @@
 		selectedLanguage={data.selectedLanguage}
 		navigation={data.navigation}
 		blogPage={data.blogPage}
+		showViewAllButton={true}
+		global={data.global}
 	/>
 </div>
 

@@ -20,6 +20,17 @@ export interface InterfaceItem {
 	value: string;
 }
 
+export interface FilterState {
+	query: string;
+	selectedTags: string[];
+	dateRange: {
+		from?: string;
+		to?: string;
+	};
+	sortBy: 'date' | 'title' | 'relevance';
+	sortOrder: 'asc' | 'desc';
+}
+
 // Sitemap page object
 export interface Page {
 	slug: string;

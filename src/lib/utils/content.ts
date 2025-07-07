@@ -94,11 +94,12 @@ export class ContentLoader {
 
 		try {
 			// Carica tutti i meta.json dei progetti
-			const metaFiles = import.meta.glob('../content/projects/*/meta.json', { eager: true });
+			const metaFiles = import.meta.glob('../content/projects/*/meta.json');
 			const projects: ProjectItem[] = [];
 
-			for (const [path, module] of Object.entries(metaFiles)) {
+			for (const [path, moduleLoader] of Object.entries(metaFiles)) {
 				const projectId = path.split('/').slice(-2, -1)[0];
+				const module = await moduleLoader();
 				const meta = (module as { default: ProjectMeta }).default;
 
 				// Carica le traduzioni
@@ -150,11 +151,12 @@ export class ContentLoader {
 
 		try {
 			// Carica tutti i meta.json degli articoli
-			const metaFiles = import.meta.glob('../content/articles/*/meta.json', { eager: true });
+			const metaFiles = import.meta.glob('../content/articles/*/meta.json');
 			const articles: ArticleItem[] = [];
 
-			for (const [path, module] of Object.entries(metaFiles)) {
+			for (const [path, moduleLoader] of Object.entries(metaFiles)) {
 				const articleId = path.split('/').slice(-2, -1)[0];
+				const module = await moduleLoader();
 				const meta = (module as { default: ArticleMeta }).default;
 
 				// Carica le traduzioni

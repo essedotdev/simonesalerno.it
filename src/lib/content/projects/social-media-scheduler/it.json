@@ -1,0 +1,28 @@
+{
+	"slug": "social-media-scheduler",
+	"title": "Scheduler Social Media",
+	"description": "Strumento per la programmazione e gestione automatica dei contenuti social",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Piattaforma completa per la gestione dei social media con programmazione automatica, analytics avanzate e gestione team collaborativa."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Sviluppata con Vue.js e Laravel, supporta Facebook, Instagram, Twitter, LinkedIn e TikTok. Include editor di contenuti, calendario editoriale e report dettagliati."
+				}
+			}
+		]
+	},
+	"image_captions": [
+		"Dashboard principale",
+		"Calendario editoriale",
+		"Editor contenuti",
+		"Analytics"
+	],
+	"tags": ["Vue.js", "Laravel", "Social Media", "Analytics"]
+}

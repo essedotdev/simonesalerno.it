@@ -6,7 +6,6 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-
 <section class="mx-auto max-w-screen-xl px-5 pt-20 pb-32 sm:px-8 md:px-12 md:pt-32 md:pb-44">
 	{#if data.pageType === 'projects'}
 		<Projects
@@ -14,6 +13,7 @@
 			selectedLanguage={data.selectedLanguage}
 			navigation={data.navigation}
 			projectsPage={data.projectsPage}
+			showFilters={true}
 		/>
 	{:else}
 		<Articles
@@ -21,6 +21,7 @@
 			selectedLanguage={data.selectedLanguage}
 			navigation={data.navigation}
 			blogPage={data.blogPage}
+			showFilters={true}
 		/>
 	{/if}
 </section>

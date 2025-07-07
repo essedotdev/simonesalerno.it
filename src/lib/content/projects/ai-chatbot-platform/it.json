@@ -1,0 +1,28 @@
+{
+	"slug": "piattaforma-chatbot-ai",
+	"title": "Piattaforma Chatbot AI",
+	"description": "Una piattaforma avanzata per creare e gestire chatbot intelligenti con AI",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Piattaforma no-code per la creazione di chatbot AI avanzati, con supporto per elaborazione del linguaggio naturale e integrazione multi-canale."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Sviluppata con Next.js e Python per il backend AI, utilizza OpenAI GPT per conversazioni naturali e supporta deployment su web, Telegram e WhatsApp."
+				}
+			}
+		]
+	},
+	"image_captions": [
+		"Editor chatbot",
+		"Training AI",
+		"Analytics conversazioni",
+		"Deployment multi-canale"
+	],
+	"tags": ["Next.js", "Python", "OpenAI", "NLP", "Chatbot"]
+}

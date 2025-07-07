@@ -26,6 +26,7 @@
 		{ "name": "backToHome", "value": "Torna alla home" },
 		{ "name": "loading", "value": "Caricamento..." },
 		{ "name": "noProjects", "value": "Nessun progetto disponibile" },
-		{ "name": "noArticles", "value": "Nessun articolo disponibile" }
+		{ "name": "noArticles", "value": "Nessun articolo disponibile" },
+		{ "name": "viewAll", "value": "Vedi tutti" }
 	]
 }

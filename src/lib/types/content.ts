@@ -206,6 +206,9 @@ export interface ProjectsSectionProps {
 	selectedLanguage: string;
 	navigation: NavigationConfig;
 	projectsPage: ProjectsPageContent;
+	showFilters?: boolean;
+	showViewAllButton?: boolean;
+	global?: GlobalContent;
 }
 
 export interface ArticlesSectionProps {
@@ -213,6 +216,9 @@ export interface ArticlesSectionProps {
 	selectedLanguage: string;
 	navigation: NavigationConfig;
 	blogPage: BlogPageContent;
+	showFilters?: boolean;
+	showViewAllButton?: boolean;
+	global?: GlobalContent;
 }
 
 export interface ProjectSectionProps {

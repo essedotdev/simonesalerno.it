@@ -1,0 +1,23 @@
+{
+	"slug": "crypto-trading-bot",
+	"title": "Bot Trading Crypto",
+	"description": "Un bot automatizzato per il trading di criptovalute con strategie AI",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Bot di trading automatizzato che utilizza algoritmi di machine learning per analizzare i mercati crypto e eseguire operazioni profittevoli."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Implementato con Python e TensorFlow, integrato con le API di Binance e Coinbase. Include dashboard web per monitoraggio performance e gestione portfolio."
+				}
+			}
+		]
+	},
+	"image_captions": ["Dashboard trading", "Analisi mercato", "Portfolio performance"],
+	"tags": ["Python", "TensorFlow", "API", "Crypto", "Trading"]
+}

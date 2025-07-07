@@ -28,6 +28,7 @@
 		{ "name": "backToHome", "value": "Back to Home" },
 		{ "name": "loading", "value": "Loading..." },
 		{ "name": "noProjects", "value": "No projects available" },
-		{ "name": "noArticles", "value": "No articles available" }
+		{ "name": "noArticles", "value": "No articles available" },
+		{ "name": "viewAll", "value": "View all" }
 	]
 }
