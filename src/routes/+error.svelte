@@ -2,11 +2,15 @@
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 	import { ContentLoader } from '$lib/utils/content';
+	import { getTranslation } from '$lib/utils/translations';
+	import type { ErrorPageState } from '$lib/types/content';
 	import { onMount } from 'svelte';
 
-	// State for translations
-	let global: any = $state(null);
-	let currentLang = $state('en');
+	// State for translations with proper typing
+	let errorState: ErrorPageState = $state({
+		global: null,
+		currentLang: 'en'
+	});
 
 	// Load translations on mount
 	onMount(async () => {
@@ -15,11 +19,11 @@
 				// Determine language from URL
 				const pathSegments = page.url.pathname.split('/').filter(Boolean);
 				const possibleLang = pathSegments[0];
-				currentLang = ['en', 'it'].includes(possibleLang) ? possibleLang : 'en';
+				errorState.currentLang = ['en', 'it'].includes(possibleLang) ? possibleLang : 'en';
 
 				// Load global translations
 				const loader = new ContentLoader();
-				global = await loader.loadGlobal(currentLang);
+				errorState.global = await loader.loadGlobal(errorState.currentLang);
 			} catch (error) {
 				console.error('Error loading translations for error page:', error);
 				// Keep global as null, will show missing translation placeholders
@@ -27,16 +31,14 @@
 		}
 	});
 
-	// Derive translations from global interface
+	// Use the translation system with type safety
 	let notFoundText = $derived(
-		global?.interface?.find((item: any) => item.name === 'pageNotFound')?.value
+		getTranslation(errorState.global, 'pageNotFound', '404 - Page Not Found')
 	);
-	let backHomeText = $derived(
-		global?.interface?.find((item: any) => item.name === 'backHome')?.value
-	);
+	let backHomeText = $derived(getTranslation(errorState.global, 'backHome', 'Back Home'));
 
 	// Generate home URL based on current language
-	let homeUrl = $derived(currentLang === 'en' ? '/' : `/${currentLang}`);
+	let homeUrl = $derived(errorState.currentLang === 'en' ? '/' : `/${errorState.currentLang}`);
 </script>
 
 <div class="flex min-h-[80vh] flex-col items-center justify-center">

@@ -58,15 +58,7 @@ export class ContentLoader {
 		try {
 			const module = await import(`../content/global/${lang}.json`);
 			const data: GlobalContent = module.default;
-			
-			// Process interface items to add missing translation placeholders
-			if (data.interface) {
-				data.interface = data.interface.map(item => ({
-					...item,
-					value: item.value || `[MISSING_TRANSLATION: ${item.name}]`
-				}));
-			}
-			
+
 			this.cache.set(cacheKey, data);
 			return data;
 		} catch (error) {

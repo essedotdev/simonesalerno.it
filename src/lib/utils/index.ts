@@ -1,32 +1,5 @@
-export function handleAnchorClick(event: MouseEvent) {
-	const link = event.currentTarget as HTMLAnchorElement;
-	const anchorId = new URL(link.href).hash;
-
-	if (anchorId.startsWith('#')) {
-		const id = anchorId.replace('#', '');
-		const anchor = document.getElementById(id);
-
-		if (anchor) {
-			event.preventDefault();
-
-			window.scrollTo({
-				top: anchor.offsetTop - calculateOffset(id),
-				behavior: 'smooth'
-			});
-		}
-	}
-}
-
-export function calculateOffset(anchorId: string): number {
-	const offsets: { [key: string]: number } = {
-		partner: 300,
-		servizi: 160,
-		contatti: 100
-	};
-
-	return offsets[anchorId] || 50;
-}
-
-// Re-export utilities
+// Re-export utilities for convenient access
 export { initializeAnalytics, isAnalyticsReady, trackEvent, trackPageView } from './analytics';
 export { ContentLoader, getImagePath, getThumbnailPath, getFeaturedImagePath } from './content';
+export { handleAnchorClick, calculateOffset, scrollToTop, scrollToElement } from './scrollUtils';
+export { getTranslation, getTranslations, createTranslationMap } from './translations';

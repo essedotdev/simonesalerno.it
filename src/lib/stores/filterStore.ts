@@ -1,16 +1,5 @@
 import { writable } from 'svelte/store';
-import type { ProjectItem, ArticleItem } from '$lib/utils/types';
-
-export interface FilterState {
-	query: string;
-	selectedTags: string[];
-	dateRange: {
-		from?: string;
-		to?: string;
-	};
-	sortBy: 'date' | 'title' | 'relevance';
-	sortOrder: 'asc' | 'desc';
-}
+import type { ProjectItem, ArticleItem, FilterState } from '$lib/types/content';
 
 export const createFilterStore = () => {
 	const initialState: FilterState = {

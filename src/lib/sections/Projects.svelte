@@ -5,9 +5,10 @@
 	import { projectsFilterStore } from '$lib/stores/filterStore';
 	import type { ProjectsSectionProps } from '$lib/types/content';
 	import { applyFilters, extractTags } from '$lib/utils/searchUtils';
-	import type { FilterState } from '$lib/utils/types';
+	import type { FilterState } from '$lib/types/content';
 	import { onMount } from 'svelte';
 	import { inview, type Options } from 'svelte-inview';
+	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
 
 	// Receive data as props
 	let {
@@ -70,10 +71,15 @@
 		return filteredProjects.slice(0, limit);
 	});
 
-	// Get view all button text from global interface
-	let viewAllText = $derived(
-		global?.interface?.find((item) => item.name === 'viewAll')?.value
-	);
+	// Get all required translations at once
+	const translationKeys: TranslationKey[] = [
+		'viewAll',
+		'searchProjects',
+		'noResultsFound',
+		'tryAdjusting'
+	];
+
+	let t = $derived(getTranslations(global, translationKeys));
 
 	// Generate link to projects page
 	let projectsPageLink = $derived(`/${selectedLanguage}/${navigation[selectedLanguage].projects}`);
@@ -87,19 +93,6 @@
 	const handleClearFilters = () => {
 		projectsFilterStore.reset();
 	};
-
-	// Derive search placeholder from global
-	let searchProjectsText = $derived(
-		global?.interface?.find((item) => item.name === 'searchProjects')?.value
-	);
-	
-	// Derive error messages from global
-	let noResultsFoundText = $derived(
-		global?.interface?.find((item) => item.name === 'noResultsFound')?.value
-	);
-	let tryAdjustingText = $derived(
-		global?.interface?.find((item) => item.name === 'tryAdjusting')?.value
-	);
 </script>
 
 <div
@@ -121,7 +114,7 @@
 				filters={$projectsFilterStore}
 				{availableTags}
 				showDateFilter={false}
-				placeholder={searchProjectsText}
+				placeholder={t.searchProjects}
 				{global}
 				onUpdateFilters={handleFilterUpdate}
 				onClearFilters={handleClearFilters}
@@ -154,7 +147,7 @@
 					href={projectsPageLink}
 					class="group flex items-center gap-3 rounded-full border border-white/10 bg-white/[.01] px-8 py-4 backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:border-white/20 hover:bg-white/[.05]"
 				>
-					<span class="text-lg font-medium text-gray-300">{viewAllText}</span>
+					<span class="text-lg font-medium text-gray-300">{t.viewAll}</span>
 					<svg
 						class="h-5 w-5 text-gray-300 transition-transform duration-300 group-hover:translate-x-1"
 						fill="none"
@@ -183,8 +176,8 @@
 				/>
 			</svg>
 			<div class="text-white/60">
-				<p class="text-lg">{noResultsFoundText}</p>
-				<p class="mt-2 text-sm">{tryAdjustingText}</p>
+				<p class="text-lg">{t.noResultsFound}</p>
+				<p class="mt-2 text-sm">{t.tryAdjusting}</p>
 			</div>
 		</div>
 	{/if}

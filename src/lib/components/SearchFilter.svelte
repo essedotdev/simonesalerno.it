@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import type { FilterState } from '$lib/utils/types';
+	import type { FilterState } from '$lib/types/content';
+	import type { GlobalContent } from '$lib/types';
+	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
 
 	interface Props {
 		filters: FilterState;
 		availableTags: string[];
 		showDateFilter?: boolean;
 		placeholder: string;
-		global?: any;
+		global?: GlobalContent;
 		onUpdateFilters?: (filters: FilterState) => void;
 		onClearFilters?: () => void;
 	}
@@ -22,34 +24,20 @@
 		onClearFilters
 	}: Props = $props();
 
-	// Derive individual interface values from global
-	let tagsText = $derived(
-		global?.interface?.find((item: any) => item.name === 'tags')?.value
-	);
-	let searchTagsText = $derived(
-		global?.interface?.find((item: any) => item.name === 'searchTags')?.value
-	);
-	let clearFiltersText = $derived(
-		global?.interface?.find((item: any) => item.name === 'clearFilters')?.value
-	);
-	let sortNewestText = $derived(
-		global?.interface?.find((item: any) => item.name === 'sortNewest')?.value
-	);
-	let sortOldestText = $derived(
-		global?.interface?.find((item: any) => item.name === 'sortOldest')?.value
-	);
-	let sortTitleAZText = $derived(
-		global?.interface?.find((item: any) => item.name === 'sortTitleAZ')?.value
-	);
-	let sortTitleZAText = $derived(
-		global?.interface?.find((item: any) => item.name === 'sortTitleZA')?.value
-	);
-	let removeFilterText = $derived(
-		global?.interface?.find((item: any) => item.name === 'removeFilter')?.value
-	);
-	let closeTagDropdownText = $derived(
-		global?.interface?.find((item: any) => item.name === 'closeTagDropdown')?.value
-	);
+	// Get all required translations at once with type safety
+	const translationKeys: TranslationKey[] = [
+		'tags',
+		'searchTags',
+		'clearFilters',
+		'sortNewest',
+		'sortOldest',
+		'sortTitleAZ',
+		'sortTitleZA',
+		'removeFilter',
+		'closeTagDropdown'
+	];
+
+	let t = $derived(getTranslations(global, translationKeys));
 
 	// Local state for UI
 	let showTagDropdown = $state(false);
@@ -190,7 +178,7 @@
 							d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.99 1.99 0 013 12V7a4 4 0 014-4z"
 						/>
 					</svg>
-					{tagsText}
+					{t.tags}
 					{#if filters.selectedTags.length > 0}
 						<span class="ml-1 rounded-full bg-white/10 px-2 py-1 text-xs">
 							{filters.selectedTags.length}
@@ -233,10 +221,10 @@
 			value={`${filters.sortBy}-${filters.sortOrder}`}
 			class="rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white focus:border-white/20 focus:outline-none"
 		>
-			<option value="date-desc">{sortNewestText}</option>
-			<option value="date-asc">{sortOldestText}</option>
-			<option value="title-asc">{sortTitleAZText}</option>
-			<option value="title-desc">{sortTitleZAText}</option>
+			<option value="date-desc">{t.sortNewest}</option>
+			<option value="date-asc">{t.sortOldest}</option>
+			<option value="title-asc">{t.sortTitleAZ}</option>
+			<option value="title-desc">{t.sortTitleZA}</option>
 		</select>
 
 		<!-- Clear Filters -->
@@ -245,7 +233,7 @@
 				onclick={clearAllFilters}
 				class="rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04]"
 			>
-				{clearFiltersText}
+				{t.clearFilters}
 			</button>
 		{/if}
 	</div>
@@ -261,7 +249,7 @@
 					<button
 						onclick={() => handleTagToggle(tag)}
 						class="rounded-full p-1 hover:bg-white/10"
-						aria-label="{removeFilterText} {tag}"
+						aria-label="{t.removeFilter} {tag}"
 					>
 						<svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -287,7 +275,7 @@
 		onkeydown={(e) => e.key === 'Escape' && (showTagDropdown = false)}
 		role="button"
 		tabindex="-1"
-		aria-label={closeTagDropdownText}
+		aria-label={t.closeTagDropdown}
 	></div>
 
 	<!-- Tag dropdown portal -->
@@ -299,7 +287,7 @@
 			<input
 				type="text"
 				bind:value={tagSearchQuery}
-				placeholder={searchTagsText}
+				placeholder={t.searchTags}
 				class="w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white placeholder-white/50 focus:border-white/20 focus:outline-none"
 			/>
 		</div>

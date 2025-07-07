@@ -2,14 +2,13 @@
 	import { inview, type Options } from 'svelte-inview';
 	import type { ArticleSectionProps } from '$lib/types';
 	import Image from '$lib/components/Image.svelte';
+	import { getTranslation } from '$lib/utils/translations';
 
 	// Receive props from parent
 	let { content, currentLang, global }: ArticleSectionProps = $props();
-	
-	// Derive back text from global
-	let backText = $derived(
-		global?.interface?.find((item: any) => item.name === 'back')?.value
-	);
+
+	// Get translation with type safety
+	let backText = $derived(getTranslation(global, 'back'));
 
 	let isInView = $state(false);
 	const options: Options = {

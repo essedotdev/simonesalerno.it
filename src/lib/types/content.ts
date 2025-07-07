@@ -320,7 +320,26 @@ export interface DetailPageParams {
 	sub?: string; // This will be the slug
 }
 
+// Filter types
+export interface FilterState {
+	query: string;
+	selectedTags: string[];
+	dateRange: {
+		from?: string;
+		to?: string;
+	};
+	sortBy: 'date' | 'title' | 'relevance';
+	sortOrder: 'asc' | 'desc';
+}
+
 // Sitemap types
+export interface Page {
+	slug: string;
+	lastMod: string;
+	priority: number;
+	hreflang: string;
+}
+
 export interface SitemapPage {
 	slug: string;
 	lastMod: string;
@@ -328,4 +347,23 @@ export interface SitemapPage {
 	changefreq: string;
 	hreflang: string;
 	alternates?: Array<{ hreflang: string; href: string }>;
+}
+
+// Layout data type
+export interface LayoutData {
+	selectedLanguage: string;
+	languages: Language[];
+	navigation: Record<string, Record<string, string>>;
+	global: GlobalContent;
+	welcome: WelcomeContent;
+	about: AboutContent;
+	contact: ContactContent;
+	projects: ProjectItem[];
+	articles: ArticleItem[];
+}
+
+// Error page types
+export interface ErrorPageState {
+	global: GlobalContent | null;
+	currentLang: string;
 }

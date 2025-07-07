@@ -1,4 +1,4 @@
-import type { ProjectItem, ArticleItem, FilterState } from '$lib/utils/types';
+import type { ProjectItem, ArticleItem, FilterState } from '$lib/types/content';
 
 // Text search utility
 export const matchesQuery = (text: string, query: string): boolean => {

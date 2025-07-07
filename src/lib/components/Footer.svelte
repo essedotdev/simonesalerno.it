@@ -3,6 +3,7 @@
 	import type { FooterProps } from '$lib/types';
 	import { handleAnchorClick } from '$lib/utils';
 	import Logo from './Logo.svelte';
+	import { getTranslation } from '$lib/utils/translations';
 
 	// Receive data as props from parent layout
 	let { data }: FooterProps = $props();
@@ -10,11 +11,9 @@
 	let isLanguageCodeValid = $derived(
 		data.languages.some((l) => l.code === $page.url.pathname.split('/')[1])
 	);
-	
-	// Derive copyright text from global
-	let copyrightText = $derived(
-		data.global?.interface?.find((item: any) => item.name === 'copyright')?.value
-	);
+
+	// Get translation with type safety
+	let copyrightText = $derived(getTranslation(data.global, 'copyright'));
 </script>
 
 <footer class="mx-auto w-full max-w-[90vw] border-t border-white/5">
