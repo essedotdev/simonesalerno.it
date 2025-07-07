@@ -28,7 +28,12 @@ export type TranslationKey =
 	| 'noResultsFound'
 	| 'tryAdjusting'
 	| 'pageNotFound'
-	| 'back';
+	| 'back'
+	| 'dateRange'
+	| 'from'
+	| 'to'
+	| 'sort'
+	| 'apply';
 
 // Translation map cache
 const translationCache = new Map<string, Record<string, string>>();

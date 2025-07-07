@@ -49,6 +49,11 @@
 		{ "name": "noResultsFound", "value": "No results found matching your filters" },
 		{ "name": "tryAdjusting", "value": "Try adjusting your search or clearing filters" },
 		{ "name": "pageNotFound", "value": "Page not found" },
-		{ "name": "back", "value": "Back" }
+		{ "name": "back", "value": "Back" },
+		{ "name": "dateRange", "value": "Date range" },
+		{ "name": "from", "value": "From" },
+		{ "name": "to", "value": "To" },
+		{ "name": "sort", "value": "Sort" },
+		{ "name": "apply", "value": "Apply" }
 	]
 }
