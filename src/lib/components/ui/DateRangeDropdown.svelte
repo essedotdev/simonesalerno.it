@@ -46,12 +46,6 @@
 		isOpen = !isOpen;
 	};
 
-	$effect(() => {
-		if (isOpen) {
-			dropdownContentElement?.focus();
-		}
-	});
-
 	const closeDropdown = () => {
 		isOpen = false;
 	};
@@ -104,6 +98,7 @@
 		width={isMobile ? '90vw' : '24rem'}
 		role="dialog"
 		enableFocusTrap={true}
+		autoFocus={false}
 	>
 		<div class="space-y-4 p-4" bind:this={dropdownContentElement} tabindex="-1">
 			<div class="space-y-2">

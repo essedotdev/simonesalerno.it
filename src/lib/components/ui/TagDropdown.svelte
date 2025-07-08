@@ -42,12 +42,6 @@
 		}
 	};
 
-	$effect(() => {
-		if (isOpen) {
-			dropdownContentElement?.focus();
-		}
-	});
-
 	const handleTagSelect = (tag: string) => {
 		onTagToggle(tag);
 	};
@@ -88,6 +82,7 @@
 		maxHeight="20rem"
 		role="listbox"
 		enableFocusTrap={true}
+		autoFocus={false}
 	>
 		<div class="p-3" bind:this={dropdownContentElement} tabindex="-1">
 			<input

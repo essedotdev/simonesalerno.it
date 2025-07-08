@@ -15,6 +15,7 @@
 		triggerId?: string; // For ARIA
 		role?: 'menu' | 'listbox' | 'dialog';
 		enableFocusTrap?: boolean;
+		autoFocus?: boolean;
 	}
 
 	let {
@@ -28,7 +29,8 @@
 		dropdownId = 'dropdown',
 		triggerId = 'trigger',
 		role = 'listbox',
-		enableFocusTrap = false
+		enableFocusTrap = false,
+		autoFocus = true
 	}: Props = $props();
 
 	let dropdownElement = $state<HTMLDivElement>();
@@ -172,7 +174,7 @@
 					focusableElements = Array.from(elements) as HTMLElement[];
 
 					// Focus first focusable element
-					if (focusableElements.length > 0) {
+					if (autoFocus && focusableElements.length > 0) {
 						focusableElements[0].focus();
 					}
 				}
