@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { GlobalContent } from '$lib/types';
 	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
+	import { Check, ChevronDown, Tag } from '@lucide/svelte';
 	import Dropdown from './Dropdown.svelte';
-	import { Tag, ChevronDown, Check } from '@lucide/svelte';
 
 	interface Props {
 		availableTags: string[];
@@ -19,6 +19,7 @@
 	let isOpen = $state(false);
 	let tagSearchQuery = $state('');
 	let triggerElement = $state<HTMLButtonElement>();
+	let dropdownContentElement = $state<HTMLElement>();
 
 	// Generate unique IDs for ARIA
 	const dropdownId = `tag-dropdown-${Math.random().toString(36).substring(7)}`;
@@ -41,6 +42,12 @@
 		}
 	};
 
+	$effect(() => {
+		if (isOpen) {
+			dropdownContentElement?.focus();
+		}
+	});
+
 	const handleTagSelect = (tag: string) => {
 		onTagToggle(tag);
 	};
@@ -59,7 +66,7 @@
 		aria-haspopup="listbox"
 		aria-controls={dropdownId}
 		onclick={toggleDropdown}
-		class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04] cursor-pointer"
+		class="flex cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04]"
 	>
 		<Tag class="h-4 w-4" />
 		{t.tags}
@@ -82,7 +89,7 @@
 		role="listbox"
 		enableFocusTrap={true}
 	>
-		<div class="p-3">
+		<div class="p-3" bind:this={dropdownContentElement} tabindex="-1">
 			<input
 				type="text"
 				bind:value={tagSearchQuery}

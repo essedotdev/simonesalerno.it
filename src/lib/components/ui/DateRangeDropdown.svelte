@@ -17,6 +17,7 @@
 
 	let isOpen = $state(false);
 	let triggerElement = $state<HTMLButtonElement>();
+	let dropdownContentElement = $state<HTMLElement>();
 	let isMobile = $state(false);
 
 	// Detect mobile device
@@ -44,6 +45,12 @@
 		}
 		isOpen = !isOpen;
 	};
+
+	$effect(() => {
+		if (isOpen) {
+			dropdownContentElement?.focus();
+		}
+	});
 
 	const closeDropdown = () => {
 		isOpen = false;
@@ -98,7 +105,7 @@
 		role="dialog"
 		enableFocusTrap={true}
 	>
-		<div class="space-y-4 p-4">
+		<div class="space-y-4 p-4" bind:this={dropdownContentElement} tabindex="-1">
 			<div class="space-y-2">
 				<label for="date-from" class="block text-sm text-white/70">{t.from}</label>
 				<input

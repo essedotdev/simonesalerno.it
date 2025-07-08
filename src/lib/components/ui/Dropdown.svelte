@@ -60,13 +60,13 @@
 		// Horizontal positioning
 		let left = '0';
 		let right = 'auto';
-		
+
 		if (isMobile) {
 			// On mobile, prevent overflow by adjusting position
 			const dropdownWidth = dropdownRect.width;
 			const triggerCenter = triggerRect.left + triggerRect.width / 2;
 			const halfDropdownWidth = dropdownWidth / 2;
-			
+
 			if (triggerCenter - halfDropdownWidth < 16) {
 				// Too close to left edge
 				left = `${16 - triggerRect.left}px`;

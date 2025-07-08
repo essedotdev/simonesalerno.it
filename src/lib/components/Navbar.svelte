@@ -57,7 +57,7 @@
 
 		<div class="flex h-[40px] w-[40px] items-center justify-center md:hidden">
 			{#if menuOpen}
-				<div class="fixed top-10 left-7 z-20" transition:fade={{ duration: 300 }}>
+				<div class="fixed top-10 left-7 z-40" transition:fade={{ duration: 300 }}>
 					<LanguageSelector
 						languages={data.languages}
 						selectedLanguage={data.selectedLanguage}
@@ -67,12 +67,12 @@
 					/>
 				</div>
 
-				<button class="fixed z-20" transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
+				<button class="fixed z-40" transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
 					<X class="h-9 w-9" />
 				</button>
 
 				<div
-					class="fixed top-0 left-0 z-10 flex h-screen w-screen flex-col items-center justify-center bg-black/60 text-2xl backdrop-blur-sm"
+					class="fixed top-0 left-0 z-30 flex h-screen w-screen flex-col items-center justify-center bg-black/60 text-2xl backdrop-blur-sm"
 					transition:fade={{ duration: 300 }}
 				>
 					<div class="flex flex-col gap-y-3">
