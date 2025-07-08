@@ -45,6 +45,7 @@
 
 		const triggerRect = triggerElement.getBoundingClientRect();
 		const dropdownRect = dropdownElement.getBoundingClientRect();
+		const isMobile = window.innerWidth <= 768;
 
 		const spaceBelow = window.innerHeight - triggerRect.bottom;
 		const spaceAbove = triggerRect.top;
@@ -59,9 +60,30 @@
 		// Horizontal positioning
 		let left = '0';
 		let right = 'auto';
-		if (spaceRight < dropdownRect.width) {
-			left = 'auto';
-			right = '0';
+		
+		if (isMobile) {
+			// On mobile, prevent overflow by adjusting position
+			const dropdownWidth = dropdownRect.width;
+			const triggerCenter = triggerRect.left + triggerRect.width / 2;
+			const halfDropdownWidth = dropdownWidth / 2;
+			
+			if (triggerCenter - halfDropdownWidth < 16) {
+				// Too close to left edge
+				left = `${16 - triggerRect.left}px`;
+			} else if (triggerCenter + halfDropdownWidth > window.innerWidth - 16) {
+				// Too close to right edge
+				left = 'auto';
+				right = `${16 - (window.innerWidth - triggerRect.right)}px`;
+			} else {
+				// Center on trigger
+				left = `${triggerCenter - triggerRect.left - halfDropdownWidth}px`;
+			}
+		} else {
+			// Desktop positioning
+			if (spaceRight < dropdownRect.width) {
+				left = 'auto';
+				right = '0';
+			}
 		}
 
 		position = { top, left, right };

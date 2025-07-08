@@ -17,6 +17,36 @@
 
 	let isOpen = $state(false);
 	let triggerElement = $state<HTMLButtonElement>();
+	let isMobile = $state(false);
+
+	// Detect mobile device
+	$effect(() => {
+		isMobile = window.innerWidth <= 768;
+		
+		const handleResize = () => {
+			isMobile = window.innerWidth <= 768;
+		};
+		
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	});
+
+	// Handle mobile keyboard opening
+	$effect(() => {
+		if (!isMobile) return;
+		
+		const handleFocusIn = (e: FocusEvent) => {
+			const target = e.target as HTMLElement;
+			if (target.tagName === 'INPUT' && target.type === 'text') {
+				setTimeout(() => {
+					target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}, 300);
+			}
+		};
+
+		document.addEventListener('focusin', handleFocusIn);
+		return () => document.removeEventListener('focusin', handleFocusIn);
+	});
 
 	// Generate unique IDs for ARIA
 	const dropdownId = `date-dropdown-${Math.random().toString(36).substring(7)}`;
@@ -34,6 +64,19 @@
 
 	const handleDateInput = (type: 'from' | 'to', event: Event) => {
 		const target = event.target as HTMLInputElement;
+		if (isMobile) {
+			// For mobile text inputs, convert dd/mm/yyyy to yyyy-mm-dd
+			const value = target.value;
+			if (value.includes('/')) {
+				const parts = value.split('/');
+				if (parts.length === 3) {
+					const [day, month, year] = parts;
+					const isoDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+					onDateChange(type, isoDate);
+					return;
+				}
+			}
+		}
 		onDateChange(type, target.value);
 	};
 
@@ -61,6 +104,15 @@
 			year: 'numeric'
 		});
 	};
+
+	// Helper to convert ISO date to display format for mobile
+	const dateToDisplayValue = (isoDate: string) => {
+		if (!isoDate) return '';
+		if (isMobile) {
+			return formatDate(isoDate);
+		}
+		return isoDate;
+	};
 </script>
 
 <div class="relative">
@@ -86,7 +138,7 @@
 		{dropdownId}
 		{triggerId}
 		onClose={closeDropdown}
-		width="24rem"
+		width={isMobile ? '90vw' : '24rem'}
 		role="dialog"
 		enableFocusTrap={true}
 	>
@@ -95,15 +147,10 @@
 				<label for="date-from" class="block text-sm text-white/70">{t.from}</label>
 				<input
 					id="date-from"
-					type="date"
-					value={dateRange.from || ''}
+					type={isMobile ? 'text' : 'date'}
+					value={dateToDisplayValue(dateRange.from || '')}
+					placeholder={isMobile ? 'gg/mm/aaaa' : ''}
 					oninput={(e) => handleDateInput('from', e)}
-					onfocus={(e) => {
-						// Prevent auto-focus on mobile to avoid native picker
-						if (window.innerWidth <= 768) {
-							e.target.blur();
-						}
-					}}
 					class="date-input w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white focus:border-white/20 focus:outline-none"
 				/>
 			</div>
@@ -111,15 +158,10 @@
 				<label for="date-to" class="block text-sm text-white/70">{t.to}</label>
 				<input
 					id="date-to"
-					type="date"
-					value={dateRange.to || ''}
+					type={isMobile ? 'text' : 'date'}
+					value={dateToDisplayValue(dateRange.to || '')}
+					placeholder={isMobile ? 'gg/mm/aaaa' : ''}
 					oninput={(e) => handleDateInput('to', e)}
-					onfocus={(e) => {
-						// Prevent auto-focus on mobile to avoid native picker
-						if (window.innerWidth <= 768) {
-							e.target.blur();
-						}
-					}}
 					class="date-input w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white focus:border-white/20 focus:outline-none"
 				/>
 			</div>
