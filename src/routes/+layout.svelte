@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { page } from '$app/stores';
-	import BackToTop from '$lib/components/ui/BackToTop.svelte';
+	import { page } from '$app/state';
 	import FloatingNav from '$lib/components/FloatingNav.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
+	import BackToTop from '$lib/components/ui/BackToTop.svelte';
 	import '$lib/style/globals.css';
 	import { initializeAnalytics, isAnalyticsReady, trackPageView } from '$lib/utils/analytics';
 	import { setContext } from 'svelte';
@@ -13,6 +13,10 @@
 
 	let scrollY = $state(0);
 	let menuOpen = $state(false);
+
+	let isLanguageCodeValid = $derived(
+		data.languages.some((l: { code: string }) => l.code === page.url.pathname.split('/')[1])
+	);
 
 	// Fornisce i dati come context invece di store
 	setContext('layoutData', data);
@@ -43,8 +47,8 @@
 
 	// Track page views on navigation
 	$effect(() => {
-		if (browser && $page.url && isAnalyticsReady()) {
-			trackPageView($page.url.pathname + $page.url.search);
+		if (browser && page.url && isAnalyticsReady()) {
+			trackPageView(page.url.pathname + page.url.search);
 		}
 	});
 
@@ -52,8 +56,8 @@
 	let pageTitle = $derived.by(() => {
 		if (!data?.global?.title) return 'Simone Salerno';
 
-		const currentRoute = $page.route.id;
-		const params = $page.params;
+		const currentRoute = page.route.id;
+		const params = page.params;
 
 		// Home page
 		if (currentRoute === '/[page=lang]') {
@@ -73,7 +77,7 @@
 		// Individual project/article pages - get title from page data
 		if (currentRoute === '/[page=lang]/[route=route]/[sub]') {
 			// Try to get page data from page store
-			const pageData = $page.data;
+			const pageData = page.data;
 			if (pageData?.content?.translations?.[pageData.currentLang]?.title) {
 				return `Simone Salerno • ${pageData.content.translations[pageData.currentLang].title}`;
 			}
@@ -108,8 +112,11 @@
 	class="flex min-h-screen flex-col overflow-x-hidden scroll-smooth text-white antialiased selection:bg-white/10"
 >
 	<!-- Passa dati come props ai componenti -->
-	<Navbar {data} {menuOpen} />
-	<FloatingNav {data} {menuOpen} />
+	<Navbar {data} bind:menuOpen />
+
+	{#if isLanguageCodeValid}
+		<FloatingNav {data} bind:menuOpen />
+	{/if}
 
 	<main class="flex-1">
 		{@render children()}

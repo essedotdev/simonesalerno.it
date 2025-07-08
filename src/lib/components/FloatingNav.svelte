@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import type { FloatingNavProps } from '$lib/types/content';
+	import type { LayoutData } from '$lib/types/content';
 	import { handleAnchorClick } from '$lib/utils';
 	import { Menu } from '@lucide/svelte';
 	import { fade } from 'svelte/transition';
 
 	// Receive data as props from parent layout
-	let { data, menuOpen }: FloatingNavProps = $props();
+	let { data, menuOpen = $bindable() }: { data: LayoutData; menuOpen: boolean } = $props();
 
 	function handleMenuClick() {
 		menuOpen = !menuOpen;
@@ -24,10 +24,12 @@
 
 {#if show()}
 	<header
-		class="fixed top-[1.7rem] z-50 flex w-full justify-end sm:top-4 sm:left-0 sm:justify-center"
+		class="pointer-events-none fixed top-[1.7rem] z-50 flex w-full justify-end sm:top-4 sm:left-0 sm:justify-center"
 		transition:fade={{ duration: 150 }}
 	>
-		<nav class="rounded-s-full rounded-e-none bg-neutral-900/20 sm:rounded-full">
+		<nav
+			class="pointer-events-auto rounded-s-full rounded-e-none bg-neutral-900/20 sm:rounded-full"
+		>
 			<div
 				class="flex items-center justify-between rounded-s-full rounded-e-none border border-white/5 bg-white/[.01] ps-8 pe-[calc(0.95rem+5vw)] text-lg backdrop-blur-md sm:rounded-full sm:bg-white/[.02] sm:px-4"
 			>
@@ -52,10 +54,10 @@
 					>
 				{/each}
 
-				<div class="flex h-[40px] w-[40px] sm:hidden">
+				<div class="flex h-[40px] w-[40px] items-center justify-center sm:hidden">
 					{#if !menuOpen}
-						<button class="absolute" transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
-							<Menu class="h-6 w-6" />
+						<button transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
+							<Menu class="h-9 w-9" />
 						</button>
 					{/if}
 				</div>

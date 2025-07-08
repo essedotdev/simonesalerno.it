@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import type { NavbarProps } from '$lib/types/content';
+	import type { LayoutData } from '$lib/types/content';
 	import { handleAnchorClick } from '$lib/utils';
-	import { fade } from 'svelte/transition';
 	import { Menu, X } from '@lucide/svelte';
-	import LanguageSelector from './ui/LanguageSelector.svelte';
+	import { fade } from 'svelte/transition';
 	import Logo from './Logo.svelte';
+	import LanguageSelector from './ui/LanguageSelector.svelte';
 
 	// Ricevi dati come props
-	let { data, menuOpen }: NavbarProps = $props();
+	let { data, menuOpen = $bindable() }: { data: LayoutData; menuOpen: boolean } = $props();
 
 	function handleMenuClick() {
 		menuOpen = !menuOpen;
@@ -55,7 +55,7 @@
 			</div>
 		</div>
 
-		<div class="flex h-[40px] w-[40px] md:hidden">
+		<div class="flex h-[40px] w-[40px] items-center justify-center md:hidden">
 			{#if menuOpen}
 				<div class="fixed top-10 left-7 z-20" transition:fade={{ duration: 300 }}>
 					<LanguageSelector
@@ -68,7 +68,7 @@
 				</div>
 
 				<button class="fixed z-20" transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
-					<X class="h-6 w-6" />
+					<X class="h-9 w-9" />
 				</button>
 
 				<div
@@ -85,8 +85,8 @@
 					</div>
 				</div>
 			{:else}
-				<button class="absolute" transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
-					<Menu class="h-6 w-6" />
+				<button transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
+					<Menu class="h-9 w-9" />
 				</button>
 			{/if}
 		</div>
