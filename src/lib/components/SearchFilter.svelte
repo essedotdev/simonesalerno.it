@@ -2,10 +2,10 @@
 	import type { GlobalContent } from '$lib/types';
 	import type { FilterState } from '$lib/types/content';
 	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
+	import { Search, X } from '@lucide/svelte';
 	import DateRangeDropdown from './ui/DateRangeDropdown.svelte';
 	import SortDropdown from './ui/SortDropdown.svelte';
 	import TagDropdown from './ui/TagDropdown.svelte';
-	import { Search, X } from '@lucide/svelte';
 
 	interface Props {
 		filters: FilterState;
@@ -80,7 +80,7 @@
 	</div>
 
 	<!-- Filters Row -->
-	<div class="flex flex-wrap gap-3">
+	<div class="xs:grid-cols-2 grid grid-cols-1 gap-3 sm:grid-cols-3 md:flex">
 		<!-- Tag Filter -->
 		{#if availableTags.length > 0}
 			<TagDropdown

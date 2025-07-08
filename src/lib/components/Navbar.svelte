@@ -21,7 +21,7 @@
 
 <header id="top" class="mx-auto w-full max-w-[90vw] border-b border-white/5">
 	<nav
-		class="mx-auto flex w-full max-w-screen-2xl items-center justify-between px-4 py-8 sm:px-8 lg:px-14"
+		class="mx-auto flex w-full max-w-screen-2xl items-center justify-between py-8"
 	>
 		<a
 			href={$page.url.pathname.split('/')[2]
@@ -36,7 +36,7 @@
 		</a>
 
 		<div
-			class="hidden items-center gap-x-6 text-[1.3rem] md:flex lg:gap-x-7 lg:text-[1.5rem] xl:gap-x-8"
+			class="hidden items-center gap-x-6 text-[1.3rem]  md:flex lg:gap-x-7 lg:text-[1.5rem] xl:gap-x-8"
 		>
 			{#each data.global.navigation as route (route.name)}
 				<a href={'/' + data.selectedLanguage + route.link} onclick={handleAnchorClick}

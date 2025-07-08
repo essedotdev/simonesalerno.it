@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+@theme {
+	--breakpoint-xs: 30rem;
+}
+
 body {
 	@apply overflow-x-hidden overscroll-none text-gray-100;
 	font-family: 'Geist', fantasy;

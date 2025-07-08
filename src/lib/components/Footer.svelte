@@ -17,7 +17,7 @@
 </script>
 
 <footer class="mx-auto w-full max-w-[90vw] border-t border-white/5">
-	<div class="mx-auto w-full max-w-screen-2xl px-4 sm:px-8 lg:px-14">
+	<div class="mx-auto w-full max-w-screen-2xl">
 		<nav
 			class="flex items-start justify-between py-8 text-lg sm:pt-10 sm:pb-8 sm:text-xl md:text-2xl"
 		>

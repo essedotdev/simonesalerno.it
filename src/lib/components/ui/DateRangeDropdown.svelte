@@ -80,13 +80,13 @@
 		aria-haspopup="dialog"
 		aria-controls={dropdownId}
 		onclick={toggleDropdown}
-		class="flex cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04]"
+		class="flex w-full cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04]"
 	>
 		<Calendar class="h-4 w-4" />
 		<span class="truncate">
 			{hasDateRange ? formatDateRange() : t.dateRange}
 		</span>
-		<ChevronDown class="ml-1 h-4 w-4" />
+		<ChevronDown class="ml-auto h-4 w-4" />
 	</button>
 
 	<Dropdown
