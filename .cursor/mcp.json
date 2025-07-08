@@ -1,12 +1,3 @@
 {
-	"mcpServers": {
-		"directus": {
-			"command": "npx",
-			"args": ["@directus/content-mcp@latest"],
-			"env": {
-				"DIRECTUS_URL": "https://directus.simonesalerno.it",
-				"DIRECTUS_TOKEN": "jzbQD2uAEVv3kp6LXJXqMmIc853QzHEv"
-			}
-		}
-	}
+	"mcpServers": {}
 }

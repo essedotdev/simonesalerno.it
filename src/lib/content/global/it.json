@@ -16,7 +16,7 @@
 	],
 	"navigation": [
 		{ "name": "// progetti", "link": "#projects" },
-		{ "name": "// chi-sono", "link": "#about" },
+		{ "name": "// chi sono", "link": "#about" },
 		{ "name": "// blog", "link": "#blog" },
 		{ "name": "// contatti", "link": "#contact" }
 	],

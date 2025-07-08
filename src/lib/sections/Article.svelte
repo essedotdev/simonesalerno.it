@@ -3,6 +3,7 @@
 	import type { ArticleSectionProps } from '$lib/types';
 	import Image from '$lib/components/Image.svelte';
 	import { getTranslation } from '$lib/utils/translations';
+	import { ChevronLeft } from '@lucide/svelte';
 
 	// Receive props from parent
 	let { content, currentLang, global }: ArticleSectionProps = $props();
@@ -40,15 +41,7 @@
 >
 	<div class="flex pb-10 text-2xl 2xl:pb-14">
 		<a href={homeUrl} class="flex items-center gap-x-[0.15rem]">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				style="fill: #f3f4f6;transform: ;msFilter:;margin-bottom: -0.1rem;"
-				><path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
-				></path></svg
-			>
+			<ChevronLeft class="h-6 w-6 text-gray-100" style="margin-bottom: -0.1rem;" />
 			<span class="hover:underline">{backText}</span>
 		</a>
 	</div>

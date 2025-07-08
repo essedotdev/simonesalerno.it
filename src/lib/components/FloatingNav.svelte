@@ -3,7 +3,7 @@
 	import type { FloatingNavProps } from '$lib/types/content';
 	import { handleAnchorClick } from '$lib/utils';
 	import { fade } from 'svelte/transition';
-	import MenuOpen from './icons/OpenMenu.svelte';
+	import { Menu } from '@lucide/svelte';
 
 	// Receive data as props from parent layout
 	let { data, menuOpen }: FloatingNavProps = $props();
@@ -24,7 +24,7 @@
 
 {#if show()}
 	<header
-		class="fixed top-[1.7rem] z-50 flex w-full justify-end sm:top-4 sm:left-0 sm:justify-center"
+		class="fixed top-[1.7rem] z-50 flex justify-end sm:top-4 sm:left-1/2 -translate-x-1/2 sm:justify-center"
 		transition:fade={{ duration: 150 }}
 	>
 		<nav class="rounded-s-full rounded-e-none bg-neutral-900/20 sm:rounded-full">
@@ -55,7 +55,7 @@
 				<div class="flex h-[40px] w-[40px] sm:hidden">
 					{#if !menuOpen}
 						<button class="absolute" transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
-							<MenuOpen />
+							<Menu class="h-6 w-6" />
 						</button>
 					{/if}
 				</div>

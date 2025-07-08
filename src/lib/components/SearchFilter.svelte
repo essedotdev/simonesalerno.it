@@ -5,6 +5,7 @@
 	import DateRangeDropdown from './ui/DateRangeDropdown.svelte';
 	import SortDropdown from './ui/SortDropdown.svelte';
 	import TagDropdown from './ui/TagDropdown.svelte';
+	import { Search, X } from '@lucide/svelte';
 
 	interface Props {
 		filters: FilterState;
@@ -65,9 +66,7 @@
 	);
 </script>
 
-<div
-	class="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/[.01] p-6 backdrop-blur-lg"
->
+<div class="flex flex-col gap-4 rounded-3xl border border-white/10 bg-black/20 p-6">
 	<!-- Search Input -->
 	<div class="relative">
 		<input
@@ -75,21 +74,9 @@
 			value={filters.query}
 			oninput={handleQueryChange}
 			{placeholder}
-			class="w-full rounded-2xl border border-white/10 bg-white/[.02] px-4 py-3 pl-12 text-white placeholder-white/50 focus:border-white/20 focus:bg-white/[.04] focus:outline-none"
+			class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 pl-12 text-white placeholder-white/50 focus:border-white/20 focus:bg-black/40 focus:outline-none"
 		/>
-		<svg
-			class="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-white/50"
-			fill="none"
-			stroke="currentColor"
-			viewBox="0 0 24 24"
-		>
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-			/>
-		</svg>
+		<Search class="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-white/50" />
 	</div>
 
 	<!-- Filters Row -->
@@ -121,7 +108,7 @@
 		{#if hasActiveFilters}
 			<button
 				onclick={clearAllFilters}
-				class="rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04]"
+				class="rounded-xl border border-white/10 bg-black/30 px-4 py-2 text-white/80 transition-colors hover:bg-black/40"
 			>
 				{t.clearFilters}
 			</button>
@@ -141,14 +128,7 @@
 						class="rounded-full p-1 hover:bg-white/10"
 						aria-label="{t.removeFilter} {tag}"
 					>
-						<svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M6 18L18 6M6 6l12 12"
-							/>
-						</svg>
+						<X class="h-3 w-3" />
 					</button>
 				</span>
 			{/each}

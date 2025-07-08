@@ -2,6 +2,7 @@
 	import type { GlobalContent } from '$lib/types';
 	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
 	import Dropdown from './Dropdown.svelte';
+	import { Calendar, ChevronDown } from '@lucide/svelte';
 
 	interface Props {
 		dateRange: { from?: string; to?: string };
@@ -16,6 +17,10 @@
 
 	let isOpen = $state(false);
 	let triggerElement = $state<HTMLButtonElement>();
+
+	// Generate unique IDs for ARIA
+	const dropdownId = `date-dropdown-${Math.random().toString(36).substring(7)}`;
+	const triggerId = `date-trigger-${Math.random().toString(36).substring(7)}`;
 
 	const toggleDropdown = () => {
 		if (!isOpen) {
@@ -61,29 +66,33 @@
 <div class="relative">
 	<button
 		bind:this={triggerElement}
+		id={triggerId}
+		aria-expanded={isOpen}
+		aria-haspopup="dialog"
+		aria-controls={dropdownId}
 		onclick={toggleDropdown}
-		class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04]"
+		class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04] cursor-pointer"
 	>
-		<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-			/>
-		</svg>
+		<Calendar class="h-4 w-4" />
 		<span class="truncate">
 			{hasDateRange ? formatDateRange : t.dateRange}
 		</span>
 		{#if hasDateRange}
 			<span class="ml-1 rounded-full bg-white/10 px-2 py-1 text-xs"> • </span>
 		{/if}
-		<svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-		</svg>
+		<ChevronDown class="ml-1 h-4 w-4" />
 	</button>
 
-	<Dropdown {isOpen} {triggerElement} onClose={closeDropdown} width="24rem">
+	<Dropdown
+		{isOpen}
+		{triggerElement}
+		{dropdownId}
+		{triggerId}
+		onClose={closeDropdown}
+		width="24rem"
+		role="dialog"
+		enableFocusTrap={true}
+	>
 		<div class="space-y-4 p-4">
 			<div class="space-y-2">
 				<label for="date-from" class="block text-sm text-white/70">{t.from}</label>

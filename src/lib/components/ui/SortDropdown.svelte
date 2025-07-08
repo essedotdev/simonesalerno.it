@@ -1,6 +1,15 @@
 <script lang="ts">
 	import type { FilterState, GlobalContent } from '$lib/types';
 	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
+	import {
+		ArrowDownAZ,
+		ArrowDownZA,
+		ArrowUpDown,
+		CalendarArrowDown,
+		CalendarArrowUp,
+		Check,
+		ChevronDown
+	} from '@lucide/svelte';
 	import Dropdown from './Dropdown.svelte';
 
 	interface Props {
@@ -24,14 +33,38 @@
 	let isOpen = $state(false);
 	let triggerElement = $state<HTMLButtonElement>();
 
+	// Generate unique IDs for ARIA
+	const dropdownId = `sort-dropdown-${Math.random().toString(36).substring(7)}`;
+	const triggerId = `sort-trigger-${Math.random().toString(36).substring(7)}`;
+
 	const sortOptions = [
-		{ value: 'date-desc', sortBy: 'date' as const, sortOrder: 'desc' as const, icon: '↓' },
-		{ value: 'date-asc', sortBy: 'date' as const, sortOrder: 'asc' as const, icon: '↑' },
-		{ value: 'title-asc', sortBy: 'title' as const, sortOrder: 'asc' as const, icon: 'A→Z' },
-		{ value: 'title-desc', sortBy: 'title' as const, sortOrder: 'desc' as const, icon: 'Z→A' }
+		{
+			value: 'date-desc',
+			sortBy: 'date' as const,
+			sortOrder: 'desc' as const,
+			IconComponent: CalendarArrowDown
+		},
+		{
+			value: 'date-asc',
+			sortBy: 'date' as const,
+			sortOrder: 'asc' as const,
+			IconComponent: CalendarArrowUp
+		},
+		{
+			value: 'title-asc',
+			sortBy: 'title' as const,
+			sortOrder: 'asc' as const,
+			IconComponent: ArrowDownAZ
+		},
+		{
+			value: 'title-desc',
+			sortBy: 'title' as const,
+			sortOrder: 'desc' as const,
+			IconComponent: ArrowDownZA
+		}
 	];
 
-	const currentSort = `${sortBy}-${sortOrder}`;
+	const currentSort = $derived(`${sortBy}-${sortOrder}`);
 	const currentSortLabel = $derived(() => {
 		switch (currentSort) {
 			case 'date-desc':
@@ -74,26 +107,30 @@
 <div class="relative">
 	<button
 		bind:this={triggerElement}
+		id={triggerId}
+		aria-expanded={isOpen}
+		aria-haspopup="menu"
+		aria-controls={dropdownId}
 		onclick={toggleDropdown}
-		class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04]"
+		class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04] cursor-pointer"
 	>
-		<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
-			/>
-		</svg>
+		<ArrowUpDown class="h-4 w-4" />
 		<span class="truncate">
 			{currentSortLabel()}
 		</span>
-		<svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-		</svg>
+		<ChevronDown class="ml-1 h-4 w-4" />
 	</button>
 
-	<Dropdown {isOpen} {triggerElement} onClose={closeDropdown} width="18rem">
+	<Dropdown
+		{isOpen}
+		{triggerElement}
+		{dropdownId}
+		{triggerId}
+		onClose={closeDropdown}
+		width="18rem"
+		role="menu"
+		enableFocusTrap={true}
+	>
 		<div class="py-1">
 			{#each sortOptions as option (option.value)}
 				{@const label =
@@ -112,9 +149,9 @@
 						: ''}"
 				>
 					<div
-						class="flex h-8 w-8 items-center justify-center rounded-md bg-white/10 font-mono text-xs text-white/80"
+						class="flex h-8 w-8 items-center justify-center rounded-md bg-white/10 text-white/80"
 					>
-						{option.icon}
+						<option.IconComponent class="h-4 w-4" />
 					</div>
 					<div class="min-w-0 flex-1">
 						<div class="font-medium text-white/90">
@@ -122,19 +159,7 @@
 						</div>
 					</div>
 					{#if currentSort === option.value}
-						<svg
-							class="h-4 w-4 text-white/70"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M5 13l4 4L19 7"
-							/>
-						</svg>
+						<Check class="h-4 w-4 text-white/70" />
 					{/if}
 				</button>
 			{/each}

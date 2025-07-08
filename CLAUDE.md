@@ -2,85 +2,81 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Overview
+## Development Commands
 
-This is **simonesalerno.it**, a personal portfolio website built with **SvelteKit 5** using TypeScript, deployed on Cloudflare Pages with Directus as a headless CMS.
-
-## Commands
-
-### Development
+**Package Manager**: Must use `pnpm` (version 10.12.4)
 
 ```bash
-pnpm dev          # Start development server
-pnpm build        # Build for production
-pnpm preview      # Preview production build
-pnpm check        # Run type checking
-pnpm lint         # Run ESLint + Prettier
-pnpm format       # Format code
-```
-
-### Deployment
-
-```bash
-pnpm run deploy   # Deploy to Cloudflare Pages
+pnpm dev         # Start development server
+pnpm build       # Production build
+pnpm preview     # Preview production build
+pnpm check       # Type checking with svelte-check
+pnpm lint        # ESLint + Prettier checking (MUST run before commits)
+pnpm format      # Code formatting
 ```
 
 ## Architecture
 
-### Tech Stack
+**Tech Stack**: SvelteKit 5 + TypeScript + Tailwind CSS v4 + Cloudflare Pages
+**Content Management**: File-based JSON system with full i18n (English/Italian)
 
-- **Frontend**: SvelteKit 5 with TypeScript
-- **Styling**: Tailwind CSS v4
-- **Content Management**: Local JSON-based system
-- **Analytics**: Umami analytics
-- **Deployment**: Cloudflare Pages
-- **Package Manager**: pnpm
+### Content System
 
-### Internationalization
+- All content in `/src/lib/content/` as JSON files
+- Structure: `meta.json` + `en.json` + `it.json` for each item
+- Articles and projects have metadata (dates, tags, images) + translations
+- Global interface text in `/src/lib/content/global/`
 
-- **Languages**: English (`en`) and Italian (`it`)
-- **Routing**: Dynamic with `[page=lang]` parameter
-- **Page mappings**:
-  - English: `/en/projects`, `/en/about`
-  - Italian: `/it/progetti`, `/it/informazioni`
-- **Param matchers**: Custom validation in `src/params/`
+### Routing
 
-### Routing Structure
+- Dynamic routes: `[page=lang]/[route=route]/[sub]`
+- Language-based URLs: `/en/projects` vs `/it/progetti`
+- Parameter validation in `/src/params/`
+
+### Component Organization
 
 ```
-/[page=lang]/                     # Home (e.g., /en, /it)
-/[page=lang]/[page=route]/[sub]/  # Project details (e.g., /en/projects/project-name)
-/sitemap.xml                      # Generated sitemap
+src/lib/
+├── components/    # Reusable UI components
+├── sections/      # Large page sections
+├── content/       # JSON content files
+├── stores/        # State management
+├── types/         # TypeScript definitions
+└── utils/         # Utility functions
 ```
 
-### Content Management
+### Key Patterns
 
-- **Local JSON files**: All content stored in `src/lib/content/`
-- **Content types**: Global settings, Welcome, Projects, About, Contact, Articles
-- **Server-side loading**: All content fetched in `+layout.server.ts` via ContentLoader
-- **Block editor**: Rich content with structured blocks (EditorJS format)
-- **Multi-language**: Each content piece has separate JSON files per language
+- **Svelte 5 Runes**: Use `$state`, `$derived`, `$effect` (not stores)
+- **TypeScript**: Strict typing enabled, comprehensive interfaces
+- **ContentLoader**: Centralized content loading with caching
+- **Atomic Design**: Components organized by complexity level
 
-### Key Directories
+## Development Guidelines
 
-- `src/lib/components/` - Reusable UI components
-- `src/lib/sections/` - Page sections (Welcome, Projects, About, Contact)
-- `src/lib/content/` - JSON content files organized by type
-- `src/lib/utils/` - Utility functions including ContentLoader
-- `src/params/` - Custom param matchers for routing
+### Content Changes
 
-### Configuration Files
+- Edit JSON files directly for content updates
+- Maintain both `en.json` and `it.json` translations
+- Update `meta.json` for metadata changes
+- Content validation happens at build time
 
-- `svelte.config.js` - Cloudflare adapter configuration
-- `vite.config.ts` - Vite with Tailwind and enhanced images
-- `wrangler.jsonc` - Cloudflare Workers configuration
-- `tsconfig.json` - TypeScript configuration
+### Component Development
 
-## Development Notes
+- Follow existing patterns in `/src/lib/components/`
+- Use TypeScript interfaces from `/src/lib/types/`
+- Leverage Tailwind CSS v4 for styling
+- Ensure accessibility (WCAG compliance focus)
 
-- **Package Manager**: Uses pnpm exclusively
-- **Node Version**: 22.16.0 (specified in wrangler.jsonc)
-- **Analytics**: Umami integration (disabled in development)
-- **Images**: Using `@sveltejs/enhanced-img` for optimization
-- **SEO**: Dynamic sitemap generation with hreflang tags
-- **Content Loading**: Uses Vite's `import.meta.glob` for dynamic JSON imports
+### Type Safety
+
+- All content has strict TypeScript interfaces
+- Use type guards for content validation
+- Maintain consistency across translations
+
+## Deployment
+
+- Target: Cloudflare Pages
+- Build output: `.svelte-kit/cloudflare`
+- Node.js compatibility enabled
+- Automatic deployment on main branch

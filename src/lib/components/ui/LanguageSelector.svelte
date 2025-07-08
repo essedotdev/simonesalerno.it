@@ -3,6 +3,7 @@
 	import type { LanguageSelectorProps } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
+	import { ChevronDown } from '@lucide/svelte';
 
 	// Props ricevuti dal layout parent
 	let {
@@ -92,18 +93,7 @@
 			onclick={toggleDropdown}
 		>
 			{selectedLanguage.toUpperCase()}
-			<svg
-				class="mt-[0.15rem] -mr-1 h-5 w-5 text-white/15"
-				viewBox="0 0 20 20"
-				fill="currentColor"
-				aria-hidden="true"
-			>
-				<path
-					fill-rule="evenodd"
-					d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-					clip-rule="evenodd"
-				/>
-			</svg>
+			<ChevronDown class="mt-[0.15rem] -mr-1 h-5 w-5 text-white/15" />
 		</button>
 	</div>
 

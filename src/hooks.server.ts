@@ -1,13 +1,7 @@
 import { ContentLoader } from '$lib/utils/content';
-import type { RequestEvent } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit';
 
-export async function handle({
-	event,
-	resolve
-}: {
-	event: RequestEvent;
-	resolve: (event: RequestEvent) => Response | Promise<Response>;
-}): Promise<Response> {
+export const handle: Handle = async ({ event, resolve }) => {
 	const { pathname, origin } = event.url;
 	const pathSegments = pathname.split('/').filter(Boolean);
 
@@ -17,10 +11,11 @@ export async function handle({
 		const navigation = await loader.loadConfig('navigation');
 
 		// Determina la lingua corrente dalla URL
+		let currentLang = 'en'; // default
 		if (pathSegments.length > 0) {
 			const firstSegment = pathSegments[0];
 			if (languages.find((l) => l.code === firstSegment)) {
-				// Language is valid, continue processing
+				currentLang = firstSegment;
 			}
 		}
 
@@ -49,10 +44,14 @@ export async function handle({
 			}
 		}
 
-		return await resolve(event);
+		return await resolve(event, {
+			transformPageChunk: ({ html }: { html: string }) => html.replace('%lang%', currentLang)
+		});
 	} catch (error) {
 		console.error('Error in hooks.server.ts:', error);
-		// Fallback di sicurezza
-		return await resolve(event);
+		// Fallback di sicurezza con lingua di default
+		return await resolve(event, {
+			transformPageChunk: ({ html }: { html: string }) => html.replace('%lang%', 'en')
+		});
 	}
-}
+};

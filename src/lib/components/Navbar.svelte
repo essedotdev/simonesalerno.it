@@ -3,9 +3,8 @@
 	import type { NavbarProps } from '$lib/types/content';
 	import { handleAnchorClick } from '$lib/utils';
 	import { fade } from 'svelte/transition';
-	import MenuClose from './icons/CloseMenu.svelte';
-	import MenuOpen from './icons/OpenMenu.svelte';
-	import LanguageSelector from './LanguageSelector.svelte';
+	import { Menu, X } from '@lucide/svelte';
+	import LanguageSelector from './ui/LanguageSelector.svelte';
 	import Logo from './Logo.svelte';
 
 	// Ricevi dati come props
@@ -69,7 +68,7 @@
 				</div>
 
 				<button class="fixed z-20" transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
-					<MenuClose />
+					<X class="h-6 w-6" />
 				</button>
 
 				<div
@@ -87,7 +86,7 @@
 				</div>
 			{:else}
 				<button class="absolute" transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
-					<MenuOpen />
+					<Menu class="h-6 w-6" />
 				</button>
 			{/if}
 		</div>
