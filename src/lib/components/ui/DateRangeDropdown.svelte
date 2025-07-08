@@ -75,11 +75,8 @@
 	>
 		<Calendar class="h-4 w-4" />
 		<span class="truncate">
-			{hasDateRange ? formatDateRange : t.dateRange}
+			{hasDateRange ? formatDateRange() : t.dateRange}
 		</span>
-		{#if hasDateRange}
-			<span class="ml-1 rounded-full bg-white/10 px-2 py-1 text-xs"> • </span>
-		{/if}
 		<ChevronDown class="ml-1 h-4 w-4" />
 	</button>
 
@@ -101,6 +98,12 @@
 					type="date"
 					value={dateRange.from || ''}
 					oninput={(e) => handleDateInput('from', e)}
+					onfocus={(e) => {
+						// Prevent auto-focus on mobile to avoid native picker
+						if (window.innerWidth <= 768) {
+							e.target.blur();
+						}
+					}}
 					class="date-input w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white focus:border-white/20 focus:outline-none"
 				/>
 			</div>
@@ -111,6 +114,12 @@
 					type="date"
 					value={dateRange.to || ''}
 					oninput={(e) => handleDateInput('to', e)}
+					onfocus={(e) => {
+						// Prevent auto-focus on mobile to avoid native picker
+						if (window.innerWidth <= 768) {
+							e.target.blur();
+						}
+					}}
 					class="date-input w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white focus:border-white/20 focus:outline-none"
 				/>
 			</div>
