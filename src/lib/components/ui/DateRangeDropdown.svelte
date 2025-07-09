@@ -100,7 +100,11 @@
 		enableFocusTrap={true}
 		autoFocus={false}
 	>
-		<div class="space-y-4 p-4 {isMobile ? 'mobile-dropdown-content' : ''}" bind:this={dropdownContentElement} tabindex="-1">
+		<div
+			class="space-y-4 p-4 {isMobile ? 'mobile-dropdown-content' : ''}"
+			bind:this={dropdownContentElement}
+			tabindex="-1"
+		>
 			<div class="space-y-2 overflow-hidden">
 				<label for="date-from" class="block text-sm text-white/70">{t.from}</label>
 				<div class="w-full overflow-hidden">
