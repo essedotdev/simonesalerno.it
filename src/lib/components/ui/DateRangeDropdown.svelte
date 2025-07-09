@@ -100,11 +100,7 @@
 		enableFocusTrap={true}
 		autoFocus={false}
 	>
-		<div
-			class="space-y-4 p-4 {isMobile ? 'mobile-dropdown-content' : ''}"
-			bind:this={dropdownContentElement}
-			tabindex="-1"
-		>
+		<div class="space-y-4 p-4" bind:this={dropdownContentElement} tabindex="-1">
 			<div class="space-y-2">
 				<label for="date-from" class="block text-sm text-white/70">{t.from}</label>
 				<input
@@ -147,12 +143,6 @@
 </div>
 
 <style>
-	.date-input {
-		box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-	}
-
 	.date-input::-webkit-calendar-picker-indicator {
 		filter: invert(1) brightness(0.8);
 		cursor: pointer;
@@ -162,12 +152,5 @@
 	.date-input::-webkit-outer-spin-button {
 		-webkit-appearance: none;
 		margin: 0;
-	}
-
-	/* Mobile-specific fixes */
-	@media (max-width: 768px) {
-		.mobile-dropdown-content {
-			padding: 0.75rem; /* Reduce padding on mobile for more space */
-		}
 	}
 </style>
