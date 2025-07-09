@@ -105,29 +105,25 @@
 			bind:this={dropdownContentElement}
 			tabindex="-1"
 		>
-			<div class="space-y-2 overflow-hidden">
+			<div class="space-y-2">
 				<label for="date-from" class="block text-sm text-white/70">{t.from}</label>
-				<div class="w-full overflow-hidden">
-					<input
-						id="date-from"
-						type="date"
-						value={dateRange.from || ''}
-						onchange={(e) => onDateChange('from', e.currentTarget.value)}
-						class="date-input w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white focus:border-white/20 focus:outline-none"
-					/>
-				</div>
+				<input
+					id="date-from"
+					type="date"
+					value={dateRange.from || ''}
+					onchange={(e) => onDateChange('from', e.currentTarget.value)}
+					class="date-input w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white focus:border-white/20 focus:outline-none"
+				/>
 			</div>
-			<div class="space-y-2 overflow-hidden">
+			<div class="space-y-2">
 				<label for="date-to" class="block text-sm text-white/70">{t.to}</label>
-				<div class="w-full overflow-hidden">
-					<input
-						id="date-to"
-						type="date"
-						value={dateRange.to || ''}
-						onchange={(e) => onDateChange('to', e.currentTarget.value)}
-						class="date-input w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white focus:border-white/20 focus:outline-none"
-					/>
-				</div>
+				<input
+					id="date-to"
+					type="date"
+					value={dateRange.to || ''}
+					onchange={(e) => onDateChange('to', e.currentTarget.value)}
+					class="date-input w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white focus:border-white/20 focus:outline-none"
+				/>
 			</div>
 			<div class="flex gap-2 pt-2">
 				<button
@@ -170,11 +166,6 @@
 
 	/* Mobile-specific fixes */
 	@media (max-width: 768px) {
-		.date-input {
-			max-width: 100%;
-			width: calc(100% - 2px); /* Account for potential border issues */
-		}
-
 		.mobile-dropdown-content {
 			padding: 0.75rem; /* Reduce padding on mobile for more space */
 		}
