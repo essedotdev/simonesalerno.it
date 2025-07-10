@@ -1,7 +1,11 @@
+import type { Article, FilterState, Project } from '$lib/types';
+import { applyFilters, extractTags } from '$lib/utils/searchUtils';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, parent }) => {
+const ITEMS_PER_PAGE = 6;
+
+export const load: PageServerLoad = async ({ params, parent, url }) => {
 	const lang = params.page as string;
 	const route = params.route as string;
 	const parentData = await parent();
@@ -20,9 +24,55 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 		throw error(404, 'Page not found');
 	}
 
-	// Return page type for the component to render
+	// Get query parameters from URL
+	const page = parseInt(url.searchParams.get('page') || '1');
+	const query = url.searchParams.get('query') || '';
+	const tags = url.searchParams.get('tags')?.split(',') || [];
+	const sortBy = (url.searchParams.get('sortBy') as FilterState['sortBy']) || 'date';
+	const sortOrder = (url.searchParams.get('sortOrder') as FilterState['sortOrder']) || 'desc';
+
+	const filters: FilterState = {
+		query,
+		selectedTags: tags.filter(Boolean),
+		dateRange: { from: '', to: '' }, // Date filtering can be added here if needed
+		sortBy,
+		sortOrder
+	};
+
+	// Get the full list of data based on the route
+	const allData: Project[] | Article[] = isProjectsRoute
+		? parentData.projects
+		: parentData.articles;
+
+	// Extract all available tags BEFORE filtering
+	const availableTags = extractTags(allData, lang);
+
+	// Apply filters to the data
+	const filteredData = applyFilters(
+		allData,
+		filters,
+		lang,
+		isProjectsRoute ? 'projects' : 'articles'
+	);
+
+	// Apply pagination
+	const totalItems = filteredData.length;
+	const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+	const startIndex = (page - 1) * ITEMS_PER_PAGE;
+	const endIndex = startIndex + ITEMS_PER_PAGE;
+	const paginatedData = filteredData.slice(startIndex, endIndex);
+
+	// Return page type and paginated data
 	return {
 		pageType: isProjectsRoute ? 'projects' : 'articles',
+		items: paginatedData,
+		pagination: {
+			currentPage: page,
+			totalPages,
+			totalItems
+		},
+		activeFilters: filters,
+		availableTags, // Pass all available tags
 		currentLang: lang
 	};
 };

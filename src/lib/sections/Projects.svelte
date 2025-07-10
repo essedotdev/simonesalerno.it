@@ -2,14 +2,12 @@
 	import { browser } from '$app/environment';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import SearchFilter from '$lib/components/SearchFilter.svelte';
-	import { projectsFilterStore } from '$lib/stores/filterStore';
-	import type { ProjectsSectionProps } from '$lib/types/content';
-	import { applyFilters, extractTags } from '$lib/utils/searchUtils';
-	import type { FilterState } from '$lib/types/content';
-	import { onMount } from 'svelte';
-	import { inview, type Options } from 'svelte-inview';
+	import Pagination from '$lib/components/ui/Pagination.svelte';
+	import type { FilterState, ProjectsSectionProps } from '$lib/types/content';
 	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
 	import { ArrowRight, FileText } from '@lucide/svelte';
+	import { onMount } from 'svelte';
+	import { inview, type Options } from 'svelte-inview';
 
 	// Receive data as props
 	let {
@@ -19,14 +17,22 @@
 		projectsPage,
 		showFilters = false,
 		showViewAllButton = false,
-		global
-	}: ProjectsSectionProps = $props();
+		global,
+		pagination,
+		activeFilters,
+		availableTags
+	}: ProjectsSectionProps & {
+		pagination?: { currentPage: number; totalPages: number };
+		activeFilters?: FilterState;
+		availableTags?: string[];
+	} = $props();
 
 	let isInView = $state(false);
 	let screenSize = $state('desktop'); // 'mobile' | 'tablet' | 'desktop'
 
 	const options: Options = {
 		rootMargin: '-100px',
+
 		unobserveOnEnter: true
 	};
 
@@ -49,27 +55,17 @@
 		}
 	});
 
-	// Filter projects that have translation for current language
-	let languageFilteredProjects = $derived(
-		projects.filter((project) => project.translations[selectedLanguage])
-	);
-
-	// Extract available tags for the current language
-	let availableTags = $derived(extractTags(languageFilteredProjects, selectedLanguage));
-
-	// Apply search filters only if showFilters is enabled
-	let filteredProjects = $derived(
-		showFilters
-			? applyFilters(languageFilteredProjects, $projectsFilterStore, selectedLanguage, 'projects')
-			: languageFilteredProjects
-	);
-
-	// Limit projects based on screen size if showViewAllButton is enabled (home page)
+	// Data is now pre-filtered, but we ensure it has translations.
+	// We also apply the view limit reactively based on screen size.
 	let currentProjects = $derived.by(() => {
-		if (!showViewAllButton) return filteredProjects;
+		const languageFiltered = projects.filter((project) => project.translations[selectedLanguage]);
+
+		if (!showViewAllButton) {
+			return languageFiltered;
+		}
 
 		const limit = screenSize === 'mobile' ? 3 : screenSize === 'tablet' ? 4 : 6;
-		return filteredProjects.slice(0, limit);
+		return languageFiltered.slice(0, limit);
 	});
 
 	// Get all required translations at once
@@ -84,16 +80,6 @@
 
 	// Generate link to projects page
 	let projectsPageLink = $derived(`/${selectedLanguage}/${navigation[selectedLanguage].projects}`);
-
-	// Handle filter updates
-	const handleFilterUpdate = (newFilters: FilterState) => {
-		projectsFilterStore.set(newFilters);
-	};
-
-	// Handle clear filters
-	const handleClearFilters = () => {
-		projectsFilterStore.reset();
-	};
 </script>
 
 <div
@@ -109,16 +95,14 @@
 	</h2>
 
 	<!-- Search and Filter Component -->
-	{#if showFilters}
+	{#if showFilters && activeFilters && availableTags}
 		<div class="relative z-10">
 			<SearchFilter
-				filters={$projectsFilterStore}
+				filters={activeFilters}
 				{availableTags}
 				showDateFilter={false}
 				placeholder={t.searchProjects}
 				{global}
-				onUpdateFilters={handleFilterUpdate}
-				onClearFilters={handleClearFilters}
 			/>
 		</div>
 	{/if}
@@ -141,8 +125,15 @@
 			{/each}
 		</div>
 
+		<!-- Pagination -->
+		{#if pagination && pagination.totalPages > 1}
+			<div class="mt-8">
+				<Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
+			</div>
+		{/if}
+
 		<!-- View All Button - only show if in home page and there are more projects -->
-		{#if showViewAllButton && filteredProjects.length > (screenSize === 'mobile' ? 3 : screenSize === 'tablet' ? 4 : 6)}
+		{#if showViewAllButton && projects.length > (screenSize === 'mobile' ? 3 : screenSize === 'tablet' ? 4 : 6)}
 			<div class="flex justify-center">
 				<a
 					href={projectsPageLink}
@@ -155,8 +146,8 @@
 				</a>
 			</div>
 		{/if}
-	{:else if languageFilteredProjects.length > 0}
-		<!-- No results found with current filters -->
+	{:else}
+		<!-- No results found or no projects at all -->
 		<div class="flex flex-col items-center gap-4 py-16 text-center">
 			<FileText class="h-16 w-16 text-white/20" />
 			<div class="text-white/60">

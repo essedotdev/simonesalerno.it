@@ -1,13 +1,11 @@
 <script lang="ts">
 	import ArticleCard from '$lib/components/ArticleCard.svelte';
 	import SearchFilter from '$lib/components/SearchFilter.svelte';
-	import { articlesFilterStore } from '$lib/stores/filterStore';
-	import type { ArticlesSectionProps } from '$lib/types/content';
-	import { applyFilters, extractTags } from '$lib/utils/searchUtils';
-	import type { FilterState } from '$lib/types/content';
-	import { inview, type Options } from 'svelte-inview';
+	import Pagination from '$lib/components/ui/Pagination.svelte';
+	import type { ArticlesSectionProps, FilterState } from '$lib/types/content';
 	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
 	import { ArrowRight, FileText } from '@lucide/svelte';
+	import { inview, type Options } from 'svelte-inview';
 
 	// Receive data as props
 	let {
@@ -17,8 +15,15 @@
 		blogPage,
 		showFilters = false,
 		showViewAllButton = false,
-		global
-	}: ArticlesSectionProps = $props();
+		global,
+		pagination,
+		activeFilters,
+		availableTags
+	}: ArticlesSectionProps & {
+		pagination?: { currentPage: number; totalPages: number };
+		activeFilters?: FilterState;
+		availableTags?: string[];
+	} = $props();
 
 	let isInView = $state(false);
 	const options: Options = {
@@ -26,27 +31,17 @@
 		unobserveOnEnter: true
 	};
 
-	// Filter articles that have translation for current language
-	let languageFilteredArticles = $derived(
+	// The `articles` prop now contains only the items for the current page.
+	// We can still apply a language filter for robustness, though data should be pre-filtered.
+	let currentArticles = $derived(
 		articles.filter((article) => article.translations[selectedLanguage])
 	);
 
-	// Extract available tags for the current language
-	let availableTags = $derived(extractTags(languageFilteredArticles, selectedLanguage));
-
-	// Apply search filters only if showFilters is enabled
-	let filteredArticles = $derived(
-		showFilters
-			? applyFilters(languageFilteredArticles, $articlesFilterStore, selectedLanguage, 'articles')
-			: languageFilteredArticles
-	);
-
 	// Limit articles to 3 if showViewAllButton is enabled (home page)
-	let currentArticles = $derived(
-		showViewAllButton ? filteredArticles.slice(0, 3) : filteredArticles
-	);
+	if (showViewAllButton) {
+		currentArticles = currentArticles.slice(0, 3);
+	}
 
-	// Get all required translations at once
 	const translationKeys: TranslationKey[] = [
 		'viewAll',
 		'searchArticles',
@@ -56,18 +51,7 @@
 
 	let t = $derived(getTranslations(global, translationKeys));
 
-	// Generate link to blog page
 	let blogPageLink = $derived(`/${selectedLanguage}/${navigation[selectedLanguage].articles}`);
-
-	// Handle filter updates
-	const handleFilterUpdate = (newFilters: FilterState) => {
-		articlesFilterStore.set(newFilters);
-	};
-
-	// Handle clear filters
-	const handleClearFilters = () => {
-		articlesFilterStore.reset();
-	};
 </script>
 
 <div
@@ -83,16 +67,14 @@
 	</h2>
 
 	<!-- Search and Filter Component -->
-	{#if showFilters}
+	{#if showFilters && activeFilters && availableTags}
 		<div class="relative z-10">
 			<SearchFilter
-				filters={$articlesFilterStore}
+				filters={activeFilters}
 				{availableTags}
 				showDateFilter={true}
 				placeholder={t.searchArticles}
 				{global}
-				onUpdateFilters={handleFilterUpdate}
-				onClearFilters={handleClearFilters}
 			/>
 		</div>
 	{/if}
@@ -117,8 +99,15 @@
 			{/each}
 		</div>
 
+		<!-- Pagination -->
+		{#if pagination && pagination.totalPages > 1}
+			<div class="mt-8">
+				<Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
+			</div>
+		{/if}
+
 		<!-- View All Button - only show if in home page and there are more articles -->
-		{#if showViewAllButton && filteredArticles.length > 3}
+		{#if showViewAllButton && articles.length > 3}
 			<div class="flex justify-center">
 				<a
 					href={blogPageLink}
@@ -131,8 +120,8 @@
 				</a>
 			</div>
 		{/if}
-	{:else if languageFilteredArticles.length > 0}
-		<!-- No results found with current filters -->
+	{:else}
+		<!-- No results found or no articles at all -->
 		<div class="flex flex-col items-center gap-4 py-16 text-center">
 			<FileText class="h-16 w-16 text-white/20" />
 			<div class="text-white/60">
