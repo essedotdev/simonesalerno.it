@@ -143,6 +143,23 @@
 </div>
 
 <style>
+	.date-input {
+		box-sizing: border-box;
+		min-width: 0;
+		max-width: 100%;
+	}
+
+	/* Mobile-specific styles to ensure proper containment */
+	@media (max-width: 480px) {
+		.date-input {
+			width: 100% !important;
+			max-width: 100% !important;
+			min-width: 0 !important;
+			-webkit-appearance: none;
+			-moz-appearance: textfield;
+		}
+	}
+
 	.date-input::-webkit-calendar-picker-indicator {
 		filter: invert(1) brightness(0.8);
 		cursor: pointer;

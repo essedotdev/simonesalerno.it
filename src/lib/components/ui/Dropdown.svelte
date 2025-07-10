@@ -227,6 +227,7 @@
                         left: {position.left};
                         right: {position.right};
                         max-height: {maxHeight};
+                        width: auto;
                         z-index: {zIndex};
                         backdrop-filter: blur(16px) saturate(180%);
                         -webkit-backdrop-filter: blur(16px) saturate(180%);
