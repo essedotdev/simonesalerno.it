@@ -22,10 +22,10 @@
 
 	// Detect mobile device
 	$effect(() => {
-		isMobile = window.innerWidth <= 768;
+		isMobile = window.innerWidth <= 480;
 
 		const handleResize = () => {
-			isMobile = window.innerWidth <= 768;
+			isMobile = window.innerWidth <= 480;
 		};
 
 		window.addEventListener('resize', handleResize);
@@ -95,7 +95,6 @@
 		{dropdownId}
 		{triggerId}
 		onClose={closeDropdown}
-		width={isMobile ? '90vw' : '24rem'}
 		role="dialog"
 		enableFocusTrap={true}
 		autoFocus={false}

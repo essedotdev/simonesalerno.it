@@ -127,7 +127,6 @@
 		{dropdownId}
 		{triggerId}
 		onClose={closeDropdown}
-		width="18rem"
 		role="menu"
 		enableFocusTrap={true}
 	>

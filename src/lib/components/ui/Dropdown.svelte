@@ -21,9 +21,9 @@
 	let {
 		isOpen,
 		onClose,
-		width = '16rem',
+		width = '22rem',
 		maxHeight = '16rem',
-		zIndex = 10000,
+		zIndex = 100,
 		children,
 		triggerElement,
 		dropdownId = 'dropdown',
@@ -34,10 +34,21 @@
 	}: Props = $props();
 
 	let dropdownElement = $state<HTMLDivElement>();
-	let position = $state({ top: '100%', left: '0', right: 'auto' });
+	let position = $state({ top: 'auto', left: 'auto', right: 'auto', bottom: 'auto' });
 	let isAnimating = $state(false);
 	let focusableElements = $state<HTMLElement[] | null>(null);
 	let lastFocusedElement = $state<HTMLElement | null>(null);
+	let isMobile = $state(false);
+
+	$effect(() => {
+		if (!browser) return;
+		const checkMobile = () => (isMobile = window.innerWidth <= 480);
+		checkMobile();
+		window.addEventListener('resize', checkMobile);
+		return () => {
+			window.removeEventListener('resize', checkMobile);
+		};
+	});
 
 	// Calculate optimal position relative to viewport
 	const calculatePosition = async () => {
@@ -46,49 +57,44 @@
 		await tick(); // Ensure DOM is updated
 
 		const triggerRect = triggerElement.getBoundingClientRect();
-		const dropdownRect = dropdownElement.getBoundingClientRect();
-		const isMobile = window.innerWidth <= 768;
-
-		const spaceBelow = window.innerHeight - triggerRect.bottom;
-		const spaceAbove = triggerRect.top;
-		const spaceRight = window.innerWidth - triggerRect.left;
-
-		// Vertical positioning
-		let top = '100%';
-		if (spaceBelow < dropdownRect.height && spaceAbove > spaceBelow) {
-			top = `-${dropdownRect.height + 8}px`;
-		}
-
-		// Horizontal positioning
-		let left = '0';
-		let right = 'auto';
 
 		if (isMobile) {
-			// On mobile, prevent overflow by adjusting position
-			const dropdownWidth = dropdownRect.width;
-			const triggerCenter = triggerRect.left + triggerRect.width / 2;
-			const halfDropdownWidth = dropdownWidth / 2;
+			const dropdownHeight = dropdownElement.offsetHeight;
+			const spaceBelow = window.innerHeight - triggerRect.bottom;
 
-			if (triggerCenter - halfDropdownWidth < 16) {
-				// Too close to left edge
-				left = `${16 - triggerRect.left}px`;
-			} else if (triggerCenter + halfDropdownWidth > window.innerWidth - 16) {
-				// Too close to right edge
-				left = 'auto';
-				right = `${16 - (window.innerWidth - triggerRect.right)}px`;
-			} else {
-				// Center on trigger
-				left = `${triggerCenter - triggerRect.left - halfDropdownWidth}px`;
+			let top = `${triggerRect.bottom + 8}px`;
+			let bottom = 'auto';
+
+			// If not enough space below and more space above, open upwards
+			if (spaceBelow < dropdownHeight && triggerRect.top > spaceBelow) {
+				top = 'auto';
+				bottom = `${window.innerHeight - triggerRect.top + 8}px`;
 			}
+			// The left/right positioning is handled by the mobile wrapper's padding
+			position = { top, bottom, left: '2.5rem', right: '2.5rem' };
 		} else {
-			// Desktop positioning
+			const dropdownRect = dropdownElement.getBoundingClientRect();
+			const spaceBelow = window.innerHeight - triggerRect.bottom;
+			const spaceAbove = triggerRect.top;
+			const spaceRight = window.innerWidth - triggerRect.left;
+
+			// Vertical positioning
+			let top = '100%';
+			if (spaceBelow < dropdownRect.height && spaceAbove > spaceBelow) {
+				top = `-${dropdownRect.height + 8}px`;
+			}
+
+			// Horizontal positioning
+			let left = '0';
+			let right = 'auto';
+
 			if (spaceRight < dropdownRect.width) {
 				left = 'auto';
 				right = '0';
 			}
-		}
 
-		position = { top, left, right };
+			position = { top, left, right, bottom: 'auto' };
+		}
 	};
 
 	// Handle focus trap
@@ -159,14 +165,14 @@
 			// Store last focused element
 			lastFocusedElement = document.activeElement as HTMLElement;
 
-			// Start animation
-			isAnimating = true;
+			const setupDropdown = async () => {
+				// Calculate position before starting animation
+				await calculatePosition();
 
-			// Calculate position
-			calculatePosition();
+				// Now that position is set, start the animation
+				isAnimating = true;
 
-			// Setup focus management
-			tick().then(() => {
+				// Setup focus management. `calculatePosition` has a `tick`, so DOM is ready.
 				if (dropdownElement) {
 					const elements = dropdownElement.querySelectorAll(
 						'button:not([disabled]), input:not([disabled]), [tabindex="0"]'
@@ -178,9 +184,12 @@
 						focusableElements[0].focus();
 					}
 				}
-			});
+			};
+
+			setupDropdown();
 		} else if (!isOpen && lastFocusedElement) {
-			// Return focus when closing
+			// Return focus when closing and reset animation state
+			isAnimating = false;
 			lastFocusedElement.focus();
 			lastFocusedElement = null;
 		}
@@ -204,14 +213,38 @@
 <svelte:window on:click={handleOutsideClick} on:keydown={handleKeydown} />
 
 {#if isOpen && browser}
-	<div
-		bind:this={dropdownElement}
-		id={dropdownId}
-		{role}
-		aria-labelledby={triggerId}
-		class="dropdown absolute mt-2 overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]"
-		class:dropdown-enter={isAnimating}
-		style="
+	{#if isMobile}
+		<div
+			bind:this={dropdownElement}
+			id={dropdownId}
+			{role}
+			aria-labelledby={triggerId}
+			class="dropdown-mobile fixed overflow-hidden rounded-xl border border-white/10"
+			class:animate-mobile={isAnimating}
+			style="
+                        top: {position.top};
+                        bottom: {position.bottom};
+                        left: {position.left};
+                        right: {position.right};
+                        max-height: {maxHeight};
+                        width: auto;
+                        z-index: {zIndex};
+                        backdrop-filter: blur(16px) saturate(180%);
+                        -webkit-backdrop-filter: blur(16px) saturate(180%);
+                        background-color: rgba(17, 17, 17, 0.8);
+                    "
+		>
+			{@render children()}
+		</div>
+	{:else}
+		<div
+			bind:this={dropdownElement}
+			id={dropdownId}
+			{role}
+			aria-labelledby={triggerId}
+			class="dropdown-desktop absolute mt-2 overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]"
+			class:animate-desktop={isAnimating}
+			style="
 			top: {position.top}; 
 			left: {position.left}; 
 			right: {position.right};
@@ -222,23 +255,31 @@
 			-webkit-backdrop-filter: blur(16px) saturate(180%);
 			background-color: rgba(17, 17, 17, 0.8);
 		"
-	>
-		{@render children()}
-	</div>
+		>
+			{@render children()}
+		</div>
+	{/if}
 {/if}
 
 <style>
-	.dropdown {
+	.dropdown-desktop {
 		transform-origin: top center;
 		transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
 		will-change: transform, opacity;
+		isolation: isolate;
 	}
 
-	.dropdown-enter {
-		animation: dropdownEnter 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	.dropdown-mobile {
+		transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+		will-change: transform, opacity;
+		isolation: isolate;
 	}
 
-	@keyframes dropdownEnter {
+	.animate-desktop {
+		animation: desktopEnter 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	}
+
+	@keyframes desktopEnter {
 		from {
 			opacity: 0;
 			transform: scale(0.95) translateY(-8px);
@@ -249,8 +290,18 @@
 		}
 	}
 
-	/* Ensure proper stacking context */
-	.dropdown {
-		isolation: isolate;
+	.animate-mobile {
+		animation: mobileEnter 250ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	}
+
+	@keyframes mobileEnter {
+		from {
+			opacity: 0;
+			transform: translateY(-20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
 	}
 </style>

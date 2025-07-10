@@ -78,7 +78,6 @@
 		{dropdownId}
 		{triggerId}
 		onClose={closeDropdown}
-		width="22rem"
 		maxHeight="20rem"
 		role="listbox"
 		enableFocusTrap={true}
