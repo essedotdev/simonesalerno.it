@@ -155,6 +155,7 @@
 			width: 100% !important;
 			max-width: 100% !important;
 			min-width: 0 !important;
+			appearance: none;
 			-webkit-appearance: none;
 			-moz-appearance: textfield;
 		}
