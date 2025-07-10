@@ -92,11 +92,11 @@
 				class="w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white placeholder-white/50 focus:border-white/20 focus:outline-none"
 			/>
 		</div>
-		<div class="max-h-40 overflow-y-auto">
+		<div class="max-h-40 overflow-y-auto p-2 space-y-1">
 			{#each filteredTags as tag (tag)}
 				<button
 					onclick={() => handleTagSelect(tag)}
-					class="flex w-full items-center gap-2 px-3 py-2 text-left text-white/80 transition-colors hover:bg-white/[.04]"
+					class="flex w-full items-center gap-2 px-3 py-2 text-left text-white/80 transition-colors rounded-lg hover:bg-white/[.08] active:bg-white/[.12] {selectedTags.includes(tag) ? 'bg-white/[.06]' : ''}"
 				>
 					<div
 						class="flex h-4 w-4 items-center justify-center rounded border border-white/20 {selectedTags.includes(

@@ -131,7 +131,7 @@
 		role="menu"
 		enableFocusTrap={true}
 	>
-		<div class="py-1">
+		<div class="p-2 space-y-1">
 			{#each sortOptions as option (option.value)}
 				{@const label =
 					option.value === 'date-desc'
@@ -143,7 +143,7 @@
 								: t.sortTitleZA}
 				<button
 					onclick={() => handleSortSelect(option.value)}
-					class="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-white/[.04] {currentSort ===
+					class="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors rounded-lg hover:bg-white/[.08] active:bg-white/[.12] {currentSort ===
 					option.value
 						? 'bg-white/[.06]'
 						: ''}"
