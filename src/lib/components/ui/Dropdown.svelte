@@ -73,8 +73,8 @@
 
 		if (isMobile) {
 			// On mobile, make dropdown fill width with padding
-			left = '2.5rem';
-			right = '2.5rem';
+			left = '0';
+			right = '0';
 		} else {
 			// On desktop, position relative to trigger
 			if (spaceRight < dropdownRect.width) {
