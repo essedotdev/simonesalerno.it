@@ -56,45 +56,34 @@
 
 		await tick(); // Ensure DOM is updated
 
-		const triggerRect = triggerElement.getBoundingClientRect();
+		const dropdownRect = dropdownElement.getBoundingClientRect();
+		const spaceBelow = window.innerHeight - triggerElement.getBoundingClientRect().bottom;
+		const spaceAbove = triggerElement.getBoundingClientRect().top;
+		const spaceRight = window.innerWidth - triggerElement.getBoundingClientRect().left;
+
+		// Vertical positioning - same logic for both mobile and desktop
+		let top = '100%';
+		if (spaceBelow < dropdownRect.height && spaceAbove > spaceBelow) {
+			top = `-${dropdownRect.height + 8}px`;
+		}
+
+		// Horizontal positioning - different for mobile vs desktop
+		let left = '0';
+		let right = 'auto';
 
 		if (isMobile) {
-			const dropdownHeight = dropdownElement.offsetHeight;
-			const spaceBelow = window.innerHeight - triggerRect.bottom;
-
-			let top = `${triggerRect.bottom + 8}px`;
-			let bottom = 'auto';
-
-			// If not enough space below and more space above, open upwards
-			if (spaceBelow < dropdownHeight && triggerRect.top > spaceBelow) {
-				top = 'auto';
-				bottom = `${window.innerHeight - triggerRect.top + 8}px`;
-			}
-			// The left/right positioning is handled by the mobile wrapper's padding
-			position = { top, bottom, left: '2.5rem', right: '2.5rem' };
+			// On mobile, make dropdown fill width with padding
+			left = '2.5rem';
+			right = '2.5rem';
 		} else {
-			const dropdownRect = dropdownElement.getBoundingClientRect();
-			const spaceBelow = window.innerHeight - triggerRect.bottom;
-			const spaceAbove = triggerRect.top;
-			const spaceRight = window.innerWidth - triggerRect.left;
-
-			// Vertical positioning
-			let top = '100%';
-			if (spaceBelow < dropdownRect.height && spaceAbove > spaceBelow) {
-				top = `-${dropdownRect.height + 8}px`;
-			}
-
-			// Horizontal positioning
-			let left = '0';
-			let right = 'auto';
-
+			// On desktop, position relative to trigger
 			if (spaceRight < dropdownRect.width) {
 				left = 'auto';
 				right = '0';
 			}
-
-			position = { top, left, right, bottom: 'auto' };
 		}
+
+		position = { top, left, right, bottom: 'auto' };
 	};
 
 	// Handle focus trap
@@ -213,73 +202,42 @@
 <svelte:window on:click={handleOutsideClick} on:keydown={handleKeydown} />
 
 {#if isOpen && browser}
-	{#if isMobile}
-		<div
-			bind:this={dropdownElement}
-			id={dropdownId}
-			{role}
-			aria-labelledby={triggerId}
-			class="dropdown-mobile fixed overflow-hidden rounded-xl border border-white/10"
-			class:animate-mobile={isAnimating}
-			style="
-                        top: {position.top};
-                        bottom: {position.bottom};
-                        left: {position.left};
-                        right: {position.right};
-                        max-height: {maxHeight};
-                        width: auto;
-                        z-index: {zIndex};
-                        backdrop-filter: blur(16px) saturate(180%);
-                        -webkit-backdrop-filter: blur(16px) saturate(180%);
-                        background-color: rgba(17, 17, 17, 0.8);
-                    "
-		>
-			{@render children()}
-		</div>
-	{:else}
-		<div
-			bind:this={dropdownElement}
-			id={dropdownId}
-			{role}
-			aria-labelledby={triggerId}
-			class="dropdown-desktop absolute mt-2 overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]"
-			class:animate-desktop={isAnimating}
-			style="
-			top: {position.top}; 
-			left: {position.left}; 
-			right: {position.right};
-			width: {width}; 
-			max-height: {maxHeight}; 
-			z-index: {zIndex};
-			backdrop-filter: blur(16px) saturate(180%);
-			-webkit-backdrop-filter: blur(16px) saturate(180%);
-			background-color: rgba(17, 17, 17, 0.8);
+	<div
+		bind:this={dropdownElement}
+		id={dropdownId}
+		{role}
+		aria-labelledby={triggerId}
+		class="dropdown absolute mt-2 overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]"
+		class:animate={isAnimating}
+		style="
+		top: {position.top}; 
+		left: {position.left}; 
+		right: {position.right};
+		width: {isMobile ? 'auto' : width}; 
+		max-height: {maxHeight}; 
+		z-index: {zIndex};
+		backdrop-filter: blur(16px) saturate(180%);
+		-webkit-backdrop-filter: blur(16px) saturate(180%);
+		background-color: rgba(17, 17, 17, 0.8);
 		"
-		>
-			{@render children()}
-		</div>
-	{/if}
+	>
+		{@render children()}
+	</div>
 {/if}
 
 <style>
-	.dropdown-desktop {
+	.dropdown {
 		transform-origin: top center;
 		transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
 		will-change: transform, opacity;
 		isolation: isolate;
 	}
 
-	.dropdown-mobile {
-		transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
-		will-change: transform, opacity;
-		isolation: isolate;
+	.animate {
+		animation: dropdownEnter 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 	}
 
-	.animate-desktop {
-		animation: desktopEnter 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-	}
-
-	@keyframes desktopEnter {
+	@keyframes dropdownEnter {
 		from {
 			opacity: 0;
 			transform: scale(0.95) translateY(-8px);
@@ -287,21 +245,6 @@
 		to {
 			opacity: 1;
 			transform: scale(1) translateY(0);
-		}
-	}
-
-	.animate-mobile {
-		animation: mobileEnter 250ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-	}
-
-	@keyframes mobileEnter {
-		from {
-			opacity: 0;
-			transform: translateY(-20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
 		}
 	}
 </style>
