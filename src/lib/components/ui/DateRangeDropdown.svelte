@@ -7,30 +7,18 @@
 	interface Props {
 		dateRange: { from?: string; to?: string };
 		onDateChange: (type: 'from' | 'to', value: string) => void;
+		onClearDates?: () => void;
 		global?: GlobalContent;
 	}
 
-	let { dateRange, onDateChange, global }: Props = $props();
+	let { dateRange, onDateChange, onClearDates, global }: Props = $props();
 
-	const translationKeys: TranslationKey[] = ['dateRange', 'from', 'to', 'clearFilters', 'apply'];
+	const translationKeys: TranslationKey[] = ['dateRange', 'from', 'to', 'clearDates'];
 	let t = $derived(getTranslations(global, translationKeys));
 
 	let isOpen = $state(false);
 	let triggerElement = $state<HTMLButtonElement>();
 	let dropdownContentElement = $state<HTMLElement>();
-	let isMobile = $state(false);
-
-	// Detect mobile device
-	$effect(() => {
-		isMobile = window.innerWidth <= 480;
-
-		const handleResize = () => {
-			isMobile = window.innerWidth <= 480;
-		};
-
-		window.addEventListener('resize', handleResize);
-		return () => window.removeEventListener('resize', handleResize);
-	});
 
 	// Generate unique IDs for ARIA
 	const dropdownId = `date-dropdown-${Math.random().toString(36).substring(7)}`;
@@ -80,7 +68,7 @@
 		aria-haspopup="dialog"
 		aria-controls={dropdownId}
 		onclick={toggleDropdown}
-		class="flex w-full cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04]"
+		class="flex w-full cursor-pointer items-center gap-2 rounded-xl border border-white/5 bg-white/[.01] px-4 py-2 text-white/80 backdrop-blur-md transition-colors hover:bg-white/[.02]"
 		style="touch-action: manipulation;"
 	>
 		<Calendar class="h-4 w-4" />
@@ -108,7 +96,7 @@
 					type="date"
 					value={dateRange.from || ''}
 					onchange={(e) => onDateChange('from', e.currentTarget.value)}
-					class="date-input w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white focus:border-white/20 focus:outline-none"
+					class="date-input w-full rounded-lg border border-white/10 bg-white/[.03] px-3 py-2 text-white backdrop-blur-sm focus:border-white/20 focus:outline-none"
 				/>
 			</div>
 			<div class="space-y-2">
@@ -118,26 +106,19 @@
 					type="date"
 					value={dateRange.to || ''}
 					onchange={(e) => onDateChange('to', e.currentTarget.value)}
-					class="date-input w-full rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-white focus:border-white/20 focus:outline-none"
+					class="date-input w-full rounded-lg border border-white/10 bg-white/[.03] px-3 py-2 text-white backdrop-blur-sm focus:border-white/20 focus:outline-none"
 				/>
 			</div>
-			<div class="flex gap-2 pt-2">
-				<button
-					onclick={() => {
-						onDateChange('from', '');
-						onDateChange('to', '');
-					}}
-					class="flex-1 rounded-lg border border-white/10 bg-white/[.02] px-3 py-2 text-sm text-white/80 transition-colors hover:bg-white/[.04]"
-				>
-					{t.clearFilters}
-				</button>
-				<button
-					onclick={closeDropdown}
-					class="flex-1 rounded-lg bg-white/10 px-3 py-2 text-sm text-white transition-colors hover:bg-white/20"
-				>
-					{t.apply}
-				</button>
-			</div>
+			{#if hasDateRange && onClearDates}
+				<div class="border-t border-white/5 pt-3">
+					<button
+						onclick={onClearDates}
+						class="w-full rounded-xl border border-white/5 bg-white/[.01] px-4 py-2 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/[.02]"
+					>
+						{t.clearDates}
+					</button>
+				</div>
+			{/if}
 		</div>
 	</Dropdown>
 </div>

@@ -1,4 +1,4 @@
-import type { Article, FilterState, Project } from '$lib/types';
+import type { ArticleItem, FilterState, ProjectItem } from '$lib/types';
 import { applyFilters, extractTags } from '$lib/utils/searchUtils';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
@@ -30,19 +30,19 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
 	const tags = url.searchParams.get('tags')?.split(',') || [];
 	const sortBy = (url.searchParams.get('sortBy') as FilterState['sortBy']) || 'date';
 	const sortOrder = (url.searchParams.get('sortOrder') as FilterState['sortOrder']) || 'desc';
+	const from = url.searchParams.get('from') || undefined;
+	const to = url.searchParams.get('to') || undefined;
 
 	const filters: FilterState = {
 		query,
 		selectedTags: tags.filter(Boolean),
-		dateRange: { from: '', to: '' }, // Date filtering can be added here if needed
+		dateRange: { from, to },
 		sortBy,
 		sortOrder
 	};
 
 	// Get the full list of data based on the route
-	const allData: Project[] | Article[] = isProjectsRoute
-		? parentData.projects
-		: parentData.articles;
+	const allData = isProjectsRoute ? parentData.projects : parentData.articles;
 
 	// Extract all available tags BEFORE filtering
 	const availableTags = extractTags(allData, lang);

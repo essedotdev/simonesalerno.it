@@ -34,13 +34,10 @@
 	// The `articles` prop now contains only the items for the current page.
 	// We can still apply a language filter for robustness, though data should be pre-filtered.
 	let currentArticles = $derived(
-		articles.filter((article) => article.translations[selectedLanguage])
+		articles
+			.filter((article) => article.translations[selectedLanguage])
+			.slice(0, showViewAllButton ? 3 : articles.length)
 	);
-
-	// Limit articles to 3 if showViewAllButton is enabled (home page)
-	if (showViewAllButton) {
-		currentArticles = currentArticles.slice(0, 3);
-	}
 
 	const translationKeys: TranslationKey[] = [
 		'viewAll',

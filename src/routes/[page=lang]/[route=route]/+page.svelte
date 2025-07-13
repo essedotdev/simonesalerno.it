@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Articles from '$lib/sections/Articles.svelte';
 	import Projects from '$lib/sections/Projects.svelte';
+	import type { ArticleItem, ProjectItem } from '$lib/types';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -11,7 +12,7 @@
 >
 	{#if data.pageType === 'projects'}
 		<Projects
-			projects={data.items}
+			projects={data.items.filter((item): item is ProjectItem => 'link' in item.meta)}
 			selectedLanguage={data.currentLang}
 			navigation={data.navigation}
 			projectsPage={data.projectsPage}
@@ -23,7 +24,7 @@
 		/>
 	{:else}
 		<Articles
-			articles={data.items}
+			articles={data.items.filter((item): item is ArticleItem => 'published_date' in item.meta)}
 			selectedLanguage={data.currentLang}
 			navigation={data.navigation}
 			blogPage={data.blogPage}

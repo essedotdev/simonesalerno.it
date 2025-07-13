@@ -52,6 +52,8 @@
 		{ "name": "from", "value": "Da" },
 		{ "name": "to", "value": "A" },
 		{ "name": "sort", "value": "Ordina" },
-		{ "name": "apply", "value": "Applica" }
+		{ "name": "apply", "value": "Applica" },
+		{ "name": "clearTags", "value": "Cancella tag" },
+		{ "name": "clearDates", "value": "Cancella date" }
 	]
 }

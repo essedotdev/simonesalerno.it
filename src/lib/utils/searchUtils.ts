@@ -7,8 +7,8 @@ export const matchesQuery = (text: string, query: string): boolean => {
 };
 
 // Extract all unique tags from items
-export const extractTags = <T extends ProjectItem | ArticleItem>(
-	items: T[],
+export const extractTags = (
+	items: (ProjectItem | ArticleItem)[],
 	language: string
 ): string[] => {
 	const tagSet = new Set<string>();
@@ -98,12 +98,12 @@ export const filterArticles = (
 };
 
 // Sorting function
-export const sortItems = <T extends ProjectItem | ArticleItem>(
-	items: T[],
+export const sortItems = (
+	items: (ProjectItem | ArticleItem)[],
 	sortBy: FilterState['sortBy'],
 	sortOrder: FilterState['sortOrder'],
 	language: string
-): T[] => {
+): (ProjectItem | ArticleItem)[] => {
 	const sorted = [...items].sort((a, b) => {
 		let comparison = 0;
 
@@ -139,16 +139,16 @@ export const sortItems = <T extends ProjectItem | ArticleItem>(
 };
 
 // Main filtering and sorting function
-export const applyFilters = <T extends ProjectItem | ArticleItem>(
-	items: T[],
+export const applyFilters = (
+	items: (ProjectItem | ArticleItem)[],
 	filters: FilterState,
 	language: string,
 	type: 'projects' | 'articles'
-): T[] => {
+): (ProjectItem | ArticleItem)[] => {
 	const filtered =
 		type === 'projects'
-			? (filterProjects(items as ProjectItem[], filters, language) as T[])
-			: (filterArticles(items as ArticleItem[], filters, language) as T[]);
+			? filterProjects(items as ProjectItem[], filters, language)
+			: filterArticles(items as ArticleItem[], filters, language);
 
 	return sortItems(filtered, filters.sortBy, filters.sortOrder, language);
 };

@@ -112,7 +112,7 @@
 		aria-haspopup="menu"
 		aria-controls={dropdownId}
 		onclick={toggleDropdown}
-		class="flex w-full cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-white/[.02] px-4 py-2 text-white/80 transition-colors hover:bg-white/[.04]"
+		class="flex w-full cursor-pointer items-center gap-2 rounded-xl border border-white/5 bg-white/[.01] px-4 py-2 text-white/80 backdrop-blur-md transition-colors hover:bg-white/[.02]"
 		style="touch-action: manipulation;"
 	>
 		<ArrowUpDown class="h-4 w-4" />
@@ -131,7 +131,7 @@
 		role="menu"
 		enableFocusTrap={true}
 	>
-		<div class="p-2 space-y-1">
+		<div class="space-y-1 p-2">
 			{#each sortOptions as option (option.value)}
 				{@const label =
 					option.value === 'date-desc'
@@ -143,13 +143,13 @@
 								: t.sortTitleZA}
 				<button
 					onclick={() => handleSortSelect(option.value)}
-					class="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors rounded-lg hover:bg-white/[.08] active:bg-white/[.12] {currentSort ===
+					class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-white/[.04] active:bg-white/[.08] {currentSort ===
 					option.value
-						? 'bg-white/[.06]'
+						? 'bg-white/[.02]'
 						: ''}"
 				>
 					<div
-						class="flex h-8 w-8 items-center justify-center rounded-md bg-white/10 text-white/80"
+						class="flex h-8 w-8 items-center justify-center rounded-md bg-white/5 text-white/80 backdrop-blur-sm"
 					>
 						<option.IconComponent class="h-4 w-4" />
 					</div>

@@ -43,8 +43,19 @@
 				}
 			} else if (key === 'sortBy' || key === 'sortOrder') {
 				searchParams.set(key, value as string);
+			} else if (key === 'dateRange' && typeof value === 'object') {
+				const dateRange = value as FilterState['dateRange'];
+				if (dateRange.from) {
+					searchParams.set('from', dateRange.from);
+				} else {
+					searchParams.delete('from');
+				}
+				if (dateRange.to) {
+					searchParams.set('to', dateRange.to);
+				} else {
+					searchParams.delete('to');
+				}
 			}
-			// Date range logic can be added here
 		}
 
 		goto(`?${searchParams.toString()}`, { keepFocus: true, noScroll: true });
@@ -63,18 +74,29 @@
 	};
 
 	const handleDateChange = (type: 'from' | 'to', value: string) => {
-		// This requires URL param logic similar to the above
-		console.warn('Date change handler not fully implemented for URL state');
+		const newDateRange = { ...filters.dateRange };
+		newDateRange[type] = value;
+		updateUrlParams({ dateRange: newDateRange });
 	};
 
 	const handleSortChange = (sortBy: FilterState['sortBy'], sortOrder: FilterState['sortOrder']) => {
 		updateUrlParams({ sortBy, sortOrder });
 	};
 
+	const clearTags = () => {
+		updateUrlParams({ selectedTags: [] });
+	};
+
+	const clearDates = () => {
+		updateUrlParams({ dateRange: { from: undefined, to: undefined } });
+	};
+
 	const clearAllFilters = () => {
 		const searchParams = new URLSearchParams($page.url.searchParams);
 		searchParams.delete('query');
 		searchParams.delete('tags');
+		searchParams.delete('from');
+		searchParams.delete('to');
 		searchParams.delete('page');
 		// Keep sorting parameters or clear them as well
 		// searchParams.delete('sortBy');
@@ -83,8 +105,10 @@
 	};
 
 	const hasActiveFilters = $derived(
-		filters.query.trim() !== '' || filters.selectedTags.length > 0
-		// We don't check for date range here since it's not fully implemented
+		filters.query.trim() !== '' ||
+			filters.selectedTags.length > 0 ||
+			filters.dateRange.from !== undefined ||
+			filters.dateRange.to !== undefined
 	);
 </script>
 
@@ -96,7 +120,7 @@
 			value={filters.query}
 			oninput={handleQueryChange}
 			{placeholder}
-			class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 pl-12 text-white placeholder-white/50 focus:border-white/20 focus:bg-black/40 focus:outline-none"
+			class="w-full rounded-2xl border border-white/5 bg-white/[.01] px-4 py-3 pl-12 text-white placeholder-white/50 backdrop-blur-sm focus:border-white/10 focus:outline-none"
 		/>
 		<Search class="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-white/50" />
 	</div>
@@ -109,13 +133,19 @@
 				{availableTags}
 				selectedTags={filters.selectedTags}
 				onTagToggle={handleTagToggle}
+				onClearTags={clearTags}
 				{global}
 			/>
 		{/if}
 
 		<!-- Date Range Filter -->
 		{#if showDateFilter}
-			<DateRangeDropdown dateRange={filters.dateRange} onDateChange={handleDateChange} {global} />
+			<DateRangeDropdown 
+				dateRange={filters.dateRange} 
+				onDateChange={handleDateChange} 
+				onClearDates={clearDates}
+				{global} 
+			/>
 		{/if}
 
 		<!-- Sort Options -->
@@ -130,7 +160,7 @@
 		{#if hasActiveFilters}
 			<button
 				onclick={clearAllFilters}
-				class="rounded-xl border border-white/10 bg-black/30 px-4 py-2 text-white/80 transition-colors hover:bg-black/40"
+				class="rounded-xl border border-white/5 bg-white/[.01] px-4 py-2 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/[.02]"
 			>
 				{t.clearFilters}
 			</button>
