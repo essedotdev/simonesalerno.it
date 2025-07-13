@@ -112,7 +112,7 @@
 		aria-haspopup="menu"
 		aria-controls={dropdownId}
 		onclick={toggleDropdown}
-		class="flex w-full cursor-pointer items-center gap-2 rounded-xl border border-white/5 bg-white/[.01] px-4 py-2 text-white/80 backdrop-blur-md transition-colors hover:bg-white/[.02]"
+		class="flex w-full cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 backdrop-blur-md transition-colors hover:bg-white/10"
 		style="touch-action: manipulation;"
 	>
 		<ArrowUpDown class="h-4 w-4" />
@@ -143,13 +143,13 @@
 								: t.sortTitleZA}
 				<button
 					onclick={() => handleSortSelect(option.value)}
-					class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-white/[.04] active:bg-white/[.08] {currentSort ===
-					option.value
-						? 'bg-white/[.02]'
-						: ''}"
+					class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors
+						{currentSort === option.value
+							? 'bg-white/10'
+							: 'hover:bg-white/5 active:bg-white/10'} w-full"
 				>
 					<div
-						class="flex h-8 w-8 items-center justify-center rounded-md bg-white/5 text-white/80 backdrop-blur-sm"
+						class="flex h-8 w-8 items-center justify-center rounded-md bg-white/10 text-white/80 backdrop-blur-sm"
 					>
 						<option.IconComponent class="h-4 w-4" />
 					</div>

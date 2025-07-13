@@ -61,13 +61,13 @@
 		aria-haspopup="listbox"
 		aria-controls={dropdownId}
 		onclick={toggleDropdown}
-		class="flex w-full cursor-pointer items-center gap-2 rounded-xl border border-white/5 bg-white/[.01] px-4 py-2 text-white/80 backdrop-blur-md transition-colors hover:bg-white/[.02]"
+		class="flex w-full cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 backdrop-blur-md transition-colors hover:bg-white/10"
 		style="touch-action: manipulation;"
 	>
 		<Tag class="h-4 w-4" />
 		{t.tags}
 		{#if selectedTags.length > 0}
-			<span class="ml-1 rounded-full bg-white/5 px-2 py-1 text-xs backdrop-blur-sm">
+			<span class="ml-1 rounded-full bg-white/15 px-2 py-1 text-xs backdrop-blur-sm">
 				{selectedTags.length}
 			</span>
 		{/if}
@@ -90,24 +90,24 @@
 				type="text"
 				bind:value={tagSearchQuery}
 				placeholder={t.searchTags}
-				class="w-full rounded-lg border border-white/5 bg-white/[.01] px-3 py-2 text-white placeholder-white/50 backdrop-blur-sm focus:border-white/10 focus:outline-none"
+				class="w-full rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2 text-white placeholder-white/50 backdrop-blur-sm focus:border-white/20 focus:outline-none"
 			/>
 		</div>
 		<div class="max-h-40 space-y-1 overflow-y-auto p-2">
 			{#each filteredTags as tag (tag)}
 				<button
 					onclick={() => handleTagSelect(tag)}
-					class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-white/80 transition-colors hover:bg-white/[.04] active:bg-white/[.08] {selectedTags.includes(
+					class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-white/80 transition-colors {selectedTags.includes(
 						tag
 					)
-						? 'bg-white/[.02]'
-						: ''}"
+						? 'bg-white/15'
+						: 'hover:bg-white/10 active:bg-white/15'}"
 				>
 					<div
 						class="flex h-4 w-4 items-center justify-center rounded border border-white/10 {selectedTags.includes(
 							tag
 						)
-							? 'bg-white/10'
+							? 'bg-white/15'
 							: ''}"
 					>
 						{#if selectedTags.includes(tag)}
@@ -122,7 +122,7 @@
 			<div class="border-t border-white/5 p-2">
 				<button
 					onclick={onClearTags}
-					class="w-full rounded-xl border border-white/5 bg-white/[.01] px-4 py-2 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/[.02]"
+					class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10"
 				>
 					{t.clearTags}
 				</button>

@@ -207,7 +207,7 @@
 		id={dropdownId}
 		{role}
 		aria-labelledby={triggerId}
-		class="dropdown absolute mt-2 overflow-hidden rounded-xl border border-white/5 bg-white/[0.01]"
+		class="dropdown absolute mt-2 overflow-hidden rounded-xl border border-white/10 bg-white/5"
 		class:animate={isAnimating}
 		style="
 		top: {position.top}; 
@@ -218,7 +218,7 @@
 		z-index: {zIndex};
 		backdrop-filter: blur(16px) saturate(180%);
 		-webkit-backdrop-filter: blur(16px) saturate(180%);
-		background-color: rgba(17, 17, 17, 0.4);
+		background-color: rgba(17, 17, 17, 0.6);
 		"
 	>
 		{@render children()}
