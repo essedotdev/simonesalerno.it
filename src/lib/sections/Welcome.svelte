@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { inview, type Options } from 'svelte-inview';
 	import type { WelcomeSectionProps } from '$lib/types';
+	import { inview, type Options } from 'svelte-inview';
+	import { fly } from 'svelte/transition';
 
 	// Receive welcome data as props
 	let { welcome }: WelcomeSectionProps = $props();
@@ -10,6 +11,9 @@
 		rootMargin: '-50px',
 		unobserveOnEnter: true
 	};
+
+	// Split title into words for individual animation
+	const titleWords = $derived(welcome.title.split(' '));
 </script>
 
 <div
@@ -22,11 +26,22 @@
 >
 	<div class="mb-12 overflow-hidden">
 		<h1
-			class="-mt-2 text-center text-[4rem] leading-[1.1] font-medium tracking-tight sm:text-[7rem] lg:-mt-3 xl:-mt-4 xl:text-[8rem] 2xl:-mt-6 2xl:text-[10rem] {isInView
-				? 'slide-in'
-				: ''}"
+			class="-mt-2 text-center text-[4rem] leading-[1.1] font-medium tracking-tight sm:text-[7rem] lg:-mt-3 xl:-mt-4 xl:text-[8rem] 2xl:-mt-6 2xl:text-[10rem]"
 		>
-			{welcome.title}
+			{#each titleWords as word, i}
+				{#if isInView}
+					<span
+						in:fly={{ y: 30, duration: 600, delay: i * 300 + (i > 0 ? 700 : 0) }}
+						class="inline-block"
+					>
+						{word}
+					</span>
+				{:else}
+					<span class="inline-block opacity-0">{word}</span>
+				{/if}
+				<!-- svelte-ignore block_empty -->
+				{#if i < titleWords.length - 1}{/if}
+			{/each}
 		</h1>
 	</div>
 
