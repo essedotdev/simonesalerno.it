@@ -76,6 +76,17 @@ export const handle: Handle = async ({ event, resolve }) => {
 			}
 		}
 
+		// Gestisce percorsi con un solo segmento che non sono lingue valide
+		if (pathSegments.length === 1) {
+			const segment = pathSegments[0];
+			const isValidLanguage = languages.find((l) => l.code === segment);
+
+			if (!isValidLanguage) {
+				// Reindirizza a /en per percorsi casuali
+				return Response.redirect(new URL('/en', origin).toString(), 302);
+			}
+		}
+
 		// Verifica che la rotta sia una sottorotta della lingua corretta
 		if (pathSegments.length >= 2) {
 			const [lang, sub] = pathSegments;
