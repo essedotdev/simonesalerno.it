@@ -144,9 +144,7 @@
 				<button
 					onclick={() => handleSortSelect(option.value)}
 					class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors
-						{currentSort === option.value
-							? 'bg-white/10'
-							: 'hover:bg-white/5 active:bg-white/10'} w-full"
+						{currentSort === option.value ? 'bg-white/10' : 'hover:bg-white/5 active:bg-white/10'} w-full"
 				>
 					<div
 						class="flex h-8 w-8 items-center justify-center rounded-md bg-white/10 text-white/80 backdrop-blur-sm"

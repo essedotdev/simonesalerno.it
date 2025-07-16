@@ -140,11 +140,11 @@
 
 		<!-- Date Range Filter -->
 		{#if showDateFilter}
-			<DateRangeDropdown 
-				dateRange={filters.dateRange} 
-				onDateChange={handleDateChange} 
+			<DateRangeDropdown
+				dateRange={filters.dateRange}
+				onDateChange={handleDateChange}
 				onClearDates={clearDates}
-				{global} 
+				{global}
 			/>
 		{/if}
 
