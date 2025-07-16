@@ -109,13 +109,13 @@
 </svelte:head>
 
 <div
-	class="flex min-h-screen flex-col overflow-x-hidden scroll-smooth text-white antialiased selection:bg-white/10"
+	class="mx-auto flex min-h-screen w-full max-w-[90vw] flex-col overflow-x-hidden scroll-smooth text-white antialiased selection:bg-white/10"
 >
 	<!-- Passa dati come props ai componenti -->
 	<Navbar {data} bind:menuOpen />
 
 	{#if isLanguageCodeValid}
-		<FloatingNav {data} bind:menuOpen />
+		<FloatingNav {data} bind:menuOpen {scrollY} />
 	{/if}
 
 	<main class="flex-1">
@@ -124,7 +124,7 @@
 
 	<Footer {data} />
 
-	{#if scrollY > 200}
+	{#if scrollY > 350}
 		<BackToTop global={data.global} />
 	{/if}
 </div>

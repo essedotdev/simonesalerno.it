@@ -3,10 +3,10 @@
 	import type { LayoutData } from '$lib/types/content';
 	import { handleAnchorClick } from '$lib/utils';
 	import { Menu } from '@lucide/svelte';
-	import { fade } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 
 	// Receive data as props from parent layout
-	let { data, menuOpen = $bindable() }: { data: LayoutData; menuOpen: boolean } = $props();
+	let { data, menuOpen = $bindable(), scrollY }: { data: LayoutData; menuOpen: boolean; scrollY: number } = $props();
 
 	function handleMenuClick() {
 		menuOpen = !menuOpen;
@@ -16,16 +16,15 @@
 		data.languages.some((l) => l.code === $page.url.pathname.split('/')[1])
 	);
 
-	let scroll = $state(0);
-	let show = $derived(() => scroll > 350 && !menuOpen);
+	let show = $derived(() => scrollY > 350 && !menuOpen);
 </script>
 
-<svelte:window bind:scrollY={scroll} />
 
 {#if show()}
 	<header
 		class="pointer-events-none fixed top-[1.7rem] z-50 flex w-full justify-end sm:top-4 sm:left-0 sm:justify-center"
-		transition:fade={{ duration: 150 }}
+		in:fly={{ y: -20, duration: 300 }}
+		out:fly={{ y: -20, duration: 200 }}
 	>
 		<nav
 			class="pointer-events-auto rounded-s-full rounded-e-none bg-neutral-900/20 sm:rounded-full"

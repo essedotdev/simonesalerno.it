@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import type { LanguageSelectorProps } from '$lib/types';
 	import { onMount } from 'svelte';
-	import { fade, fly } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 	import { ChevronDown } from '@lucide/svelte';
 
 	// Props ricevuti dal layout parent
@@ -100,7 +100,7 @@
 	{#if isOpen}
 		<div
 			in:fly={{ y: -10, duration: 100 }}
-			out:fade={{ duration: 100 }}
+			out:fly={{ y: -10, duration: 100 }}
 			class="absolute right-0 z-10 mt-1 w-16 origin-top-right rounded-md border border-white/5 bg-white/[.02] text-base backdrop-blur-md"
 			role="menu"
 			aria-orientation="vertical"

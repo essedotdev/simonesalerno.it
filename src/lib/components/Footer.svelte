@@ -16,10 +16,10 @@
 	let copyrightText = $derived(getTranslation(data.global, 'copyright'));
 </script>
 
-<footer class="mx-auto w-full max-w-[90vw] border-t border-white/5">
+<footer class="border-t border-white/5">
 	<div class="mx-auto w-full max-w-screen-2xl">
 		<nav
-			class="flex items-start justify-between py-8 text-lg sm:pt-10 sm:pb-8 sm:text-xl md:text-2xl"
+			class="flex items-start justify-between px-4 py-8 text-lg sm:px-8 sm:pt-10 sm:pb-8 sm:text-xl md:text-2xl lg:px-14"
 		>
 			<a
 				href={$page.url.pathname.split('/')[2]
@@ -42,7 +42,7 @@
 			</div>
 		</nav>
 		<div
-			class="text-md flex items-center justify-between pt-2 pb-7 text-neutral-200 opacity-70 sm:text-lg"
+			class="text-md flex items-center justify-between px-4 pt-2 pb-7 text-neutral-200 opacity-70 sm:px-8 sm:text-lg lg:px-14"
 		>
 			{copyrightText}
 		</div>
