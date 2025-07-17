@@ -93,7 +93,7 @@
 				class="w-full rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2 text-white placeholder-white/50 backdrop-blur-sm focus:border-white/20 focus:outline-none"
 			/>
 		</div>
-		<div class="max-h-40 space-y-1 overflow-y-auto p-2">
+		<div class="max-h-40 space-y-1 overflow-y-auto p-2 pt-0">
 			{#each filteredTags as tag (tag)}
 				<button
 					onclick={() => handleTagSelect(tag)}
