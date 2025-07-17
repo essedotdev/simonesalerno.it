@@ -152,7 +152,7 @@
 						<option.IconComponent class="h-4 w-4" />
 					</div>
 					<div class="min-w-0 flex-1">
-						<div class="font-medium text-white/90">
+						<div class="text-white/90">
 							{label}
 						</div>
 					</div>
