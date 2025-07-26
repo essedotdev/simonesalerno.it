@@ -2,81 +2,100 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Project Overview
+
+This is a personal portfolio website for Simone Salerno, built with SvelteKit 5 and TypeScript. The site features multilingual support (i18n), JSON-based content management, and is deployed on Cloudflare Pages.
+
+## Key Technologies
+
+- **SvelteKit 5** with TypeScript
+- **Tailwind CSS v4** for styling  
+- **Cloudflare Pages** for deployment
+- **pnpm** as package manager
+- **Vite** as build tool
+
 ## Development Commands
 
-**Package Manager**: Must use `pnpm` (version 10.12.4)
-
 ```bash
-pnpm dev         # Start development server
-pnpm build       # Production build
-pnpm preview     # Preview production build
-pnpm check       # Type checking with svelte-check
-pnpm lint        # ESLint + Prettier checking (MUST run before commits)
-pnpm format      # Code formatting
+# Install dependencies
+pnpm install
+
+# Start development server
+pnpm dev
+
+# Build production
+pnpm build
+
+# Preview production build
+pnpm preview
+
+# Type checking
+pnpm check
+pnpm check:watch
+
+# Linting and formatting
+pnpm lint
+pnpm format
 ```
 
-## Architecture
+## Architecture Overview
 
-**Tech Stack**: SvelteKit 5 + TypeScript + Tailwind CSS v4 + Cloudflare Pages
-**Content Management**: File-based JSON system with full i18n (English/Italian)
+### Content Management System
 
-### Content System
+The site uses a JSON-based content management system with full internationalization support:
 
-- All content in `/src/lib/content/` as JSON files
-- Structure: `meta.json` + `en.json` + `it.json` for each item
-- Articles and projects have metadata (dates, tags, images) + translations
-- Global interface text in `/src/lib/content/global/`
+- **Config files**: `src/lib/content/config/` - Contains languages.json and navigation.json
+- **Global content**: `src/lib/content/global/` - Contains site-wide translations (e.g., it.json, en.json)
+- **Page content**: `src/lib/content/pages/` - Contains page-specific content organized by page type
+- **Collections**: `src/lib/content/projects/` and `src/lib/content/articles/` - Each item has:
+  - `meta.json` - Metadata (dates, published status, images)
+  - Language files (e.g., `it.json`, `en.json`) - Translations with BlockEditor format
 
-### Routing
+### Routing Structure
 
-- Dynamic routes: `[page=lang]/[route=route]/[sub]`
-- Language-based URLs: `/en/projects` vs `/it/progetti`
-- Parameter validation in `/src/params/`
+The app uses a language-first routing pattern:
+- `/{lang}` - Homepage in specified language
+- `/{lang}/projects` - Projects listing page
+- `/{lang}/projects/{slug}` - Individual project detail
+- `/{lang}/articles` - Articles listing page  
+- `/{lang}/articles/{slug}` - Individual article detail
 
-### Component Organization
+Route parameters are handled through special matchers in `src/params/`.
 
-```
-src/lib/
-├── components/    # Reusable UI components
-├── sections/      # Large page sections
-├── content/       # JSON content files
-├── stores/        # State management
-├── types/         # TypeScript definitions
-└── utils/         # Utility functions
-```
+### Key Components
 
-### Key Patterns
+- **Layout Components**: `Navbar`, `Footer`, `FloatingNav` - Main navigation elements
+- **Section Components**: `Welcome`, `About`, `Contact`, `Projects`, `Articles` - Page sections
+- **UI Components**: Various reusable components in `src/lib/components/ui/`
+- **Content Display**: Components handle BlockEditor format for rich text content
 
-- **Svelte 5 Runes**: Use `$state`, `$derived`, `$effect` (not stores)
-- **TypeScript**: Strict typing enabled, comprehensive interfaces
-- **ContentLoader**: Centralized content loading with caching
-- **Atomic Design**: Components organized by complexity level
+### Type System
 
-## Development Guidelines
+The project has a comprehensive type system defined in `src/lib/types/content.ts` that covers:
+- Content structures (GlobalContent, ProjectItem, ArticleItem, etc.)
+- Component props interfaces
+- Layout data types
+- BlockEditor format for rich text content
 
-### Content Changes
+### Utilities
 
-- Edit JSON files directly for content updates
-- Maintain both `en.json` and `it.json` translations
-- Update `meta.json` for metadata changes
-- Content validation happens at build time
+- **ContentLoader** (`src/lib/utils/content.ts`): Handles loading and caching of JSON content
+- **Analytics** (`src/lib/utils/analytics.ts`): Google Analytics integration
+- **Translations** (`src/lib/utils/translations.ts`): Language switching utilities
+- **Search/Filter** (`src/lib/utils/searchUtils.ts`): Content filtering logic
 
-### Component Development
+### Deployment
 
-- Follow existing patterns in `/src/lib/components/`
-- Use TypeScript interfaces from `/src/lib/types/`
-- Leverage Tailwind CSS v4 for styling
-- Ensure accessibility (WCAG compliance focus)
+The site is configured for Cloudflare Pages deployment:
+- Adapter: `@sveltejs/adapter-cloudflare`
+- Build output is optimized for edge runtime
+- Supports Cloudflare Workers for server-side logic
 
-### Type Safety
+## Important Notes
 
-- All content has strict TypeScript interfaces
-- Use type guards for content validation
-- Maintain consistency across translations
-
-## Deployment
-
-- Target: Cloudflare Pages
-- Build output: `.svelte-kit/cloudflare`
-- Node.js compatibility enabled
-- Automatic deployment on main branch
+- Always check existing content structure before adding new content
+- Follow the established BlockEditor format for rich text content
+- Maintain type safety by using the defined interfaces
+- Content is cached in memory - changes require a rebuild
+- Language codes must match those defined in `languages.json`
+- All projects and articles must have a `meta.json` file and at least one language translation

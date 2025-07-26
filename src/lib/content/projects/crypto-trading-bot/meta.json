@@ -8,7 +8,8 @@
 	"thumbnail": "images/projects/crypto-trading-bot/thumbnail.jpg",
 	"thumbnailPlaceholder": true,
 	"link": "https://crypto-bot.example.com",
-	"published": true,
+	"published": false,
+	"status": "archived",
 	"created_date": "2024-02-20",
 	"updated_date": "2024-03-05"
 }

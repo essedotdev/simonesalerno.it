@@ -20,11 +20,13 @@
 		global,
 		pagination,
 		activeFilters,
-		availableTags
+		availableTags,
+		availableStatuses
 	}: ProjectsSectionProps & {
 		pagination?: { currentPage: number; totalPages: number };
 		activeFilters?: FilterState;
 		availableTags?: string[];
+		availableStatuses?: string[];
 	} = $props();
 
 	let isInView = $state(false);
@@ -100,7 +102,9 @@
 			<SearchFilter
 				filters={activeFilters}
 				{availableTags}
+				{availableStatuses}
 				showDateFilter={false}
+				showStatusFilter={true}
 				placeholder={t.searchProjects}
 				{global}
 			/>

@@ -8,16 +8,19 @@
 	import DateRangeDropdown from './ui/DateRangeDropdown.svelte';
 	import SortDropdown from './ui/SortDropdown.svelte';
 	import TagDropdown from './ui/TagDropdown.svelte';
+	import StatusDropdown from './ui/StatusDropdown.svelte';
 
 	interface Props {
 		filters: FilterState;
 		availableTags: string[];
+		availableStatuses?: string[];
 		showDateFilter?: boolean;
+		showStatusFilter?: boolean;
 		placeholder: string;
 		global?: GlobalContent;
 	}
 
-	let { filters, availableTags, showDateFilter = false, placeholder, global }: Props = $props();
+	let { filters, availableTags, availableStatuses = [], showDateFilter = false, showStatusFilter = false, placeholder, global }: Props = $props();
 
 	const translationKeys: TranslationKey[] = ['clearFilters', 'removeFilter'];
 	let t = $derived(getTranslations(global, translationKeys));
@@ -34,6 +37,12 @@
 					searchParams.set('tags', value.join(','));
 				} else {
 					searchParams.delete('tags');
+				}
+			} else if (key === 'selectedStatuses' && Array.isArray(value)) {
+				if (value.length > 0) {
+					searchParams.set('statuses', value.join(','));
+				} else {
+					searchParams.delete('statuses');
 				}
 			} else if (key === 'query' && typeof value === 'string') {
 				if (value) {
@@ -73,6 +82,13 @@
 		updateUrlParams({ selectedTags: newTags });
 	};
 
+	const handleStatusToggle = (status: string) => {
+		const newStatuses = filters.selectedStatuses.includes(status)
+			? filters.selectedStatuses.filter((s) => s !== status)
+			: [...filters.selectedStatuses, status];
+		updateUrlParams({ selectedStatuses: newStatuses });
+	};
+
 	const handleDateChange = (type: 'from' | 'to', value: string) => {
 		const newDateRange = { ...filters.dateRange };
 		newDateRange[type] = value;
@@ -87,6 +103,10 @@
 		updateUrlParams({ selectedTags: [] });
 	};
 
+	const clearStatuses = () => {
+		updateUrlParams({ selectedStatuses: [] });
+	};
+
 	const clearDates = () => {
 		updateUrlParams({ dateRange: { from: undefined, to: undefined } });
 	};
@@ -95,6 +115,7 @@
 		const searchParams = new URLSearchParams($page.url.searchParams);
 		searchParams.delete('query');
 		searchParams.delete('tags');
+		searchParams.delete('statuses');
 		searchParams.delete('from');
 		searchParams.delete('to');
 		searchParams.delete('page');
@@ -107,6 +128,7 @@
 	const hasActiveFilters = $derived(
 		filters.query.trim() !== '' ||
 			filters.selectedTags.length > 0 ||
+			filters.selectedStatuses.length > 0 ||
 			filters.dateRange.from !== undefined ||
 			filters.dateRange.to !== undefined
 	);
@@ -134,6 +156,17 @@
 				selectedTags={filters.selectedTags}
 				onTagToggle={handleTagToggle}
 				onClearTags={clearTags}
+				{global}
+			/>
+		{/if}
+
+		<!-- Status Filter -->
+		{#if showStatusFilter && availableStatuses.length > 0}
+			<StatusDropdown
+				{availableStatuses}
+				selectedStatuses={filters.selectedStatuses}
+				onStatusToggle={handleStatusToggle}
+				onClearStatuses={clearStatuses}
 				{global}
 			/>
 		{/if}
@@ -168,7 +201,7 @@
 	</div>
 
 	<!-- Active Filters -->
-	{#if filters.selectedTags.length > 0}
+	{#if filters.selectedTags.length > 0 || filters.selectedStatuses.length > 0}
 		<div class="flex flex-wrap gap-2">
 			{#each filters.selectedTags as tag (tag)}
 				<span
@@ -179,6 +212,20 @@
 						onclick={() => handleTagToggle(tag)}
 						class="rounded-full p-1 hover:bg-white/20"
 						aria-label="{t.removeFilter} {tag}"
+					>
+						<X class="h-3 w-3" />
+					</button>
+				</span>
+			{/each}
+			{#each filters.selectedStatuses as status (status)}
+				<span
+					class="inline-flex items-center gap-1 rounded-full bg-blue/15 px-3 py-1 text-sm text-white/80"
+				>
+					{t[`status${status.charAt(0).toUpperCase()}${status.slice(1).replace('-', '')}`] || status}
+					<button
+						onclick={() => handleStatusToggle(status)}
+						class="rounded-full p-1 hover:bg-white/20"
+						aria-label="{t.removeFilter} {status}"
 					>
 						<X class="h-3 w-3" />
 					</button>

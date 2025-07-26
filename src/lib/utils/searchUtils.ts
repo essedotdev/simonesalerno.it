@@ -20,6 +20,19 @@ export const extractTags = (items: (ProjectItem | ArticleItem)[], language: stri
 	return Array.from(tagSet).sort();
 };
 
+// Extract all unique statuses from projects
+export const extractStatuses = (projects: ProjectItem[]): string[] => {
+	const statusSet = new Set<string>();
+
+	projects.forEach((project) => {
+		if (project.meta.status) {
+			statusSet.add(project.meta.status);
+		}
+	});
+
+	return Array.from(statusSet).sort();
+};
+
 // Date filtering utility
 export const isInDateRange = (
 	date: string | undefined,
@@ -57,6 +70,11 @@ export const filterProjects = (
 			const projectTags = translation.tags || [];
 			const hasSelectedTag = filters.selectedTags.some((tag) => projectTags.includes(tag));
 			if (!hasSelectedTag) return false;
+		}
+
+		// Status filtering
+		if (filters.selectedStatuses.length > 0) {
+			if (!filters.selectedStatuses.includes(project.meta.status)) return false;
 		}
 
 		// Date filtering (using created_date for projects)

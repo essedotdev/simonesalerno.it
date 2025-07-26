@@ -1,5 +1,5 @@
 import type { FilterState } from '$lib/types';
-import { applyFilters, extractTags } from '$lib/utils/searchUtils';
+import { applyFilters, extractTags, extractStatuses } from '$lib/utils/searchUtils';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -28,6 +28,7 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
 	const page = parseInt(url.searchParams.get('page') || '1');
 	const query = url.searchParams.get('query') || '';
 	const tags = url.searchParams.get('tags')?.split(',') || [];
+	const statuses = url.searchParams.get('statuses')?.split(',') || [];
 	const sortBy = (url.searchParams.get('sortBy') as FilterState['sortBy']) || 'date';
 	const sortOrder = (url.searchParams.get('sortOrder') as FilterState['sortOrder']) || 'desc';
 	const from = url.searchParams.get('from') || undefined;
@@ -36,6 +37,7 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
 	const filters: FilterState = {
 		query,
 		selectedTags: tags.filter(Boolean),
+		selectedStatuses: statuses.filter(Boolean),
 		dateRange: { from, to },
 		sortBy,
 		sortOrder
@@ -44,8 +46,9 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
 	// Get the full list of data based on the route
 	const allData = isProjectsRoute ? parentData.projects : parentData.articles;
 
-	// Extract all available tags BEFORE filtering
+	// Extract all available tags and statuses BEFORE filtering
 	const availableTags = extractTags(allData, lang);
+	const availableStatuses = isProjectsRoute ? extractStatuses(allData) : [];
 
 	// Apply filters to the data
 	const filteredData = applyFilters(
@@ -73,6 +76,7 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
 		},
 		activeFilters: filters,
 		availableTags, // Pass all available tags
+		availableStatuses, // Pass all available statuses
 		currentLang: lang
 	};
 };

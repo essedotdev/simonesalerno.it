@@ -95,6 +95,7 @@ export interface ProjectMeta {
 	thumbnailPlaceholder?: boolean;
 	link: string;
 	published: boolean;
+	status: 'completed' | 'in-progress' | 'idea' | 'archived';
 	created_date: string;
 	updated_date: string;
 }
@@ -324,6 +325,7 @@ export interface DetailPageParams {
 export interface FilterState {
 	query: string;
 	selectedTags: string[];
+	selectedStatuses: string[];
 	dateRange: {
 		from?: string;
 		to?: string;

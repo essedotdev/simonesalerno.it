@@ -54,6 +54,13 @@
 		{ "name": "sort", "value": "Ordina" },
 		{ "name": "apply", "value": "Applica" },
 		{ "name": "clearTags", "value": "Cancella tag" },
-		{ "name": "clearDates", "value": "Cancella date" }
+		{ "name": "clearDates", "value": "Cancella date" },
+		{ "name": "status", "value": "Stato" },
+		{ "name": "statusCompleted", "value": "Completato" },
+		{ "name": "statusInProgress", "value": "In corso" },
+		{ "name": "statusIdea", "value": "Idea" },
+		{ "name": "statusArchived", "value": "Archiviato" },
+		{ "name": "clearStatuses", "value": "Cancella stati" },
+		{ "name": "closeStatusDropdown", "value": "Chiudi menu stato" }
 	]
 }

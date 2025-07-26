@@ -56,6 +56,13 @@
 		{ "name": "sort", "value": "Sort" },
 		{ "name": "apply", "value": "Apply" },
 		{ "name": "clearTags", "value": "Clear tags" },
-		{ "name": "clearDates", "value": "Clear dates" }
+		{ "name": "clearDates", "value": "Clear dates" },
+		{ "name": "status", "value": "Status" },
+		{ "name": "statusCompleted", "value": "Completed" },
+		{ "name": "statusInProgress", "value": "In Progress" },
+		{ "name": "statusIdea", "value": "Idea" },
+		{ "name": "statusArchived", "value": "Archived" },
+		{ "name": "clearStatuses", "value": "Clear statuses" },
+		{ "name": "closeStatusDropdown", "value": "Close status dropdown" }
 	]
 }
