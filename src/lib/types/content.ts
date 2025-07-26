@@ -189,6 +189,7 @@ export interface ProjectCardProps {
 	thumbnail?: string;
 	thumbnailPlaceholder?: boolean;
 	link: string;
+	tags?: string[];
 }
 
 export interface ArticleCardProps {

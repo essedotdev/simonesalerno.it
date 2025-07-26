@@ -65,10 +65,12 @@ export const filterProjects = (
 		const searchText = `${translation.title} ${translation.description || ''}`;
 		if (!matchesQuery(searchText, filters.query)) return false;
 
-		// Tag filtering
+		// Tag filtering (case-insensitive)
 		if (filters.selectedTags.length > 0) {
 			const projectTags = translation.tags || [];
-			const hasSelectedTag = filters.selectedTags.some((tag) => projectTags.includes(tag));
+			const hasSelectedTag = filters.selectedTags.some((tag) =>
+				projectTags.some((projectTag) => projectTag.toLowerCase() === tag.toLowerCase())
+			);
 			if (!hasSelectedTag) return false;
 		}
 
@@ -98,10 +100,12 @@ export const filterArticles = (
 		const searchText = `${translation.title} ${translation.excerpt || ''}`;
 		if (!matchesQuery(searchText, filters.query)) return false;
 
-		// Tag filtering
+		// Tag filtering (case-insensitive)
 		if (filters.selectedTags.length > 0) {
 			const articleTags = translation.tags || [];
-			const hasSelectedTag = filters.selectedTags.some((tag) => articleTags.includes(tag));
+			const hasSelectedTag = filters.selectedTags.some((tag) =>
+				articleTags.some((articleTag) => articleTag.toLowerCase() === tag.toLowerCase())
+			);
 			if (!hasSelectedTag) return false;
 		}
 

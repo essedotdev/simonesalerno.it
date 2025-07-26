@@ -9,7 +9,7 @@ This is a personal portfolio website for Simone Salerno, built with SvelteKit 5 
 ## Key Technologies
 
 - **SvelteKit 5** with TypeScript
-- **Tailwind CSS v4** for styling  
+- **Tailwind CSS v4** for styling
 - **Cloudflare Pages** for deployment
 - **pnpm** as package manager
 - **Vite** as build tool
@@ -54,10 +54,11 @@ The site uses a JSON-based content management system with full internationalizat
 ### Routing Structure
 
 The app uses a language-first routing pattern:
+
 - `/{lang}` - Homepage in specified language
 - `/{lang}/projects` - Projects listing page
 - `/{lang}/projects/{slug}` - Individual project detail
-- `/{lang}/articles` - Articles listing page  
+- `/{lang}/articles` - Articles listing page
 - `/{lang}/articles/{slug}` - Individual article detail
 
 Route parameters are handled through special matchers in `src/params/`.
@@ -72,6 +73,7 @@ Route parameters are handled through special matchers in `src/params/`.
 ### Type System
 
 The project has a comprehensive type system defined in `src/lib/types/content.ts` that covers:
+
 - Content structures (GlobalContent, ProjectItem, ArticleItem, etc.)
 - Component props interfaces
 - Layout data types
@@ -87,6 +89,7 @@ The project has a comprehensive type system defined in `src/lib/types/content.ts
 ### Deployment
 
 The site is configured for Cloudflare Pages deployment:
+
 - Adapter: `@sveltejs/adapter-cloudflare`
 - Build output is optimized for edge runtime
 - Supports Cloudflare Workers for server-side logic

@@ -32,10 +32,11 @@
 		const currentLang = currentPath[1];
 		const route = currentPath[2];
 		const slug = currentPath[3];
+		const searchParams = $page.url.search;
 
 		// Se non c'è una route (homepage)
 		if (!route) {
-			return `/${targetLang}`;
+			return `/${targetLang}${searchParams}`;
 		}
 
 		// Trova il tipo di route corrente
@@ -45,18 +46,18 @@
 
 		if (!currentRouteKey) {
 			// Route non riconosciuta, vai alla homepage
-			return `/${targetLang}`;
+			return `/${targetLang}${searchParams}`;
 		}
 
 		const targetRoute = navigation[targetLang]?.[currentRouteKey];
 		if (!targetRoute) {
 			// Route non disponibile nella lingua target
-			return `/${targetLang}`;
+			return `/${targetLang}${searchParams}`;
 		}
 
 		// Se non c'è slug (pagina di sezione come /en/blog)
 		if (!slug) {
-			return `/${targetLang}/${targetRoute}`;
+			return `/${targetLang}/${targetRoute}${searchParams}`;
 		}
 
 		// Trova il contenuto con lo slug corrente
@@ -66,12 +67,12 @@
 		if (!content || !content.translations[targetLang]) {
 			// Contenuto non disponibile nella lingua target
 			// Vai alla sezione principale (es. /en/projects)
-			return `/${targetLang}/${targetRoute}`;
+			return `/${targetLang}/${targetRoute}${searchParams}`;
 		}
 
 		// Contenuto disponibile, vai alla pagina specifica
 		const targetSlug = content.translations[targetLang].slug;
-		return `/${targetLang}/${targetRoute}/${targetSlug}`;
+		return `/${targetLang}/${targetRoute}/${targetSlug}${searchParams}`;
 	}
 
 	onMount(() => {

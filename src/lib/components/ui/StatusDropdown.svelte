@@ -12,7 +12,8 @@
 		global?: GlobalContent;
 	}
 
-	let { availableStatuses, selectedStatuses, onStatusToggle, onClearStatuses, global }: Props = $props();
+	let { availableStatuses, selectedStatuses, onStatusToggle, onClearStatuses, global }: Props =
+		$props();
 
 	const translationKeys: TranslationKey[] = [
 		'status',

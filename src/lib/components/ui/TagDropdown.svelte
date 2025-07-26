@@ -30,6 +30,14 @@
 		availableTags.filter((tag) => tag.toLowerCase().includes(tagSearchQuery.toLowerCase()))
 	);
 
+	// Helper function to check if a tag is selected (case-insensitive)
+	const isTagSelected = (tag: string): boolean => {
+		return selectedTags.some((selectedTag) => selectedTag.toLowerCase() === tag.toLowerCase());
+	};
+
+	// Count actually selected tags from available tags (case-insensitive)
+	const selectedTagsCount = $derived(availableTags.filter((tag) => isTagSelected(tag)).length);
+
 	const toggleDropdown = () => {
 		if (!isOpen) {
 			// Calculate position before opening
@@ -66,9 +74,9 @@
 	>
 		<Tag class="h-4 w-4" />
 		{t.tags}
-		{#if selectedTags.length > 0}
+		{#if selectedTagsCount > 0}
 			<span class="ml-1 rounded-full bg-white/15 px-2 py-1 text-xs backdrop-blur-sm">
-				{selectedTags.length}
+				{selectedTagsCount}
 			</span>
 		{/if}
 		<ChevronDown class="ml-auto h-4 w-4" />
@@ -97,20 +105,20 @@
 			{#each filteredTags as tag (tag)}
 				<button
 					onclick={() => handleTagSelect(tag)}
-					class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-white/80 transition-colors {selectedTags.includes(
+					class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-white/80 transition-colors {isTagSelected(
 						tag
 					)
 						? 'bg-white/15'
 						: 'hover:bg-white/10 active:bg-white/15'}"
 				>
 					<div
-						class="flex h-4 w-4 items-center justify-center rounded border border-white/10 {selectedTags.includes(
+						class="flex h-4 w-4 items-center justify-center rounded border border-white/10 {isTagSelected(
 							tag
 						)
 							? 'bg-white/15'
 							: ''}"
 					>
-						{#if selectedTags.includes(tag)}
+						{#if isTagSelected(tag)}
 							<Check class="h-3 w-3" />
 						{/if}
 					</div>
@@ -118,7 +126,7 @@
 				</button>
 			{/each}
 		</div>
-		{#if selectedTags.length > 0 && onClearTags}
+		{#if selectedTagsCount > 0 && onClearTags}
 			<div class="border-t border-white/5 p-2">
 				<button
 					onclick={onClearTags}

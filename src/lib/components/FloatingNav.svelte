@@ -6,7 +6,11 @@
 	import { fade, fly } from 'svelte/transition';
 
 	// Receive data as props from parent layout
-	let { data, menuOpen = $bindable(), scrollY }: { data: LayoutData; menuOpen: boolean; scrollY: number } = $props();
+	let {
+		data,
+		menuOpen = $bindable(),
+		scrollY
+	}: { data: LayoutData; menuOpen: boolean; scrollY: number } = $props();
 
 	function handleMenuClick() {
 		menuOpen = !menuOpen;
@@ -18,7 +22,6 @@
 
 	let show = $derived(() => scrollY > 350 && !menuOpen);
 </script>
-
 
 {#if show()}
 	<header

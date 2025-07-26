@@ -119,6 +119,7 @@
 					description={project.translations[selectedLanguage].description}
 					thumbnail={project.meta.thumbnail}
 					thumbnailPlaceholder={project.meta.thumbnailPlaceholder}
+					tags={project.translations[selectedLanguage].tags}
 					link={'/' +
 						selectedLanguage +
 						'/' +

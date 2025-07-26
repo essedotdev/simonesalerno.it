@@ -9,7 +9,7 @@
 	"thumbnail": "images/projects/e-commerce-platform/thumbnail.jpg",
 	"thumbnailPlaceholder": true,
 	"link": "https://demo-ecommerce.example.com",
-	"published": false,
+	"published": true,
 	"status": "in-progress",
 	"created_date": "2024-02-01",
 	"updated_date": "2024-03-01"

@@ -28,7 +28,7 @@
 		<h1
 			class="-mt-2 text-center text-[4rem] leading-[1.1] font-medium tracking-tight sm:text-[7rem] lg:-mt-3 xl:-mt-4 xl:text-[8rem] 2xl:-mt-6 2xl:text-[10rem]"
 		>
-			{#each titleWords as word, i}
+			{#each titleWords as word, i (i)}
 				{#if isInView}
 					<span
 						in:fly={{ y: 30, duration: 600, delay: i * 300 + (i > 0 ? 700 : 0) }}
@@ -39,7 +39,6 @@
 				{:else}
 					<span class="inline-block opacity-0">{word}</span>
 				{/if}
-				<!-- svelte-ignore block_empty -->
 				{#if i < titleWords.length - 1}{/if}
 			{/each}
 		</h1>

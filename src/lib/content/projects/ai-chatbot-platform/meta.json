@@ -9,7 +9,7 @@
 	"thumbnail": "images/projects/ai-chatbot-platform/thumbnail.jpg",
 	"thumbnailPlaceholder": true,
 	"link": "https://chatbot-platform.example.com",
-	"published": false,
+	"published": true,
 	"status": "idea",
 	"created_date": "2024-04-01",
 	"updated_date": "2024-04-10"

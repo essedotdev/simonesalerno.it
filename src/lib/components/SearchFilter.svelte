@@ -20,10 +20,32 @@
 		global?: GlobalContent;
 	}
 
-	let { filters, availableTags, availableStatuses = [], showDateFilter = false, showStatusFilter = false, placeholder, global }: Props = $props();
+	let {
+		filters,
+		availableTags,
+		availableStatuses = [],
+		showDateFilter = false,
+		showStatusFilter = false,
+		placeholder,
+		global
+	}: Props = $props();
 
-	const translationKeys: TranslationKey[] = ['clearFilters', 'removeFilter'];
+	const translationKeys: TranslationKey[] = [
+		'clearFilters',
+		'removeFilter',
+		'statusCompleted',
+		'statusInProgress',
+		'statusIdea',
+		'statusArchived'
+	];
 	let t = $derived(getTranslations(global, translationKeys));
+
+	// Helper function to find original case tag from available tags
+	const findOriginalCaseTag = (lowercaseTag: string): string => {
+		return (
+			availableTags.find((tag) => tag.toLowerCase() === lowercaseTag.toLowerCase()) || lowercaseTag
+		);
+	};
 
 	const updateUrlParams = (newFilters: Partial<FilterState>) => {
 		const searchParams = new URLSearchParams($page.url.searchParams);
@@ -34,7 +56,7 @@
 		for (const [key, value] of Object.entries(newFilters)) {
 			if (key === 'selectedTags' && Array.isArray(value)) {
 				if (value.length > 0) {
-					searchParams.set('tags', value.join(','));
+					searchParams.set('tags', value.map((tag) => tag.toLowerCase()).join(','));
 				} else {
 					searchParams.delete('tags');
 				}
@@ -76,9 +98,13 @@
 	};
 
 	const handleTagToggle = (tag: string) => {
-		const newTags = filters.selectedTags.includes(tag)
-			? filters.selectedTags.filter((t) => t !== tag)
-			: [...filters.selectedTags, tag];
+		const isCurrentlySelected = filters.selectedTags.some(
+			(selectedTag) => selectedTag.toLowerCase() === tag.toLowerCase()
+		);
+
+		const newTags = isCurrentlySelected
+			? filters.selectedTags.filter((t) => t.toLowerCase() !== tag.toLowerCase())
+			: [...filters.selectedTags, tag.toLowerCase()];
 		updateUrlParams({ selectedTags: newTags });
 	};
 
@@ -204,14 +230,15 @@
 	{#if filters.selectedTags.length > 0 || filters.selectedStatuses.length > 0}
 		<div class="flex flex-wrap gap-2">
 			{#each filters.selectedTags as tag (tag)}
+				{@const originalCaseTag = findOriginalCaseTag(tag)}
 				<span
 					class="inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-sm text-white/80"
 				>
-					{tag}
+					{originalCaseTag}
 					<button
-						onclick={() => handleTagToggle(tag)}
+						onclick={() => handleTagToggle(originalCaseTag)}
 						class="rounded-full p-1 hover:bg-white/20"
-						aria-label="{t.removeFilter} {tag}"
+						aria-label="{t.removeFilter} {originalCaseTag}"
 					>
 						<X class="h-3 w-3" />
 					</button>
@@ -219,12 +246,20 @@
 			{/each}
 			{#each filters.selectedStatuses as status (status)}
 				<span
-					class="inline-flex items-center gap-1 rounded-full bg-blue/15 px-3 py-1 text-sm text-white/80"
+					class="inline-flex items-center gap-1 rounded-full border border-blue-400/20 bg-blue-500/20 px-3 py-1 text-sm text-blue-200"
 				>
-					{t[`status${status.charAt(0).toUpperCase()}${status.slice(1).replace('-', '')}`] || status}
+					{status === 'completed'
+						? t.statusCompleted
+						: status === 'in-progress'
+							? t.statusInProgress
+							: status === 'idea'
+								? t.statusIdea
+								: status === 'archived'
+									? t.statusArchived
+									: status}
 					<button
 						onclick={() => handleStatusToggle(status)}
-						class="rounded-full p-1 hover:bg-white/20"
+						class="rounded-full p-1 hover:bg-blue-400/20"
 						aria-label="{t.removeFilter} {status}"
 					>
 						<X class="h-3 w-3" />

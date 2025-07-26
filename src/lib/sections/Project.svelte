@@ -66,6 +66,16 @@
 					</a>
 				{/if}
 
+				{#if currentTranslation.tags && currentTranslation.tags.length > 0}
+					<div class="flex flex-wrap gap-2">
+						{#each currentTranslation.tags as tag (tag)}
+							<span class="rounded-full bg-gray-800 px-3 py-1 text-sm text-gray-300">
+								{tag}
+							</span>
+						{/each}
+					</div>
+				{/if}
+
 				{#if currentTranslation.body}
 					<div class="flex flex-col gap-y-4 text-2xl">
 						{#each currentTranslation.body.blocks as paragraph (paragraph.data.text)}

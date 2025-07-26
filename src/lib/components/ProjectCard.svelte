@@ -2,7 +2,8 @@
 	import type { ProjectCardProps } from '$lib/types';
 	import Image from './Image.svelte';
 
-	let { title, description, thumbnail, thumbnailPlaceholder, link }: ProjectCardProps = $props();
+	let { title, description, thumbnail, thumbnailPlaceholder, link, tags }: ProjectCardProps =
+		$props();
 </script>
 
 <div
@@ -26,5 +27,15 @@
 		<p class="mb-3 text-base text-gray-300 lg:text-xl">
 			{description}
 		</p>
+
+		{#if tags && tags.length > 0}
+			<div class="flex flex-wrap gap-2">
+				{#each tags as tag (tag)}
+					<span class="rounded-full bg-white/5 px-3 py-1 text-xs text-gray-400">
+						{tag}
+					</span>
+				{/each}
+			</div>
+		{/if}
 	</div>
 </div>

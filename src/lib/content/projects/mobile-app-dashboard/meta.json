@@ -8,7 +8,7 @@
 	"thumbnail": "images/projects/mobile-app-dashboard/thumbnail.jpg",
 	"thumbnailPlaceholder": true,
 	"link": "https://dashboard-demo.example.com",
-	"published": false,
+	"published": true,
 	"status": "in-progress",
 	"created_date": "2024-03-15",
 	"updated_date": "2024-03-20"
