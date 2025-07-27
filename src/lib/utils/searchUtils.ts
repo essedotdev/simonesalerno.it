@@ -7,7 +7,7 @@ export const matchesQuery = (text: string, query: string): boolean => {
 };
 
 // Extract all unique tags from items
-export const extractTags = (items: (ProjectItem | ArticleItem)[], language: string): string[] => {
+export const extractTags = (items: ProjectItem[] | ArticleItem[], language: string): string[] => {
 	const tagSet = new Set<string>();
 
 	items.forEach((item) => {

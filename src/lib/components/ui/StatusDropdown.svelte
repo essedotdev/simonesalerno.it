@@ -40,7 +40,7 @@
 		'in-progress': t.statusInProgress,
 		idea: t.statusIdea,
 		archived: t.statusArchived
-	});
+	} as Record<string, string>);
 
 	const toggleDropdown = () => {
 		if (!isOpen) {

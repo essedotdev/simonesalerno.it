@@ -35,7 +35,14 @@ export type TranslationKey =
 	| 'sort'
 	| 'apply'
 	| 'clearTags'
-	| 'clearDates';
+	| 'clearDates'
+	| 'status'
+	| 'statusCompleted'
+	| 'statusInProgress'
+	| 'statusIdea'
+	| 'statusArchived'
+	| 'clearStatuses'
+	| 'closeStatusDropdown';
 
 // Translation map cache
 const translationCache = new Map<string, Record<string, string>>();

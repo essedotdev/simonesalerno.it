@@ -1,4 +1,4 @@
-import type { FilterState } from '$lib/types';
+import type { FilterState, ProjectItem } from '$lib/types';
 import { applyFilters, extractTags, extractStatuses } from '$lib/utils/searchUtils';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
@@ -48,7 +48,7 @@ export const load: PageServerLoad = async ({ params, parent, url }) => {
 
 	// Extract all available tags and statuses BEFORE filtering
 	const availableTags = extractTags(allData, lang);
-	const availableStatuses = isProjectsRoute ? extractStatuses(allData) : [];
+	const availableStatuses = isProjectsRoute ? extractStatuses(allData as ProjectItem[]) : [];
 
 	// Apply filters to the data
 	const filteredData = applyFilters(

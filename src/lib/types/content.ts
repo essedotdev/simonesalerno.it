@@ -356,18 +356,6 @@ export interface SitemapPage {
 	alternates?: Array<{ hreflang: string; href: string }>;
 }
 
-// Layout data type
-export interface LayoutData {
-	selectedLanguage: string;
-	languages: Language[];
-	navigation: Record<string, Record<string, string>>;
-	global: GlobalContent;
-	welcome: WelcomeContent;
-	about: AboutContent;
-	contact: ContactContent;
-	projects: ProjectItem[];
-	articles: ArticleItem[];
-}
 
 // Error page types
 export interface ErrorPageState {
