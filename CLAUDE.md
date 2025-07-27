@@ -49,7 +49,7 @@ The site uses a JSON-based content management system with full internationalizat
 - **Page content**: `src/lib/content/pages/` - Contains page-specific content organized by page type
 - **Collections**: `src/lib/content/projects/` and `src/lib/content/articles/` - Each item has:
   - `meta.json` - Metadata (dates, published status, images)
-  - Language files (e.g., `it.json`, `en.json`) - Translations with BlockEditor format
+  - Language files (e.g., `it.json`, `en.json`) - Translations with ContentBlocks format
 
 ### Routing Structure
 
@@ -68,7 +68,7 @@ Route parameters are handled through special matchers in `src/params/`.
 - **Layout Components**: `Navbar`, `Footer`, `FloatingNav` - Main navigation elements
 - **Section Components**: `Welcome`, `About`, `Contact`, `Projects`, `Articles` - Page sections
 - **UI Components**: Various reusable components in `src/lib/components/ui/`
-- **Content Display**: Components handle BlockEditor format for rich text content
+- **Content Display**: Components handle ContentBlocks format for rich text content
 
 ### Type System
 
@@ -77,7 +77,7 @@ The project has a comprehensive type system defined in `src/lib/types/content.ts
 - Content structures (GlobalContent, ProjectItem, ArticleItem, etc.)
 - Component props interfaces
 - Layout data types
-- BlockEditor format for rich text content
+- ContentBlocks format for rich text content
 
 ### Utilities
 
@@ -97,7 +97,7 @@ The site is configured for Cloudflare Pages deployment:
 ## Important Notes
 
 - Always check existing content structure before adding new content
-- Follow the established BlockEditor format for rich text content
+- Follow the established ContentBlocks format for rich text content
 - Maintain type safety by using the defined interfaces
 - Content is cached in memory - changes require a rebuild
 - Language codes must match those defined in `languages.json`

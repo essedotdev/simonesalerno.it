@@ -4,6 +4,7 @@
 	import type { ProjectSectionProps } from '$lib/types';
 	import Image from '$lib/components/Image.svelte';
 	import { getTranslation } from '$lib/utils/translations';
+	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 
 	// Receive props from parent
 	let { content, currentLang, global }: ProjectSectionProps = $props();
@@ -77,11 +78,7 @@
 				{/if}
 
 				{#if currentTranslation.body}
-					<div class="flex flex-col gap-y-4 text-2xl">
-						{#each currentTranslation.body.blocks as paragraph (paragraph.data.text)}
-							<p>{paragraph.data.text}</p>
-						{/each}
-					</div>
+					<ContentRenderer content={currentTranslation.body} className="flex flex-col gap-y-4" />
 				{/if}
 			</div>
 		</div>

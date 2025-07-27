@@ -4,6 +4,7 @@
 	import Image from '$lib/components/Image.svelte';
 	import { getTranslation } from '$lib/utils/translations';
 	import { ChevronLeft } from '@lucide/svelte';
+	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 
 	// Receive props from parent
 	let { content, currentLang, global }: ArticleSectionProps = $props();
@@ -91,23 +92,7 @@
 
 			<!-- Content -->
 			{#if currentTranslation.content}
-				<div class="prose prose-lg prose-invert max-w-none">
-					{#each currentTranslation.content.blocks as block (block)}
-						{#if block.type === 'paragraph'}
-							<p class="text-2xl leading-relaxed">{block.data.text}</p>
-						{:else if block.type === 'header'}
-							<h2 class="mt-8 mb-4 text-4xl font-semibold">{block.data.text}</h2>
-						{:else if block.type === 'list'}
-							<ul class="text-2xl">
-								{#each block.data.items || [] as item (item)}
-									<li>{item}</li>
-								{/each}
-							</ul>
-						{:else}
-							<p class="text-2xl leading-relaxed">{block.data.text}</p>
-						{/if}
-					{/each}
-				</div>
+				<ContentRenderer content={currentTranslation.content} className="max-w-none" />
 			{/if}
 		</article>
 	{/if}

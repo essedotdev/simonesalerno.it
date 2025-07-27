@@ -20,8 +20,8 @@ image.png
 
 ### 🚀 Advanced Content Management
 
-- **JSON-based CMS**: No database required, git-friendly content management
-- **BlockEditor format**: Rich text content with structured data (EditorJS compatible)
+- **JSON-based CMS**: No database required, git-friendly content management with custom ContentBlocks format
+- **ContentBlocks format**: Rich text content with structured data (custom block-based format)
 - **Automatic content loading**: Intelligent caching and lazy loading
 - **Meta-driven publishing**: Control visibility and dates through metadata
 
@@ -31,6 +31,7 @@ image.png
 - **Cross-language slug translation**: `/it/progetti/piattaforma-e-commerce` → `/en/projects/e-commerce-platform`
 - **Fallback handling**: Invalid routes redirect to appropriate language defaults
 - **Build-time validation**: Routes validated during build process for reliability
+- **Enhanced navigation**: FloatingNav component with improved visibility and responsive design
 
 ### 🎨 Modern Design & UX
 
@@ -171,10 +172,11 @@ src/
 
 ### SearchFilter Component
 
-Advanced filtering system with:
+Advanced filtering system with enhanced visibility and filtering capabilities:
 
 - **Text search**: Real-time search across titles and descriptions
 - **Tag filtering**: Multi-select tag dropdown with dynamic tag extraction
+- **Status filtering**: Filter by publication status for better content management
 - **Date range filtering**: Custom date picker for temporal filtering
 - **Sorting options**: Sort by date, title, or relevance
 - **URL persistence**: Filter state maintained in URL parameters
@@ -192,6 +194,8 @@ Intelligent language switching:
 - **BlockEditor support**: Renders rich content from EditorJS format
 - **Image optimization**: Enhanced image loading with placeholders
 - **Responsive design**: Mobile-first responsive components
+- **Tags support**: Enhanced ProjectCard and Project sections with tag display and filtering
+- **Improved metadata**: Updated article and project metadata with publication status management
 
 ## 🚀 Deployment
 

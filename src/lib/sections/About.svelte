@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { inview, type Options } from 'svelte-inview';
 	import type { AboutSectionProps } from '$lib/types';
+	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 
 	// Receive about data as props
 	let { about }: AboutSectionProps = $props();
@@ -23,11 +24,11 @@
 	<h2 class="text-[2.5rem] leading-none font-normal sm:text-5xl md:text-6xl 2xl:text-7xl">
 		{about.title}
 	</h2>
-	<div
-		class="flex flex-col gap-y-4 text-xl sm:text-2xl lg:gap-y-6 lg:text-[1.7rem] 2xl:gap-y-8 2xl:text-3xl"
-	>
-		{#each about.description.blocks as paragraph (paragraph.data.text)}
-			<p>{paragraph.data.text}</p>
-		{/each}
-	</div>
+	<ContentRenderer
+		content={about.description}
+		className="flex flex-col gap-y-4 lg:gap-y-6 2xl:gap-y-8"
+		blockClasses={{
+			paragraph: 'text-xl sm:text-2xl lg:text-[1.7rem] 2xl:text-3xl'
+		}}
+	/>
 </div>

@@ -18,21 +18,25 @@ export interface InterfaceItem {
 	value: string;
 }
 
-// Struttura BlockEditor (formato EditorJS)
-export interface BlockEditorData {
+// Struttura ContentBlocks (formato custom per contenuti strutturati)
+export interface ContentBlockData {
 	text?: string;
 	items?: string[]; // Per liste
+	level?: number; // Per headers (h1-h6)
+	src?: string; // Per immagini
+	alt?: string; // Per immagini
+	language?: string; // Per code blocks
 	[key: string]: unknown; // Per supportare altri tipi di blocchi
 }
 
-export interface BlockEditorBlock {
+export interface ContentBlock {
 	id?: string;
-	type: string;
-	data: BlockEditorData;
+	type: 'paragraph' | 'header' | 'list' | 'image' | 'code' | 'quote' | 'divider';
+	data: ContentBlockData;
 }
 
-export interface BlockEditor {
-	blocks: BlockEditorBlock[];
+export interface ContentBlocks {
+	blocks: ContentBlock[];
 	time?: number;
 	version?: string;
 }
@@ -65,12 +69,12 @@ export interface GlobalContent {
 export interface WelcomeContent {
 	title: string;
 	typewriter: string[];
-	description: BlockEditor;
+	description: ContentBlocks;
 }
 
 export interface AboutContent {
 	title: string;
-	description: BlockEditor;
+	description: ContentBlocks;
 }
 
 export interface ContactContent {
@@ -115,7 +119,7 @@ export interface ProjectTranslation {
 	slug: string;
 	title: string;
 	description: string;
-	body: BlockEditor;
+	body: ContentBlocks;
 	image_captions: string[];
 	tags: string[];
 }
@@ -124,7 +128,7 @@ export interface ArticleTranslation {
 	slug: string;
 	title: string;
 	excerpt: string;
-	content: BlockEditor;
+	content: ContentBlocks;
 	meta_description: string;
 	tags: string[];
 }

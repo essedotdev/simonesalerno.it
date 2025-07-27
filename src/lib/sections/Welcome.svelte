@@ -2,6 +2,7 @@
 	import type { WelcomeSectionProps } from '$lib/types';
 	import { inview, type Options } from 'svelte-inview';
 	import { fly } from 'svelte/transition';
+	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 
 	// Receive welcome data as props
 	let { welcome }: WelcomeSectionProps = $props();
@@ -52,11 +53,11 @@
 		{/await}
 	</div> -->
 
-	<div
-		class="flex flex-col gap-y-4 text-center text-lg sm:text-xl lg:text-[1.7rem] xl:gap-y-6 2xl:text-[1.8rem]"
-	>
-		{#each welcome.description.blocks as paragraph (paragraph.data.text)}
-			<p>{@html paragraph.data.text}</p>
-		{/each}
-	</div>
+	<ContentRenderer
+		content={welcome.description}
+		className="flex flex-col gap-y-4 text-center"
+		blockClasses={{
+			paragraph: 'text-lg sm:text-xl lg:text-[1.7rem] 2xl:text-[1.8rem]'
+		}}
+	/>
 </div>
