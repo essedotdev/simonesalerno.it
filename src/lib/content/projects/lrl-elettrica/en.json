@@ -1,0 +1,17 @@
+{
+	"slug": "lrl-elettrica",
+	"title": "L.R.L. Elettrica",
+	"description": "Website and assistance for the company L.R.L. Elettrica, specialized in electrical systems and other home solutions.",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Website and assistance for the company L.R.L. Elettrica, specialized in electrical systems and other home solutions."
+				}
+			}
+		]
+	},
+	"image_captions": ["Homepage"],
+	"tags": ["SvelteKit", "TailwindCSS", "Business"]
+}

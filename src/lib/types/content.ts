@@ -360,7 +360,6 @@ export interface SitemapPage {
 	alternates?: Array<{ hreflang: string; href: string }>;
 }
 
-
 // Error page types
 export interface ErrorPageState {
 	global: GlobalContent | null;

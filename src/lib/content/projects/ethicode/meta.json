@@ -1,0 +1,11 @@
+{
+	"id": "ethicode",
+	"images": ["images/projects/ethicode/screenshot-1.jpg"],
+	"thumbnail": "images/projects/ethicode/thumbnail.jpg",
+	"thumbnailPlaceholder": true,
+	"link": "https://ethicode.eu/",
+	"published": true,
+	"status": "completed",
+	"created_date": "2023-06-10",
+	"updated_date": "2024-02-15"
+}

@@ -29,12 +29,19 @@
 		</p>
 
 		{#if tags && tags.length > 0}
-			<div class="flex flex-wrap gap-2">
-				{#each tags as tag (tag)}
+			<div class="flex flex-wrap items-center gap-2">
+				{#each tags.slice(0, 3) as tag (tag)}
 					<span class="rounded-full bg-white/5 px-3 py-1 text-xs text-gray-400">
 						{tag}
 					</span>
 				{/each}
+				{#if tags.length > 3}
+					<span
+						class="flex h-6 w-6 items-center justify-center rounded-full bg-white/5 text-xs text-gray-400"
+					>
+						+{tags.length - 3}
+					</span>
+				{/if}
 			</div>
 		{/if}
 	</div>

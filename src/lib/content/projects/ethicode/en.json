@@ -1,0 +1,17 @@
+{
+	"slug": "ethicode",
+	"title": "Ethicode",
+	"description": "E-learning platform to learn how to code in a simple and fun way. Previously called Let's Code Italia.",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "E-learning platform to learn how to code in a simple and fun way. Previously called Let's Code Italia."
+				}
+			}
+		]
+	},
+	"image_captions": ["Homepage"],
+	"tags": ["SvelteKit", "TailwindCSS", "PocketBase", "E-learning"]
+}

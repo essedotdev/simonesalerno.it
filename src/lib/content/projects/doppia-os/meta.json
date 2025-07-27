@@ -1,0 +1,11 @@
+{
+	"id": "doppia-os",
+	"images": ["images/projects/doppia-os/screenshot-1.jpg"],
+	"thumbnail": "images/projects/doppia-os/thumbnail.jpg",
+	"thumbnailPlaceholder": true,
+	"link": "https://doppia-os.pages.dev/",
+	"published": true,
+	"status": "completed",
+	"created_date": "2023-12-15",
+	"updated_date": "2024-03-10"
+}

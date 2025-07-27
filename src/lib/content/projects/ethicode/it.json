@@ -1,0 +1,17 @@
+{
+	"slug": "ethicode",
+	"title": "Ethicode",
+	"description": "Piattaforma di e-learning per imparare a programmare in modo semplice e divertente. Precedentemente chiamato Let's Code Italia.",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Piattaforma di e-learning per imparare a programmare in modo semplice e divertente. Precedentemente chiamato Let's Code Italia."
+				}
+			}
+		]
+	},
+	"image_captions": ["Homepage"],
+	"tags": ["SvelteKit", "TailwindCSS", "PocketBase", "E-learning"]
+}

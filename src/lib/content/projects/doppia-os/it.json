@@ -1,0 +1,17 @@
+{
+	"slug": "doppia-os",
+	"title": "doppia.os",
+	"description": "Applicazione web sperimentale che mira a ricreare un'esperienza simile a un desktop, direttamente nel browser.",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Applicazione web sperimentale che mira a ricreare un'esperienza simile a un desktop, direttamente nel browser."
+				}
+			}
+		]
+	},
+	"image_captions": ["Homepage"],
+	"tags": ["SvelteKit", "Experimental", "UI/UX"]
+}

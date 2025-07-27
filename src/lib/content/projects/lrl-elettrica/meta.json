@@ -1,0 +1,11 @@
+{
+	"id": "lrl-elettrica",
+	"images": ["images/projects/lrl-elettrica/screenshot-1.jpg"],
+	"thumbnail": "images/projects/lrl-elettrica/thumbnail.jpg",
+	"thumbnailPlaceholder": true,
+	"link": "https://lrlelettrica.it/",
+	"published": true,
+	"status": "completed",
+	"created_date": "2024-01-15",
+	"updated_date": "2024-01-15"
+}

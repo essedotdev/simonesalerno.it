@@ -133,5 +133,14 @@
 		]
 	},
 	"meta_description": "From an orange binder full of robot projects to code: the story of how my mad scientist laboratory transformed into this website.",
-	"tags": ["SvelteKit", "Tailwind CSS", "Software Architecture", "Routing", "Multilingual", "CMS", "Personal Portfolio", "Artificial Intelligence"]
+	"tags": [
+		"SvelteKit",
+		"Tailwind CSS",
+		"Software Architecture",
+		"Routing",
+		"Multilingual",
+		"CMS",
+		"Personal Portfolio",
+		"Artificial Intelligence"
+	]
 }

@@ -8,7 +8,10 @@
 			"Bash(mkdir:*)",
 			"Bash(mv:*)",
 			"Bash(grep:*)",
-			"Bash(ls:*)"
+			"Bash(ls:*)",
+			"Bash(pnpm lint:*)",
+			"Bash(pnpm build:*)",
+			"Bash(pnpm prettier:*)"
 		],
 		"deny": []
 	}

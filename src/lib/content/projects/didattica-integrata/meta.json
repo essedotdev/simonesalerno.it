@@ -1,0 +1,11 @@
+{
+	"id": "didattica-integrata",
+	"images": ["images/projects/didattica-integrata/screenshot-1.jpg"],
+	"thumbnail": "images/projects/didattica-integrata/thumbnail.jpg",
+	"thumbnailPlaceholder": true,
+	"link": "https://github.com/essedev/didatticaintegrata.it",
+	"published": true,
+	"status": "completed",
+	"created_date": "2022-11-05",
+	"updated_date": "2023-01-20"
+}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ContentBlocks } from '$lib/types/content.ts';
+	import type { ContentBlocks, ContentBlock } from '$lib/types/content.ts';
 
 	export let content: ContentBlocks;
 	export let className: string = '';
@@ -53,18 +53,31 @@
 	};
 
 	// Raggruppa i blocchi per gestire layout con immagini float
-	function groupBlocksForLayout(blocks: any[]) {
-		const groups: any[] = [];
+	function groupBlocksForLayout(blocks: ContentBlock[]) {
+		const groups: Array<
+			| {
+					type: 'float-layout';
+					image: ContentBlock;
+					content: ContentBlock[];
+					layout: string;
+			  }
+			| {
+					type: 'normal';
+					block: ContentBlock;
+			  }
+		> = [];
 		let i = 0;
-		
+
 		while (i < blocks.length) {
 			const block = blocks[i];
-			
+
 			// Cerca se il prossimo blocco è un'immagine float
 			const nextBlock = i + 1 < blocks.length ? blocks[i + 1] : null;
-			const isNextImageFloat = nextBlock && nextBlock.type === 'image' && 
+			const isNextImageFloat =
+				nextBlock &&
+				nextBlock.type === 'image' &&
 				(nextBlock.data.layout === 'left' || nextBlock.data.layout === 'right');
-			
+
 			if (isNextImageFloat && (block.type === 'paragraph' || block.type === 'list')) {
 				// Crea un gruppo con il contenuto corrente + l'immagine float successiva
 				groups.push({
@@ -74,7 +87,10 @@
 					layout: nextBlock.data.layout
 				});
 				i += 2; // Salta sia il blocco corrente che l'immagine
-			} else if (block.type === 'image' && (block.data.layout === 'left' || block.data.layout === 'right')) {
+			} else if (
+				block.type === 'image' &&
+				(block.data.layout === 'left' || block.data.layout === 'right')
+			) {
 				// Immagine float senza contenuto precedente compatibile
 				groups.push({
 					type: 'float-layout',
@@ -89,29 +105,35 @@
 				i++;
 			}
 		}
-		
+
 		return groups;
 	}
 
 	// Calcola dimensioni immagine
-	function getImageDimensions(imageBlock: any) {
+	function getImageDimensions(imageBlock: ContentBlock) {
 		let width = '300px'; // default
 		let height = 'auto';
-		
+
 		if (imageBlock.data.width) {
 			width = imageBlock.data.width;
 		} else if (imageBlock.data.size) {
 			switch (imageBlock.data.size) {
-				case 'small': width = '200px'; break;
-				case 'large': width = '400px'; break;
-				default: width = '300px'; break;
+				case 'small':
+					width = '200px';
+					break;
+				case 'large':
+					width = '400px';
+					break;
+				default:
+					width = '300px';
+					break;
 			}
 		}
-		
+
 		if (imageBlock.data.height) {
 			height = imageBlock.data.height;
 		}
-		
+
 		return { width, height };
 	}
 
@@ -119,18 +141,20 @@
 </script>
 
 <div class={className}>
-	{#each groupedBlocks as group, i}
+	{#each groupedBlocks as group (group.type === 'normal' ? group.block.id || group.block.type : `float-${group.image?.id || 'default'}`)}
 		{#if group.type === 'float-layout'}
 			{@const dimensions = getImageDimensions(group.image)}
 			<!-- Layout con immagine float e testo che scorre attorno -->
 			<div class="mb-8" style="display: flow-root;">
 				<!-- Immagine float -->
-				<div 
-					class="mb-4 {group.layout === 'left' ? 'float-left mr-6' : 'float-right ml-6'}" 
+				<div
+					class="mb-4 {group.layout === 'left' ? 'float-left mr-6' : 'float-right ml-6'}"
 					style="width: {dimensions.width}; height: {dimensions.height};"
 				>
 					{#if group.image.data.src === '/placeholder.svg'}
-						<div class="relative overflow-hidden rounded-xl w-full h-full min-h-[200px] bg-white/10 backdrop-blur-md flex items-center justify-center">
+						<div
+							class="relative flex h-full min-h-[200px] w-full items-center justify-center overflow-hidden rounded-xl bg-white/10 backdrop-blur-md"
+						>
 							<img
 								src={group.image.data.src}
 								alt={group.image.data.alt || ''}
@@ -142,36 +166,36 @@
 						<img
 							src={group.image.data.src}
 							alt={group.image.data.alt || ''}
-							class="w-full h-full object-cover rounded-xl"
+							class="h-full w-full rounded-xl object-cover"
 							loading="lazy"
 						/>
 					{/if}
-					
+
 					<!-- Didascalia sotto l'immagine -->
 					{#if group.image.data.alt}
-						<p class="mt-2 text-xs text-gray-600 dark:text-gray-400 text-center leading-tight">
+						<p class="mt-2 text-center text-xs leading-tight text-gray-600 dark:text-gray-400">
 							{group.image.data.alt}
 						</p>
 					{/if}
 				</div>
-				
+
 				<!-- Contenuto che scorre attorno -->
 				<div class="text-content">
-					{#each group.content as block}
+					{#each group.content as block (block.id || block.type)}
 						{#if block.type === 'paragraph'}
 							<p class="mb-6 text-xl leading-relaxed">
 								{@html block.data.text || ''}
 							</p>
 						{:else if block.type === 'list'}
 							<ul class="mb-6 ml-6 list-disc space-y-3">
-								{#each block.data.items || [] as item, itemIndex}
+								{#each block.data.items || [] as item (item)}
 									<li class="text-xl leading-relaxed">{@html item}</li>
 								{/each}
 							</ul>
 						{/if}
 					{/each}
 				</div>
-				
+
 				<!-- Clear floats -->
 				<div class="clear-both"></div>
 			</div>
@@ -214,7 +238,7 @@
 				{/if}
 			{:else if block.type === 'list'}
 				<ul class={classes.list}>
-					{#each block.data.items || [] as item, itemIndex}
+					{#each block.data.items || [] as item (item)}
 						<li class={classes.listItem}>{@html item}</li>
 					{/each}
 				</ul>
@@ -237,8 +261,10 @@
 				<!-- Immagine full width -->
 				<div class="mb-8">
 					{#if block.data.src === '/placeholder.svg'}
-						<div class="relative overflow-hidden mx-auto max-w-full rounded-2xl aspect-video">
-							<div class="flex h-full w-full items-center justify-center bg-white/10 backdrop-blur-md">
+						<div class="relative mx-auto aspect-video max-w-full overflow-hidden rounded-2xl">
+							<div
+								class="flex h-full w-full items-center justify-center bg-white/10 backdrop-blur-md"
+							>
 								<img
 									src={block.data.src}
 									alt={block.data.alt || ''}

@@ -1,0 +1,17 @@
+{
+	"slug": "esse-designs",
+	"title": "[esse designs]",
+	"description": "Website and graphics designs for cryptocurrency projects, including logos, banners and social media posts.",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Website and graphics designs for cryptocurrency projects, including logos, banners and social media posts."
+				}
+			}
+		]
+	},
+	"image_captions": ["Homepage"],
+	"tags": ["SvelteKit", "TailwindCSS", "Web3", "Design"]
+}
