@@ -26,6 +26,10 @@ export interface ContentBlockData {
 	src?: string; // Per immagini
 	alt?: string; // Per immagini
 	language?: string; // Per code blocks
+	layout?: 'full' | 'left' | 'right'; // Layout per immagini
+	size?: 'small' | 'medium' | 'large'; // Dimensione per immagini con layout left/right
+	width?: string; // Larghezza personalizzata (es. "300px", "50%")
+	height?: string; // Altezza personalizzata (es. "200px", "auto")
 	[key: string]: unknown; // Per supportare altri tipi di blocchi
 }
 

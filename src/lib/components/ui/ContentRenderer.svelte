@@ -51,86 +51,224 @@
 		image: blockClasses.image || defaultClasses.image,
 		divider: blockClasses.divider || defaultClasses.divider
 	};
+
+	// Raggruppa i blocchi per gestire layout con immagini float
+	function groupBlocksForLayout(blocks: any[]) {
+		const groups: any[] = [];
+		let i = 0;
+		
+		while (i < blocks.length) {
+			const block = blocks[i];
+			
+			// Cerca se il prossimo blocco è un'immagine float
+			const nextBlock = i + 1 < blocks.length ? blocks[i + 1] : null;
+			const isNextImageFloat = nextBlock && nextBlock.type === 'image' && 
+				(nextBlock.data.layout === 'left' || nextBlock.data.layout === 'right');
+			
+			if (isNextImageFloat && (block.type === 'paragraph' || block.type === 'list')) {
+				// Crea un gruppo con il contenuto corrente + l'immagine float successiva
+				groups.push({
+					type: 'float-layout',
+					image: nextBlock,
+					content: [block], // Il paragrafo che precede l'immagine
+					layout: nextBlock.data.layout
+				});
+				i += 2; // Salta sia il blocco corrente che l'immagine
+			} else if (block.type === 'image' && (block.data.layout === 'left' || block.data.layout === 'right')) {
+				// Immagine float senza contenuto precedente compatibile
+				groups.push({
+					type: 'float-layout',
+					image: block,
+					content: [], // Nessun contenuto da affiancare
+					layout: block.data.layout
+				});
+				i++;
+			} else {
+				// Blocco normale
+				groups.push({ type: 'normal', block });
+				i++;
+			}
+		}
+		
+		return groups;
+	}
+
+	// Calcola dimensioni immagine
+	function getImageDimensions(imageBlock: any) {
+		let width = '300px'; // default
+		let height = 'auto';
+		
+		if (imageBlock.data.width) {
+			width = imageBlock.data.width;
+		} else if (imageBlock.data.size) {
+			switch (imageBlock.data.size) {
+				case 'small': width = '200px'; break;
+				case 'large': width = '400px'; break;
+				default: width = '300px'; break;
+			}
+		}
+		
+		if (imageBlock.data.height) {
+			height = imageBlock.data.height;
+		}
+		
+		return { width, height };
+	}
+
+	$: groupedBlocks = groupBlocksForLayout(content.blocks);
 </script>
 
 <div class={className}>
-	{#each content.blocks as block (block.id || block.data.text)}
-		{#if block.type === 'paragraph'}
-			<p class={classes.paragraph}>
-				{@html block.data.text || ''}
-			</p>
-		{:else if block.type === 'header'}
-			{#if block.data.level === 1}
-				<h1 class={classes.header.h1}>
-					{block.data.text || ''}
-				</h1>
-			{:else if block.data.level === 2}
-				<h2 class={classes.header.h2}>
-					{block.data.text || ''}
-				</h2>
-			{:else if block.data.level === 3}
-				<h3 class={classes.header.h3}>
-					{block.data.text || ''}
-				</h3>
-			{:else if block.data.level === 4}
-				<h4 class={classes.header.h4}>
-					{block.data.text || ''}
-				</h4>
-			{:else if block.data.level === 5}
-				<h5 class={classes.header.h5}>
-					{block.data.text || ''}
-				</h5>
-			{:else if block.data.level === 6}
-				<h6 class={classes.header.h6}>
-					{block.data.text || ''}
-				</h6>
-			{:else}
-				<h2 class={classes.header.h2}>
-					{block.data.text || ''}
-				</h2>
-			{/if}
-		{:else if block.type === 'list'}
-			<ul class={classes.list}>
-				{#each block.data.items || [] as item, i (i)}
-					<li class={classes.listItem}>{@html item}</li>
-				{/each}
-			</ul>
-		{:else if block.type === 'quote'}
-			<blockquote class={classes.quote}>
-				<p>
+	{#each groupedBlocks as group, i}
+		{#if group.type === 'float-layout'}
+			{@const dimensions = getImageDimensions(group.image)}
+			<!-- Layout con immagine float e testo che scorre attorno -->
+			<div class="mb-8" style="display: flow-root;">
+				<!-- Immagine float -->
+				<div 
+					class="mb-4 {group.layout === 'left' ? 'float-left mr-6' : 'float-right ml-6'}" 
+					style="width: {dimensions.width}; height: {dimensions.height};"
+				>
+					{#if group.image.data.src === '/placeholder.svg'}
+						<div class="relative overflow-hidden rounded-xl w-full h-full min-h-[200px] bg-white/10 backdrop-blur-md flex items-center justify-center">
+							<img
+								src={group.image.data.src}
+								alt={group.image.data.alt || ''}
+								class="h-12 w-12 opacity-60"
+								style="filter: brightness(0) saturate(100%) invert(100%);"
+							/>
+						</div>
+					{:else}
+						<img
+							src={group.image.data.src}
+							alt={group.image.data.alt || ''}
+							class="w-full h-full object-cover rounded-xl"
+							loading="lazy"
+						/>
+					{/if}
+					
+					<!-- Didascalia sotto l'immagine -->
+					{#if group.image.data.alt}
+						<p class="mt-2 text-xs text-gray-600 dark:text-gray-400 text-center leading-tight">
+							{group.image.data.alt}
+						</p>
+					{/if}
+				</div>
+				
+				<!-- Contenuto che scorre attorno -->
+				<div class="text-content">
+					{#each group.content as block}
+						{#if block.type === 'paragraph'}
+							<p class="mb-6 text-xl leading-relaxed">
+								{@html block.data.text || ''}
+							</p>
+						{:else if block.type === 'list'}
+							<ul class="mb-6 ml-6 list-disc space-y-3">
+								{#each block.data.items || [] as item, itemIndex}
+									<li class="text-xl leading-relaxed">{@html item}</li>
+								{/each}
+							</ul>
+						{/if}
+					{/each}
+				</div>
+				
+				<!-- Clear floats -->
+				<div class="clear-both"></div>
+			</div>
+		{:else}
+			<!-- Blocco normale -->
+			{@const block = group.block}
+			{#if block.type === 'paragraph'}
+				<p class={classes.paragraph}>
 					{@html block.data.text || ''}
 				</p>
-			</blockquote>
-		{:else if block.type === 'code'}
-			<div class="mb-4">
-				{#if block.data.language}
-					<div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
-						{block.data.language}
-					</div>
+			{:else if block.type === 'header'}
+				{#if block.data.level === 1}
+					<h1 class={classes.header.h1}>
+						{block.data.text || ''}
+					</h1>
+				{:else if block.data.level === 2}
+					<h2 class={classes.header.h2}>
+						{block.data.text || ''}
+					</h2>
+				{:else if block.data.level === 3}
+					<h3 class={classes.header.h3}>
+						{block.data.text || ''}
+					</h3>
+				{:else if block.data.level === 4}
+					<h4 class={classes.header.h4}>
+						{block.data.text || ''}
+					</h4>
+				{:else if block.data.level === 5}
+					<h5 class={classes.header.h5}>
+						{block.data.text || ''}
+					</h5>
+				{:else if block.data.level === 6}
+					<h6 class={classes.header.h6}>
+						{block.data.text || ''}
+					</h6>
+				{:else}
+					<h2 class={classes.header.h2}>
+						{block.data.text || ''}
+					</h2>
 				{/if}
-				<pre class={classes.code}><code class="text-sm">{block.data.text || ''}</code></pre>
-			</div>
-		{:else if block.type === 'image'}
-			<div class="mb-4">
-				<img
-					src={block.data.src || ''}
-					alt={block.data.alt || ''}
-					class={classes.image}
-					loading="lazy"
-				/>
-				{#if block.data.alt}
-					<p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-						{block.data.alt}
+			{:else if block.type === 'list'}
+				<ul class={classes.list}>
+					{#each block.data.items || [] as item, itemIndex}
+						<li class={classes.listItem}>{@html item}</li>
+					{/each}
+				</ul>
+			{:else if block.type === 'quote'}
+				<blockquote class={classes.quote}>
+					<p>
+						{@html block.data.text || ''}
 					</p>
-				{/if}
-			</div>
-		{:else if block.type === 'divider'}
-			<hr class={classes.divider} />
-		{:else}
-			<!-- Fallback per tipi non riconosciuti -->
-			<p class={classes.paragraph}>
-				{@html block.data.text || ''}
-			</p>
+				</blockquote>
+			{:else if block.type === 'code'}
+				<div class="mb-4">
+					{#if block.data.language}
+						<div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
+							{block.data.language}
+						</div>
+					{/if}
+					<pre class={classes.code}><code class="text-sm">{block.data.text || ''}</code></pre>
+				</div>
+			{:else if block.type === 'image'}
+				<!-- Immagine full width -->
+				<div class="mb-8">
+					{#if block.data.src === '/placeholder.svg'}
+						<div class="relative overflow-hidden mx-auto max-w-full rounded-2xl aspect-video">
+							<div class="flex h-full w-full items-center justify-center bg-white/10 backdrop-blur-md">
+								<img
+									src={block.data.src}
+									alt={block.data.alt || ''}
+									class="h-12 w-12 opacity-60"
+									style="filter: brightness(0) saturate(100%) invert(100%);"
+								/>
+							</div>
+						</div>
+					{:else}
+						<img
+							src={block.data.src || ''}
+							alt={block.data.alt || ''}
+							class={classes.image}
+							loading="lazy"
+						/>
+					{/if}
+					{#if block.data.alt}
+						<p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+							{block.data.alt}
+						</p>
+					{/if}
+				</div>
+			{:else if block.type === 'divider'}
+				<hr class={classes.divider} />
+			{:else}
+				<!-- Fallback per tipi non riconosciuti -->
+				<p class={classes.paragraph}>
+					{@html block.data.text || ''}
+				</p>
+			{/if}
 		{/if}
 	{/each}
 </div>
