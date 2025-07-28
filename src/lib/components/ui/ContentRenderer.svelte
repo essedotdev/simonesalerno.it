@@ -141,7 +141,7 @@
 </script>
 
 <div class={className}>
-	{#each groupedBlocks as group (group.type === 'normal' ? group.block.id || group.block.type : `float-${group.image?.id || 'default'}`)}
+	{#each groupedBlocks as group, groupIndex (group.type === 'normal' ? (group.block.id || `${group.block.type}-${groupIndex}`) : `float-${group.image?.id || groupIndex}`)}
 		{#if group.type === 'float-layout'}
 			{@const dimensions = getImageDimensions(group.image)}
 			<!-- Layout con immagine float e testo che scorre attorno -->
@@ -181,14 +181,14 @@
 
 				<!-- Contenuto che scorre attorno -->
 				<div class="text-content">
-					{#each group.content as block (block.id || block.type)}
+					{#each group.content as block, blockIndex (block.id || `${block.type}-${blockIndex}`)}
 						{#if block.type === 'paragraph'}
 							<p class="mb-6 text-xl leading-relaxed">
 								{@html block.data.text || ''}
 							</p>
 						{:else if block.type === 'list'}
 							<ul class="mb-6 ml-6 list-disc space-y-3">
-								{#each block.data.items || [] as item (item)}
+								{#each block.data.items || [] as item, itemIndex (`${item}-${itemIndex}`)}
 									<li class="text-xl leading-relaxed">{@html item}</li>
 								{/each}
 							</ul>
@@ -238,7 +238,7 @@
 				{/if}
 			{:else if block.type === 'list'}
 				<ul class={classes.list}>
-					{#each block.data.items || [] as item (item)}
+					{#each block.data.items || [] as item, itemIndex (`${item}-${itemIndex}`)}
 						<li class={classes.listItem}>{@html item}</li>
 					{/each}
 				</ul>
