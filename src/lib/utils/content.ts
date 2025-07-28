@@ -136,6 +136,12 @@ export class ContentLoader {
 				}
 			}
 
+			// Ordina per data di creazione (dal più recente al più vecchio)
+			projects.sort(
+				(a, b) =>
+					new Date(b.meta.created_date).getTime() - new Date(a.meta.created_date).getTime()
+			);
+
 			this.cache.set(cacheKey, projects);
 			return projects;
 		} catch (error) {
