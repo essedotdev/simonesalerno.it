@@ -42,7 +42,10 @@ export type TranslationKey =
 	| 'statusIdea'
 	| 'statusArchived'
 	| 'clearStatuses'
-	| 'closeStatusDropdown';
+	| 'closeStatusDropdown'
+	| 'noProjectsHome'
+	| 'noArticlesHome'
+	| 'checkBackLater';
 
 // Translation map cache
 const translationCache = new Map<string, Record<string, string>>();

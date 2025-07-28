@@ -43,7 +43,9 @@
 		'viewAll',
 		'searchArticles',
 		'noResultsFound',
-		'tryAdjusting'
+		'tryAdjusting',
+		'noArticlesHome',
+		'checkBackLater'
 	];
 
 	let t = $derived(getTranslations(global, translationKeys));
@@ -122,8 +124,13 @@
 		<div class="flex flex-col items-center gap-4 py-16 text-center">
 			<FileText class="h-16 w-16 text-white/20" />
 			<div class="text-white/60">
-				<p class="text-lg">{t.noResultsFound}</p>
-				<p class="mt-2 text-sm">{t.tryAdjusting}</p>
+				{#if activeFilters && (activeFilters.query || activeFilters.selectedTags.length > 0 || activeFilters.dateRange.from || activeFilters.dateRange.to)}
+					<p class="text-lg">{t.noResultsFound}</p>
+					<p class="mt-2 text-sm">{t.tryAdjusting}</p>
+				{:else}
+					<p class="text-lg">{t.noArticlesHome}</p>
+					<p class="mt-2 text-sm">{t.checkBackLater}</p>
+			{/if}
 			</div>
 		</div>
 	{/if}

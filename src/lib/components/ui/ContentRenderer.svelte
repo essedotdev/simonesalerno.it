@@ -84,7 +84,7 @@
 					type: 'float-layout',
 					image: nextBlock,
 					content: [block], // Il paragrafo che precede l'immagine
-					layout: nextBlock.data.layout
+					layout: nextBlock.data.layout || 'left'
 				});
 				i += 2; // Salta sia il blocco corrente che l'immagine
 			} else if (
