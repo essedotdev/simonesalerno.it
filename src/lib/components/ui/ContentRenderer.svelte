@@ -80,25 +80,55 @@
 
 			if (isNextImageFloat && (block.type === 'paragraph' || block.type === 'list')) {
 				// Crea un gruppo con il contenuto corrente + l'immagine float successiva
-				groups.push({
-					type: 'float-layout',
+				const floatGroup = {
+					type: 'float-layout' as const,
 					image: nextBlock,
 					content: [block], // Il paragrafo che precede l'immagine
 					layout: nextBlock.data.layout || 'left'
-				});
-				i += 2; // Salta sia il blocco corrente che l'immagine
+				};
+				
+				// Aggiungi tutti i paragrafi/liste successivi che possono scorrere accanto all'immagine
+				let j = i + 2;
+				while (j < blocks.length) {
+					const followingBlock = blocks[j];
+					if (followingBlock.type === 'paragraph' || followingBlock.type === 'list') {
+						floatGroup.content.push(followingBlock);
+						j++;
+					} else {
+						// Interrompi se incontri un altro tipo di blocco (header, immagine, etc.)
+						break;
+					}
+				}
+				
+				groups.push(floatGroup);
+				i = j; // Salta tutti i blocchi che sono stati raggruppati
 			} else if (
 				block.type === 'image' &&
 				(block.data.layout === 'left' || block.data.layout === 'right')
 			) {
-				// Immagine float senza contenuto precedente compatibile
-				groups.push({
-					type: 'float-layout',
+				// Immagine float - raccoglie tutti i paragrafi/liste successivi
+				const floatGroup = {
+					type: 'float-layout' as const,
 					image: block,
-					content: [], // Nessun contenuto da affiancare
+					content: [] as ContentBlock[],
 					layout: block.data.layout
-				});
-				i++;
+				};
+				
+				// Aggiungi tutti i paragrafi/liste successivi
+				let j = i + 1;
+				while (j < blocks.length) {
+					const followingBlock = blocks[j];
+					if (followingBlock.type === 'paragraph' || followingBlock.type === 'list') {
+						floatGroup.content.push(followingBlock);
+						j++;
+					} else {
+						// Interrompi se incontri un altro tipo di blocco
+						break;
+					}
+				}
+				
+				groups.push(floatGroup);
+				i = j; // Salta tutti i blocchi che sono stati raggruppati
 			} else {
 				// Blocco normale
 				groups.push({ type: 'normal', block });
@@ -146,10 +176,10 @@
 			{@const dimensions = getImageDimensions(group.image)}
 			<!-- Layout con immagine float e testo che scorre attorno -->
 			<div class="mb-8" style="display: flow-root;">
-				<!-- Immagine float -->
+				<!-- Immagine float (disattivato su mobile) -->
 				<div
-					class="mb-4 {group.layout === 'left' ? 'float-left mr-6' : 'float-right ml-6'}"
-					style="width: {dimensions.width}; height: {dimensions.height};"
+					class="mb-4 mx-auto {group.layout === 'center' ? '' : 'md:mx-0'} {group.layout === 'left' ? 'md:float-left md:mr-6 lg:mr-8' : group.layout === 'right' ? 'md:float-right md:ml-6 lg:ml-8' : ''}"
+					style="width: {dimensions.width}; height: {dimensions.height}; max-width: min({dimensions.width}, 100vw - 2rem);"
 				>
 					{#if group.image.data.src === '/placeholder.svg'}
 						<div

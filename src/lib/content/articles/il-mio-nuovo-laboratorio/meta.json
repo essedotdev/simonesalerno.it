@@ -1,8 +1,8 @@
 {
 	"id": "il-mio-nuovo-laboratorio",
-	"featured_image": "images/articles/il-mio-nuovo-laboratorio/featured.jpg",
-	"featuredImagePlaceholder": true,
-	"published": false,
+	"featured_image": "/images/articles/il-mio-nuovo-laboratorio/featured.jpg",
+	"featuredImagePlaceholder": false,
+	"published": true,
 	"published_date": "2025-01-27",
 	"created_date": "2025-01-27",
 	"updated_date": "2025-01-27"
