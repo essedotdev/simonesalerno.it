@@ -86,7 +86,7 @@
 					content: [block], // Il paragrafo che precede l'immagine
 					layout: nextBlock.data.layout || 'left'
 				};
-				
+
 				// Aggiungi tutti i paragrafi/liste successivi che possono scorrere accanto all'immagine
 				let j = i + 2;
 				while (j < blocks.length) {
@@ -99,7 +99,7 @@
 						break;
 					}
 				}
-				
+
 				groups.push(floatGroup);
 				i = j; // Salta tutti i blocchi che sono stati raggruppati
 			} else if (
@@ -113,7 +113,7 @@
 					content: [] as ContentBlock[],
 					layout: block.data.layout
 				};
-				
+
 				// Aggiungi tutti i paragrafi/liste successivi
 				let j = i + 1;
 				while (j < blocks.length) {
@@ -126,7 +126,7 @@
 						break;
 					}
 				}
-				
+
 				groups.push(floatGroup);
 				i = j; // Salta tutti i blocchi che sono stati raggruppati
 			} else {
@@ -171,14 +171,18 @@
 </script>
 
 <div class={className}>
-	{#each groupedBlocks as group, groupIndex (group.type === 'normal' ? (group.block.id || `${group.block.type}-${groupIndex}`) : `float-${group.image?.id || groupIndex}`)}
+	{#each groupedBlocks as group, groupIndex (group.type === 'normal' ? group.block.id || `${group.block.type}-${groupIndex}` : `float-${group.image?.id || groupIndex}`)}
 		{#if group.type === 'float-layout'}
 			{@const dimensions = getImageDimensions(group.image)}
 			<!-- Layout con immagine float e testo che scorre attorno -->
 			<div class="mb-8" style="display: flow-root;">
 				<!-- Immagine float (disattivato su mobile) -->
 				<div
-					class="mb-4 mx-auto {group.layout === 'center' ? '' : 'md:mx-0'} {group.layout === 'left' ? 'md:float-left md:mr-6 lg:mr-8' : group.layout === 'right' ? 'md:float-right md:ml-6 lg:ml-8' : ''}"
+					class="mx-auto mb-4 {group.layout === 'center' ? '' : 'md:mx-0'} {group.layout === 'left'
+						? 'md:float-left md:mr-6 lg:mr-8'
+						: group.layout === 'right'
+							? 'md:float-right md:ml-6 lg:ml-8'
+							: ''}"
 					style="width: {dimensions.width}; height: {dimensions.height}; max-width: min({dimensions.width}, 100vw - 2rem);"
 				>
 					{#if group.image.data.src === '/placeholder.svg'}

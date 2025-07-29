@@ -130,7 +130,7 @@
 				{:else}
 					<p class="text-lg">{t.noArticlesHome}</p>
 					<p class="mt-2 text-sm">{t.checkBackLater}</p>
-			{/if}
+				{/if}
 			</div>
 		</div>
 	{/if}
