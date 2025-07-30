@@ -1,19 +1,20 @@
 {
-	"permissions": {
-		"allow": [
-			"Bash(rg:*)",
-			"Bash(rm:*)",
-			"Bash(diff:*)",
-			"Bash(find:*)",
-			"Bash(mkdir:*)",
-			"Bash(mv:*)",
-			"Bash(grep:*)",
-			"Bash(ls:*)",
-			"Bash(pnpm lint:*)",
-			"Bash(pnpm build:*)",
-			"Bash(pnpm prettier:*)",
-			"Bash(pnpm check:*)"
-		],
-		"deny": []
-	}
+  "permissions": {
+    "allow": [
+      "Bash(rg:*)",
+      "Bash(rm:*)",
+      "Bash(diff:*)",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm prettier:*)",
+      "Bash(pnpm check:*)",
+      "WebFetch(domain:svelte.dev)"
+    ],
+    "deny": []
+  }
 }
