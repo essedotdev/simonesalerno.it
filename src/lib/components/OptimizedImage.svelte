@@ -21,12 +21,12 @@
 
 	// Pre-load all images using import.meta.glob for vite-imagetools
 	const articleImages = import.meta.glob('../assets/images/articles/**/*.{jpg,jpeg,png,webp}', {
-		query: '&imagetools',
+		query: '?as=srcset&format=avif;webp;jpg&w=400;800;1200',
 		eager: false
 	});
 
 	const projectImages = import.meta.glob('../assets/images/projects/**/*.{jpg,jpeg,png,webp}', {
-		query: '&imagetools',
+		query: '?as=srcset&format=avif;webp;jpg&w=400;800;1200',
 		eager: false
 	});
 
@@ -35,10 +35,13 @@
 		img: { src: string };
 	} | null = $state(null);
 	let isLoading = $state(true);
-	// Remove unused hasError variable
+	let imageNotFound = $state(false);
 
 	$effect(() => {
 		const loadImage = async () => {
+			// Reset state
+			imageNotFound = false;
+
 			if (!src || showPlaceholder) {
 				isLoading = false;
 				return;
@@ -69,24 +72,19 @@
 						if (imageModule.default && typeof imageModule.default === 'string') {
 							const srcsetString = imageModule.default;
 
-							// Parse the srcset to extract different formats and sizes
+							// In dev mode, vite-imagetools returns URLs without extensions
+							// We'll assume the order is: avif, webp, jpg (3 formats x 3 sizes = 9 URLs)
 							const srcsets = srcsetString.split(', ');
-							const avifSrcs: string[] = [];
-							const webpSrcs: string[] = [];
-							const jpegSrcs: string[] = [];
-							let fallbackSrc = '';
 
-							srcsets.forEach((srcset: string) => {
-								const [url] = srcset.split(' ');
-								if (url.includes('.avif')) {
-									avifSrcs.push(srcset);
-								} else if (url.includes('.webp')) {
-									webpSrcs.push(srcset);
-								} else if (url.includes('.jpeg') || url.includes('.jpg')) {
-									jpegSrcs.push(srcset);
-									if (!fallbackSrc) fallbackSrc = url; // Use first jpeg as fallback
-								}
-							});
+							// Group by format based on position (assuming 3 sizes per format)
+							const sizesPerFormat = 3;
+							const avifSrcs = srcsets.slice(0, sizesPerFormat);
+							const webpSrcs = srcsets.slice(sizesPerFormat, sizesPerFormat * 2);
+							const jpegSrcs = srcsets.slice(sizesPerFormat * 2, sizesPerFormat * 3);
+
+							// Use the first JPEG as fallback
+							const fallbackSrc =
+								jpegSrcs.length > 0 ? jpegSrcs[0].split(' ')[0] : srcsets[0].split(' ')[0];
 
 							// Create the expected structure for our component
 							optimizedImage = {
@@ -100,21 +98,20 @@
 								}
 							};
 						} else {
-							// Fallback to original path if unexpected structure
-							optimizedImage = { img: { src: `/${cleanPath}` } };
+							// Fallback to placeholder if unexpected structure
+							imageNotFound = true;
 						}
 					} else {
-						// Fallback to original path if not found in glob
-						optimizedImage = { img: { src: `/${cleanPath}` } };
+						// Image not found in glob - show placeholder
+						imageNotFound = true;
 					}
 				} else {
 					// For non-images/ paths, use as-is
 					optimizedImage = { img: { src } };
 				}
-			} catch (error) {
-				console.warn('Failed to load optimized image:', error);
-				// Fallback to original src
-				optimizedImage = { img: { src: src.startsWith('/') ? src : `/${src}` } };
+			} catch {
+				// Fallback to placeholder on error
+				imageNotFound = true;
 			} finally {
 				isLoading = false;
 			}
@@ -125,7 +122,7 @@
 </script>
 
 <div class="relative overflow-hidden {cssClass}">
-	{#if showPlaceholder}
+	{#if showPlaceholder || imageNotFound}
 		<div class="flex h-full w-full items-center justify-center bg-white/10 backdrop-blur-md">
 			<img
 				src={placeholderIcon}
