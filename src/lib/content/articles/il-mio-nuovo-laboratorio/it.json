@@ -57,7 +57,7 @@
 			{
 				"type": "image",
 				"data": {
-					"src": "/images/articles/il-mio-nuovo-laboratorio/robots.jpg",
+					"src": "images/articles/il-mio-nuovo-laboratorio/robots.jpg",
 					"alt": "Disegni di robot come Triangolix e Volix",
 					"layout": "right",
 					"size": "medium"

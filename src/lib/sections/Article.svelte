@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { inview, type Options } from 'svelte-inview';
 	import type { ArticleSectionProps } from '$lib/types';
-	import Image from '$lib/components/Image.svelte';
+	import OptimizedImage from '$lib/components/OptimizedImage.svelte';
 	import { getTranslation } from '$lib/utils/translations';
 	import { ChevronLeft } from '@lucide/svelte';
 	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
@@ -81,11 +81,12 @@
 			<!-- Featured image if available -->
 			{#if content.meta.featured_image || content.meta.featuredImagePlaceholder}
 				<div class="w-full">
-					<Image
+					<OptimizedImage
 						src={content.meta.featured_image}
 						alt={currentTranslation.title}
 						cssClass="aspect-video rounded-3xl"
 						showPlaceholder={content.meta.featuredImagePlaceholder || false}
+						sizes="100vw"
 					/>
 				</div>
 			{/if}

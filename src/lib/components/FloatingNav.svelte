@@ -45,7 +45,7 @@
 					onclick={handleAnchorClick}
 					aria-label="Logo"
 				>
-					<enhanced:img class="h-10 w-min" src="/static/logo/logo.png" alt="Logo" />
+					<img class="h-10 w-min" src="/logo/logo.png" alt="Logo" />
 				</a>
 
 				{#each data.global.navigation as route (route.name)}

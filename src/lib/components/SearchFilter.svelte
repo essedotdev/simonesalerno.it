@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import type { GlobalContent } from '$lib/types';
 	import type { FilterState } from '$lib/types/content';
 	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
@@ -48,7 +49,7 @@
 	};
 
 	const updateUrlParams = (newFilters: Partial<FilterState>) => {
-		const searchParams = new URLSearchParams($page.url.searchParams);
+		const searchParams = new SvelteURLSearchParams($page.url.searchParams);
 
 		// Reset page to 1 when filters change
 		searchParams.set('page', '1');
@@ -138,7 +139,7 @@
 	};
 
 	const clearAllFilters = () => {
-		const searchParams = new URLSearchParams($page.url.searchParams);
+		const searchParams = new SvelteURLSearchParams($page.url.searchParams);
 		searchParams.delete('query');
 		searchParams.delete('tags');
 		searchParams.delete('statuses');

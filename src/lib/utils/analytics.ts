@@ -20,16 +20,6 @@ export function trackPageView(url?: string) {
 	}
 }
 
-export function trackEvent(event: string, data?: Record<string, unknown>) {
-	if (!browser || !window.umami || dev) return;
-
-	try {
-		window.umami.track(event, data);
-	} catch (error) {
-		console.warn('Failed to track event:', error);
-	}
-}
-
 let isInitialized = false;
 
 // Initialize tracking when Umami script is loaded

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ProjectCardProps } from '$lib/types';
-	import Image from './Image.svelte';
+	import OptimizedImage from './OptimizedImage.svelte';
 
 	let { title, description, thumbnail, thumbnailPlaceholder, link, tags }: ProjectCardProps =
 		$props();
@@ -10,11 +10,12 @@
 	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
 >
 	<a href={link}>
-		<Image
+		<OptimizedImage
 			src={thumbnail}
 			alt={title}
 			cssClass="aspect-video rounded-t-3xl"
 			showPlaceholder={thumbnailPlaceholder}
+			sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
 		/>
 	</a>
 	<div class="px-6 py-5">

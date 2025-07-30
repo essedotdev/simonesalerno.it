@@ -2,7 +2,7 @@
 	import { ExternalLink, ChevronLeft } from '@lucide/svelte';
 	import { inview, type Options } from 'svelte-inview';
 	import type { ProjectSectionProps } from '$lib/types';
-	import Image from '$lib/components/Image.svelte';
+	import OptimizedImage from '$lib/components/OptimizedImage.svelte';
 	import { getTranslation } from '$lib/utils/translations';
 	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 
@@ -41,11 +41,12 @@
 		<div class="flex flex-col gap-y-6 xl:flex-row xl:gap-x-14">
 			<div class="w-full xl:w-1/2">
 				{#if (content.meta.images && content.meta.images.length > 0) || content.meta.thumbnailPlaceholder}
-					<Image
+					<OptimizedImage
 						src={content.meta.images?.[0]}
 						alt={currentTranslation.title}
 						cssClass="aspect-video rounded-3xl"
 						showPlaceholder={content.meta.thumbnailPlaceholder || false}
+						sizes="(max-width: 1280px) 100vw, 50vw"
 					/>
 				{/if}
 			</div>

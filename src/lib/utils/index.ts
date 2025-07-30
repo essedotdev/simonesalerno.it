@@ -1,7 +1,7 @@
 // Re-export utilities for convenient access
-export { initializeAnalytics, isAnalyticsReady, trackEvent, trackPageView } from './analytics';
-export { ContentLoader, getImagePath, getThumbnailPath, getFeaturedImagePath } from './content';
-export { handleAnchorClick, calculateOffset, scrollToTop, scrollToElement } from './scrollUtils';
+export { initializeAnalytics, isAnalyticsReady, trackPageView } from './analytics';
+export { ContentLoader } from './content';
+export { handleAnchorClick, calculateOffset, scrollToTop } from './scrollUtils';
 export { getTranslation, getTranslations, createTranslationMap } from './translations';
 export {
 	matchesQuery,

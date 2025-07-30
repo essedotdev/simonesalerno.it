@@ -41,16 +41,3 @@ export function scrollToTop() {
 		behavior: 'smooth'
 	});
 }
-
-/**
- * Smooth scroll to specific element by ID
- */
-export function scrollToElement(elementId: string, offset: number = 50) {
-	const element = document.getElementById(elementId);
-	if (element) {
-		window.scrollTo({
-			top: element.offsetTop - offset,
-			behavior: 'smooth'
-		});
-	}
-}

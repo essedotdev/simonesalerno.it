@@ -16,19 +16,6 @@ import type {
 	LoadConfigType
 } from '../types';
 
-// Helper per gestione immagini locali
-export function getImagePath(type: ContentType, id: string, filename: string): string {
-	return `/images/${type}s/${id}/${filename}`;
-}
-
-export function getThumbnailPath(type: ContentType, id: string): string {
-	return `/images/${type}s/${id}/thumbnail.jpg`;
-}
-
-export function getFeaturedImagePath(type: 'article', id: string): string {
-	return `/images/${type}s/${id}/featured.jpg`;
-}
-
 export class ContentLoader {
 	private cache: Map<CacheKey, unknown> = new Map();
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ArticleCardProps } from '$lib/types';
-	import Image from './Image.svelte';
+	import OptimizedImage from './OptimizedImage.svelte';
 
 	let {
 		title,
@@ -27,11 +27,12 @@
 	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
 >
 	<a href={link}>
-		<Image
+		<OptimizedImage
 			src={featuredImage}
 			alt={title}
 			cssClass="aspect-video rounded-t-3xl"
 			showPlaceholder={featuredImagePlaceholder}
+			sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
 		/>
 	</a>
 	<div class="px-6 py-5">

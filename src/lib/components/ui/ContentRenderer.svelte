@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ContentBlocks, ContentBlock } from '$lib/types/content.ts';
+	import OptimizedImage from '../OptimizedImage.svelte';
 
 	export let content: ContentBlocks;
 	export let className: string = '';
@@ -185,25 +186,12 @@
 							: ''}"
 					style="width: {dimensions.width}; height: {dimensions.height}; max-width: min({dimensions.width}, 100vw - 2rem);"
 				>
-					{#if group.image.data.src === '/placeholder.svg'}
-						<div
-							class="relative flex h-full min-h-[200px] w-full items-center justify-center overflow-hidden rounded-xl bg-white/10 backdrop-blur-md"
-						>
-							<img
-								src={group.image.data.src}
-								alt={group.image.data.alt || ''}
-								class="h-12 w-12 opacity-60"
-								style="filter: brightness(0) saturate(100%) invert(100%);"
-							/>
-						</div>
-					{:else}
-						<img
-							src={group.image.data.src}
-							alt={group.image.data.alt || ''}
-							class="h-full w-full rounded-xl object-cover"
-							loading="lazy"
-						/>
-					{/if}
+					<OptimizedImage
+						src={group.image.data.src}
+						alt={group.image.data.alt || ''}
+						cssClass="h-full w-full rounded-xl"
+						loading="lazy"
+					/>
 
 					<!-- Didascalia sotto l'immagine -->
 					{#if group.image.data.alt}
@@ -294,27 +282,12 @@
 			{:else if block.type === 'image'}
 				<!-- Immagine full width -->
 				<div class="mb-8">
-					{#if block.data.src === '/placeholder.svg'}
-						<div class="relative mx-auto aspect-video max-w-full overflow-hidden rounded-2xl">
-							<div
-								class="flex h-full w-full items-center justify-center bg-white/10 backdrop-blur-md"
-							>
-								<img
-									src={block.data.src}
-									alt={block.data.alt || ''}
-									class="h-12 w-12 opacity-60"
-									style="filter: brightness(0) saturate(100%) invert(100%);"
-								/>
-							</div>
-						</div>
-					{:else}
-						<img
-							src={block.data.src || ''}
-							alt={block.data.alt || ''}
-							class={classes.image}
-							loading="lazy"
-						/>
-					{/if}
+					<OptimizedImage
+						src={block.data.src || ''}
+						alt={block.data.alt || ''}
+						cssClass={classes.image}
+						loading="lazy"
+					/>
 					{#if block.data.alt}
 						<p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
 							{block.data.alt}
