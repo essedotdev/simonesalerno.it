@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { SvelteURLSearchParams } from 'svelte/reactivity';
+	import { page } from '$app/state';
 	import { ChevronLeft, ChevronRight } from '@lucide/svelte';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	interface Props {
 		currentPage: number;
@@ -11,7 +11,7 @@
 	let { currentPage, totalPages }: Props = $props();
 
 	const createPageLink = (pageNumber: number) => {
-		const searchParams = new SvelteURLSearchParams($page.url.searchParams);
+		const searchParams = new SvelteURLSearchParams(page.url.searchParams);
 		searchParams.set('page', pageNumber.toString());
 		return `?${searchParams.toString()}`;
 	};

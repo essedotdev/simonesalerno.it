@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import type { LayoutData } from '$lib/types/content';
 	import { handleAnchorClick } from '$lib/utils';
 	import { Menu, X } from '@lucide/svelte';
@@ -15,7 +15,7 @@
 	}
 
 	let isLanguageCodeValid = $derived(
-		data.languages.some((l) => l.code === $page.url.pathname.split('/')[1])
+		data.languages.some((l) => l.code === page.url.pathname.split('/')[1])
 	);
 </script>
 
@@ -24,7 +24,7 @@
 		class="mx-auto flex w-full max-w-screen-2xl items-center justify-between px-4 py-8 sm:px-8 lg:px-14"
 	>
 		<a
-			href={$page.url.pathname.split('/')[2]
+			href={page.url.pathname.split('/')[2]
 				? '/' + data.selectedLanguage
 				: isLanguageCodeValid
 					? '/' + data.selectedLanguage + '#top'

@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import type { FooterProps } from '$lib/types';
 	import { handleAnchorClick } from '$lib/utils';
-	import Logo from './Logo.svelte';
 	import { getTranslation } from '$lib/utils/translations';
+	import Logo from './Logo.svelte';
 
 	// Receive data as props from parent layout
 	let { data }: FooterProps = $props();
 
 	let isLanguageCodeValid = $derived(
-		data.languages.some((l) => l.code === $page.url.pathname.split('/')[1])
+		data.languages.some((l) => l.code === page.url.pathname.split('/')[1])
 	);
 
 	// Get translation with type safety
@@ -22,7 +22,7 @@
 			class="flex items-start justify-between px-4 py-8 text-lg sm:px-8 sm:pt-10 sm:pb-8 sm:text-xl md:text-2xl lg:px-14"
 		>
 			<a
-				href={$page.url.pathname.split('/')[2]
+				href={page.url.pathname.split('/')[2]
 					? '/' + data.selectedLanguage
 					: isLanguageCodeValid
 						? '/' + data.selectedLanguage + '#top'

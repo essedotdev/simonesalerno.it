@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
+	// Import goto
 	import type { LanguageSelectorProps } from '$lib/types';
+	import { ChevronDown } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
-	import { ChevronDown } from '@lucide/svelte';
 
 	// Props ricevuti dal layout parent
 	let {
@@ -11,8 +13,9 @@
 		selectedLanguage = 'en',
 		navigation = {},
 		projects = [],
-		articles = []
-	}: LanguageSelectorProps = $props();
+		articles = [],
+		isFloatingNav = false
+	}: LanguageSelectorProps & { isFloatingNav?: boolean } = $props();
 
 	let isOpen = $state(false);
 
@@ -28,11 +31,11 @@
 	}
 
 	function buildLanguageUrl(targetLang: string): string {
-		const currentPath = $page.url.pathname.split('/');
+		const currentPath = page.url.pathname.split('/');
 		const currentLang = currentPath[1];
 		const route = currentPath[2];
 		const slug = currentPath[3];
-		const searchParams = $page.url.search;
+		const searchParams = page.url.search;
 
 		// Se non c'è una route (homepage)
 		if (!route) {
@@ -87,14 +90,16 @@
 	<div>
 		<button
 			type="button"
-			class="flex w-16 cursor-pointer justify-center gap-x-1.5 rounded-md border border-white/5 bg-white/[.02] py-3 text-base backdrop-blur-md"
+			class="flex w-16 cursor-pointer justify-center gap-x-1.5 rounded-md border border-white/5 bg-white/[.02] backdrop-blur-md {isFloatingNav
+				? 'pt-[0.5rem] pb-2 text-sm'
+				: 'py-3 text-base'}"
 			id="menu-button"
 			aria-expanded={isOpen}
 			aria-haspopup="true"
 			onclick={toggleDropdown}
 		>
 			{selectedLanguage.toUpperCase()}
-			<ChevronDown class="mt-[0.15rem] -mr-1 h-5 w-5 text-white/15" />
+			<ChevronDown class="{isFloatingNav ? '' : 'mt-[0.15rem]'} -mr-1 h-5 w-5 text-white/15" />
 		</button>
 	</div>
 
@@ -111,12 +116,15 @@
 			<div class="py-1" role="none">
 				{#each languages as language (language.code)}
 					{#if selectedLanguage !== language.code}
+						<!-- svelte-ignore a11y_invalid_attribute -->
 						<a
-							data-sveltekit-reload
-							href={buildLanguageUrl(language.code)}
-							class="block px-4 py-2 text-sm hover:bg-white/5"
+							href="javascript:void(0);"
+							class="block px-4 {isFloatingNav ? 'py-1 text-xs' : 'py-2 text-sm'} hover:bg-white/5"
 							role="menuitem"
-							onclick={() => (isOpen = false)}
+							onclick={() => {
+								isOpen = false;
+								goto(buildLanguageUrl(language.code), { noScroll: true });
+							}}
 						>
 							{language.code.toUpperCase()}
 						</a>

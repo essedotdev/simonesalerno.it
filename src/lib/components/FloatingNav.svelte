@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import type { LayoutData } from '$lib/types/content';
 	import { handleAnchorClick } from '$lib/utils';
 	import { Menu } from '@lucide/svelte';
 	import { fade, fly } from 'svelte/transition';
+	import LanguageSelector from './ui/LanguageSelector.svelte';
 
 	// Receive data as props from parent layout
 	let {
@@ -17,7 +18,7 @@
 	}
 
 	let isLanguageCodeValid = $derived(
-		data.languages.some((l) => l.code === $page.url.pathname.split('/')[1])
+		data.languages.some((l) => l.code === page.url.pathname.split('/')[1])
 	);
 
 	let show = $derived(() => scrollY > 350 && !menuOpen);
@@ -36,7 +37,7 @@
 				class="flex items-center justify-between rounded-s-full rounded-e-none border border-white/5 bg-white/[.01] ps-8 pe-[calc(0.95rem+5vw)] text-lg backdrop-blur-md sm:rounded-full sm:bg-white/[.02] sm:px-4"
 			>
 				<a
-					href={$page.url.pathname.split('/')[2]
+					href={page.url.pathname.split('/')[2]
 						? '/' + data.selectedLanguage
 						: isLanguageCodeValid
 							? '/' + data.selectedLanguage + '#top'
@@ -55,7 +56,14 @@
 						onclick={handleAnchorClick}>{route.name}</a
 					>
 				{/each}
-
+				<LanguageSelector
+					languages={data.languages}
+					selectedLanguage={data.selectedLanguage}
+					navigation={data.navigation}
+					projects={data.projects}
+					articles={data.articles}
+					isFloatingNav={true}
+				/>
 				<div class="flex h-[40px] w-[40px] items-center justify-center sm:hidden">
 					{#if !menuOpen}
 						<button transition:fade={{ duration: 100 }} onclick={handleMenuClick}>

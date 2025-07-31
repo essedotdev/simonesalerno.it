@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { SvelteURLSearchParams } from 'svelte/reactivity';
+	import { page } from '$app/state';
 	import type { GlobalContent } from '$lib/types';
 	import type { FilterState } from '$lib/types/content';
 	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
 	import { Search, X } from '@lucide/svelte';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import DateRangeDropdown from './ui/DateRangeDropdown.svelte';
 	import SortDropdown from './ui/SortDropdown.svelte';
-	import TagDropdown from './ui/TagDropdown.svelte';
 	import StatusDropdown from './ui/StatusDropdown.svelte';
+	import TagDropdown from './ui/TagDropdown.svelte';
 
 	interface Props {
 		filters: FilterState;
@@ -49,7 +49,7 @@
 	};
 
 	const updateUrlParams = (newFilters: Partial<FilterState>) => {
-		const searchParams = new SvelteURLSearchParams($page.url.searchParams);
+		const searchParams = new SvelteURLSearchParams(page.url.searchParams);
 
 		// Reset page to 1 when filters change
 		searchParams.set('page', '1');
@@ -139,7 +139,7 @@
 	};
 
 	const clearAllFilters = () => {
-		const searchParams = new SvelteURLSearchParams($page.url.searchParams);
+		const searchParams = new SvelteURLSearchParams(page.url.searchParams);
 		searchParams.delete('query');
 		searchParams.delete('tags');
 		searchParams.delete('statuses');
