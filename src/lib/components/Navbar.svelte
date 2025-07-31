@@ -67,7 +67,11 @@
 					/>
 				</div>
 
-				<button class="fixed z-40" transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
+				<button
+					class="fixed top-[2.8rem] right-[1.1rem] z-40"
+					transition:fade={{ duration: 100 }}
+					onclick={handleMenuClick}
+				>
 					<X class="h-9 w-9" />
 				</button>
 

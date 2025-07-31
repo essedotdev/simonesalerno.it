@@ -5,7 +5,7 @@
 	import type { LanguageSelectorProps } from '$lib/types';
 	import { ChevronDown } from '@lucide/svelte';
 	import { onMount } from 'svelte';
-	import { fly } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 
 	// Props ricevuti dal layout parent
 	let {
@@ -90,9 +90,9 @@
 	<div>
 		<button
 			type="button"
-			class="flex w-16 cursor-pointer justify-center gap-x-1.5 rounded-md border border-white/5 bg-white/[.02] backdrop-blur-md {isFloatingNav
-				? 'pt-[0.5rem] pb-2 text-sm'
-				: 'py-3 text-base'}"
+			class="flex w-16 cursor-pointer justify-center gap-x-1.5 border border-white/5 bg-white/[.02] backdrop-blur-md {isFloatingNav
+				? 'rounded-s-lg rounded-e-2xl pt-[0.5rem] pb-2 text-sm'
+				: 'rounded-lg py-3 text-base'}"
 			id="menu-button"
 			aria-expanded={isOpen}
 			aria-haspopup="true"
@@ -105,21 +105,23 @@
 
 	{#if isOpen}
 		<div
-			in:fly={{ y: -10, duration: 100 }}
-			out:fly={{ y: -10, duration: 100 }}
-			class="absolute right-0 z-10 mt-1 w-16 origin-top-right rounded-md border border-white/5 bg-white/[.02] text-base backdrop-blur-md"
+			in:fade={{ duration: 100 }}
+			out:fade={{ duration: 100 }}
+			class="absolute right-0 z-10 mt-1 w-16 origin-top-right rounded-lg border border-white/5 bg-white/[.02] text-base backdrop-blur-md"
 			role="menu"
 			aria-orientation="vertical"
 			aria-labelledby="menu-button"
 			tabindex="-1"
 		>
-			<div class="py-1" role="none">
+			<div role="none">
 				{#each languages as language (language.code)}
 					{#if selectedLanguage !== language.code}
 						<!-- svelte-ignore a11y_invalid_attribute -->
 						<a
 							href="javascript:void(0);"
-							class="block px-4 {isFloatingNav ? 'py-1 text-xs' : 'py-2 text-sm'} hover:bg-white/5"
+							class="block px-4 {isFloatingNav
+								? 'py-2 text-xs'
+								: 'py-3 text-sm'} hover:bg-white/[0.04]"
 							role="menuitem"
 							onclick={() => {
 								isOpen = false;

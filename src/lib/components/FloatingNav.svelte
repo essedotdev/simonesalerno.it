@@ -3,7 +3,7 @@
 	import type { LayoutData } from '$lib/types/content';
 	import { handleAnchorClick } from '$lib/utils';
 	import { Menu } from '@lucide/svelte';
-	import { fade, fly } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 	import LanguageSelector from './ui/LanguageSelector.svelte';
 
 	// Receive data as props from parent layout
@@ -27,8 +27,8 @@
 {#if show()}
 	<header
 		class="pointer-events-none fixed top-[1.7rem] z-50 flex w-full justify-end sm:top-4 sm:left-0 sm:justify-center"
-		in:fly={{ y: -20, duration: 300 }}
-		out:fly={{ y: -20, duration: 200 }}
+		in:fade={{ duration: 300 }}
+		out:fade={{ duration: 200 }}
 	>
 		<nav
 			class="pointer-events-auto rounded-s-full rounded-e-none bg-neutral-900/20 sm:rounded-full"
@@ -56,14 +56,18 @@
 						onclick={handleAnchorClick}>{route.name}</a
 					>
 				{/each}
-				<LanguageSelector
-					languages={data.languages}
-					selectedLanguage={data.selectedLanguage}
-					navigation={data.navigation}
-					projects={data.projects}
-					articles={data.articles}
-					isFloatingNav={true}
-				/>
+
+				<div class="hidden sm:flex">
+					<LanguageSelector
+						languages={data.languages}
+						selectedLanguage={data.selectedLanguage}
+						navigation={data.navigation}
+						projects={data.projects}
+						articles={data.articles}
+						isFloatingNav={true}
+					/>
+				</div>
+
 				<div class="flex h-[40px] w-[40px] items-center justify-center sm:hidden">
 					{#if !menuOpen}
 						<button transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
