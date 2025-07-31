@@ -60,6 +60,12 @@ async function findSlugForLanguage(
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const { pathname, origin } = event.url;
+
+	// Bypass the hook for sitemap.xml
+	if (pathname === '/sitemap.xml') {
+		return await resolve(event);
+	}
+
 	const pathSegments = pathname.split('/').filter(Boolean);
 
 	try {
