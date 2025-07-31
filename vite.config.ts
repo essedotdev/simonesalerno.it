@@ -12,7 +12,7 @@ export default defineConfig({
 				if (url.pathname.includes('/images/')) {
 					return new URLSearchParams({
 						format: 'avif;webp;jpg',
-						w: '400;800;1200',
+						w: '400;800;1200;1920',
 						as: 'srcset'
 					});
 				}
