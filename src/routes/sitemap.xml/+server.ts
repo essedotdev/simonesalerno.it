@@ -1,6 +1,6 @@
+import type { SitemapPage } from '$lib/types';
 import { ContentLoader } from '$lib/utils/content';
 import type { RequestHandler } from './$types';
-import type { SitemapPage } from '$lib/types';
 
 const site = 'https://simonesalerno.it';
 
@@ -32,6 +32,35 @@ export const GET: RequestHandler = async () => {
 					href: `${site}/${l.code}`
 				}))
 			});
+
+			// Pagine principali di navigazione (es. /it/progetti, /en/projects, /it/blog, /en/blog)
+			if (navigation[langCode]?.projects) {
+				sitemapPages.push({
+					slug: `${langCode}/${navigation[langCode].projects}`,
+					lastMod: new Date().toISOString().split('T')[0],
+					priority: 0.9,
+					changefreq: 'weekly',
+					hreflang: langCode,
+					alternates: languages.map((l) => ({
+						hreflang: l.code,
+						href: `${site}/${l.code}/${navigation[l.code]?.projects}`
+					}))
+				});
+			}
+
+			if (navigation[langCode]?.articles) {
+				sitemapPages.push({
+					slug: `${langCode}/${navigation[langCode].articles}`,
+					lastMod: new Date().toISOString().split('T')[0],
+					priority: 0.9,
+					changefreq: 'weekly',
+					hreflang: langCode,
+					alternates: languages.map((l) => ({
+						hreflang: l.code,
+						href: `${site}/${l.code}/${navigation[l.code]?.articles}`
+					}))
+				});
+			}
 
 			// Progetti individuali
 			if (navigation[langCode]?.projects) {
