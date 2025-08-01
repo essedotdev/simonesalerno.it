@@ -17,7 +17,7 @@ body {
 		radial-gradient(at 46.12884622549344% 45.14656319433538%, #000000 0px, transparent 50%) #0c0c0c;
 }
 
-html::before {
+body::before {
 	content: '';
 	display: block;
 	position: fixed;
@@ -25,10 +25,15 @@ html::before {
 	top: 0;
 	left: 0;
 	width: 100vw;
+	width: calc(100vw + env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px));
 	height: 100vh;
+	height: calc(100vh + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px));
 	background: transparent url('/noise.png') 0 0;
 	background-size: 320px 320px;
 	opacity: 0.4;
+	/* Estendi oltre le safe area */
+	margin-top: calc(-1 * env(safe-area-inset-top, 0px));
+	margin-left: calc(-1 * env(safe-area-inset-left, 0px));
 }
 
 /* Classe utility per overlay fullscreen */
@@ -37,7 +42,12 @@ html::before {
 	top: 0;
 	left: 0;
 	width: 100vw;
+	width: calc(100vw + env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px));
 	height: 100vh;
+	height: calc(100vh + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px));
+	/* Estendi oltre le safe area */
+	margin-top: calc(-1 * env(safe-area-inset-top, 0px));
+	margin-left: calc(-1 * env(safe-area-inset-left, 0px));
 }
 
 ::-webkit-scrollbar {
