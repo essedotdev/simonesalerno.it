@@ -73,7 +73,7 @@
 
 				<button
 					class={`fixed top-[2.8rem] z-40 flex h-10 w-10 items-center justify-center ${isFloatingNavVisible ? 'right-4' : 'right-9'}`}
-					transition:fade={{ duration: 100 }}
+					transition:fade={{ duration: 300 }}
 					onclick={handleMenuClick}
 				>
 					<X class="h-9 w-9" />
@@ -81,7 +81,7 @@
 
 				<div
 					class="fixed z-30 flex flex-col items-center justify-center bg-black/60 text-2xl backdrop-blur-sm"
-					style="top: -100px; left: -100px; right: -100px; bottom: -100px;"
+					style="inset: 0; height: 100vh; height: 100dvh; width: 100vw; width: 100dvw;"
 					transition:fade={{ duration: 300 }}
 				>
 					<div class="flex flex-col gap-y-3">
@@ -94,7 +94,7 @@
 					</div>
 				</div>
 			{:else}
-				<button transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
+				<button transition:fade={{ duration: 300 }} onclick={handleMenuClick}>
 					<Menu class="h-9 w-9" />
 				</button>
 			{/if}

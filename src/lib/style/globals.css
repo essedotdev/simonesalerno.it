@@ -22,9 +22,11 @@ body::before {
 	display: block;
 	position: fixed;
 	z-index: -1;
-	inset: -100px;
-	width: calc(100% + 200px);
-	height: calc(100% + 200px);
+	inset: 0;
+	width: 100vw;
+	width: 100dvw;
+	height: 100vh;
+	height: 100dvh;
 	background: transparent url('/noise.png') 0 0;
 	background-size: 320px 320px;
 	opacity: 0.4;
