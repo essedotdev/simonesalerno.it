@@ -67,6 +67,7 @@ export interface GlobalContent {
 	keywords: string[];
 	navigation: LinkItem[];
 	interface: InterfaceItem[];
+	tagTranslations: Record<string, string>;
 }
 
 // Page Content (Welcome, About, Contact, Projects, Blog)

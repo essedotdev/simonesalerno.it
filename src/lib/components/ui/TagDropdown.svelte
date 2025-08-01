@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { GlobalContent } from '$lib/types';
-	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
+	import { getTranslations, translateTag, type TranslationKey } from '$lib/utils/translations';
 	import { Check, ChevronDown, Tag } from '@lucide/svelte';
 	import Dropdown from './Dropdown.svelte';
 
@@ -122,7 +122,7 @@
 							<Check class="h-3 w-3" />
 						{/if}
 					</div>
-					{tag}
+					{translateTag(global, tag)}
 				</button>
 			{/each}
 		</div>

@@ -19,5 +19,5 @@
 		]
 	},
 	"image_captions": ["Vista dashboard", "Bacheca Kanban", "Dettagli task", "Collaborazione team"],
-	"tags": ["React", "WebSockets", "Collaborazione", "Produttività"]
+	"tags": ["React", "WebSockets", "Collaboration", "Productivity"]
 }

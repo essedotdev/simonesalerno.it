@@ -3,7 +3,7 @@
 	import SearchFilter from '$lib/components/SearchFilter.svelte';
 	import Pagination from '$lib/components/ui/Pagination.svelte';
 	import type { ArticlesSectionProps, FilterState } from '$lib/types/content';
-	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
+	import { getTranslations, translateTags, type TranslationKey } from '$lib/utils/translations';
 	import { ArrowRight, FileText } from '@lucide/svelte';
 	import { inview, type Options } from 'svelte-inview';
 
@@ -93,7 +93,7 @@
 						'/' +
 						article.translations[selectedLanguage].slug}
 					publishedDate={article.meta.published_date}
-					tags={article.translations[selectedLanguage].tags}
+					tags={translateTags(global, article.translations[selectedLanguage].tags)}
 				/>
 			{/each}
 		</div>

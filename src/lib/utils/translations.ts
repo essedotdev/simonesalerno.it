@@ -112,3 +112,25 @@ export function getTranslations(
 
 	return result;
 }
+
+/**
+ * Translates a tag using the global tag translations
+ */
+export function translateTag(global: GlobalContent | null | undefined, tag: string): string {
+	if (!global || !global.tagTranslations) {
+		return tag;
+	}
+
+	return global.tagTranslations[tag] || tag;
+}
+
+/**
+ * Translates multiple tags at once
+ */
+export function translateTags(global: GlobalContent | null | undefined, tags: string[]): string[] {
+	if (!global || !global.tagTranslations) {
+		return tags;
+	}
+
+	return tags.map((tag) => global.tagTranslations[tag] || tag);
+}

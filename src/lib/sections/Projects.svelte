@@ -4,7 +4,7 @@
 	import SearchFilter from '$lib/components/SearchFilter.svelte';
 	import Pagination from '$lib/components/ui/Pagination.svelte';
 	import type { FilterState, ProjectsSectionProps } from '$lib/types/content';
-	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
+	import { getTranslations, translateTags, type TranslationKey } from '$lib/utils/translations';
 	import { ArrowRight, FileText } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { inview, type Options } from 'svelte-inview';
@@ -121,7 +121,7 @@
 					description={project.translations[selectedLanguage].description}
 					thumbnail={project.meta.thumbnail}
 					thumbnailPlaceholder={project.meta.thumbnailPlaceholder}
-					tags={project.translations[selectedLanguage].tags}
+					tags={translateTags(global, project.translations[selectedLanguage].tags)}
 					link={'/' +
 						selectedLanguage +
 						'/' +

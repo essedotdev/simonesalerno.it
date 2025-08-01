@@ -3,7 +3,7 @@
 	import { page } from '$app/state';
 	import type { GlobalContent } from '$lib/types';
 	import type { FilterState } from '$lib/types/content';
-	import { getTranslations, type TranslationKey } from '$lib/utils/translations';
+	import { getTranslations, translateTag, type TranslationKey } from '$lib/utils/translations';
 	import { Search, X } from '@lucide/svelte';
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import DateRangeDropdown from './ui/DateRangeDropdown.svelte';
@@ -235,7 +235,7 @@
 				<span
 					class="inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-sm text-white/80"
 				>
-					{originalCaseTag}
+					{translateTag(global, originalCaseTag)}
 					<button
 						onclick={() => handleTagToggle(originalCaseTag)}
 						class="rounded-full p-1 hover:bg-white/20"

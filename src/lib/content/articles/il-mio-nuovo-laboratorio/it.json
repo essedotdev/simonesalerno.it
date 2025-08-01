@@ -118,12 +118,12 @@
 	"meta_description": "Dal raccoglitore arancione pieno di progetti di robot al codice: la storia di come il mio laboratorio di scienziato pazzo si è trasformato in questo sito web.",
 	"tags": [
 		"SvelteKit",
-		"Tailwind CSS",
-		"Architettura Software",
+		"TailwindCSS",
+		"Software Architecture",
 		"Routing",
-		"Multilingua",
+		"Multilingual",
 		"CMS",
-		"Portfolio Personale",
-		"Intelligenza Artificiale"
+		"Portfolio",
+		"AI"
 	]
 }

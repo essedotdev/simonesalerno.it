@@ -2,7 +2,7 @@
 	import { inview, type Options } from 'svelte-inview';
 	import type { ArticleSectionProps } from '$lib/types';
 	import OptimizedImage from '$lib/components/OptimizedImage.svelte';
-	import { getTranslation } from '$lib/utils/translations';
+	import { getTranslation, translateTags } from '$lib/utils/translations';
 	import { ChevronLeft } from '@lucide/svelte';
 	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 
@@ -20,6 +20,9 @@
 
 	let homeUrl = $derived(currentLang === 'en' ? '/' : `/${currentLang}`);
 	let currentTranslation = $derived(content.translations[currentLang]);
+	let translatedTags = $derived(
+		currentTranslation?.tags ? translateTags(global, currentTranslation.tags) : []
+	);
 
 	function formatDate(dateString: string, lang: string): string {
 		const date = new Date(dateString);
@@ -67,9 +70,9 @@
 					{/if}
 				</div>
 
-				{#if currentTranslation.tags && currentTranslation.tags.length > 0}
+				{#if translatedTags && translatedTags.length > 0}
 					<div class="flex flex-wrap gap-2">
-						{#each currentTranslation.tags as tag (tag)}
+						{#each translatedTags as tag (tag)}
 							<span class="rounded-full bg-gray-800 px-3 py-1 text-sm text-gray-300">
 								{tag}
 							</span>
