@@ -112,7 +112,7 @@
 	class="mx-auto flex min-h-screen w-full max-w-[90vw] flex-col overflow-x-hidden scroll-smooth text-white antialiased selection:bg-white/10"
 >
 	<!-- Passa dati come props ai componenti -->
-	<Navbar {data} bind:menuOpen />
+	<Navbar {data} bind:menuOpen isFloatingNavVisible={scrollY > 350} />
 
 	{#if isLanguageCodeValid}
 		<FloatingNav {data} bind:menuOpen {scrollY} />

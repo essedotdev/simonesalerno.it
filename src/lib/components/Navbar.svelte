@@ -8,7 +8,11 @@
 	import LanguageSelector from './ui/LanguageSelector.svelte';
 
 	// Ricevi dati come props
-	let { data, menuOpen = $bindable() }: { data: LayoutData; menuOpen: boolean } = $props();
+	let {
+		data,
+		menuOpen = $bindable(),
+		isFloatingNavVisible = false
+	}: { data: LayoutData; menuOpen: boolean; isFloatingNavVisible?: boolean } = $props();
 
 	function handleMenuClick() {
 		menuOpen = !menuOpen;
@@ -68,7 +72,7 @@
 				</div>
 
 				<button
-					class="fixed top-[2.8rem] right-[1.1rem] z-40"
+					class={`fixed top-[2.8rem] z-40 ${isFloatingNavVisible ? 'right-[1.1rem]' : 'right-11'}`}
 					transition:fade={{ duration: 100 }}
 					onclick={handleMenuClick}
 				>
@@ -76,7 +80,8 @@
 				</button>
 
 				<div
-					class="fixed top-0 left-0 z-30 flex h-screen w-screen flex-col items-center justify-center bg-black/60 text-2xl backdrop-blur-sm"
+					class="fixed z-30 flex flex-col items-center justify-center bg-black/60 text-2xl backdrop-blur-sm"
+					style="top: -100px; left: -100px; right: -100px; bottom: -100px;"
 					transition:fade={{ duration: 300 }}
 				>
 					<div class="flex flex-col gap-y-3">
