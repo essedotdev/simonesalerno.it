@@ -13,4 +13,3 @@ export {
 	sortItems
 } from './searchUtils';
 export { createTranslationMap, getTranslation, getTranslations } from './translations';
-export { initViewportHeight, setViewportHeight } from './viewport';

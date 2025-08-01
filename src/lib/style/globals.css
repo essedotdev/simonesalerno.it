@@ -4,12 +4,6 @@
 	--breakpoint-xs: 30rem;
 }
 
-/* Inizializza le variabili CSS con fallback */
-:root {
-	--vh: 1vh;
-	--vw: 1vw;
-}
-
 body {
 	@apply overflow-x-hidden overscroll-none text-gray-100;
 	font-family: 'Geist', fantasy;
@@ -30,20 +24,20 @@ body::before {
 	z-index: -1;
 	top: 0;
 	left: 0;
-	width: calc(var(--vw, 1vw) * 100);
-	height: calc(var(--vh, 1vh) * 100);
+	width: 100vw;
+	height: 100vh;
 	background: transparent url('/noise.png') 0 0;
 	background-size: 320px 320px;
 	opacity: 0.4;
 }
 
-/* Classe utility per overlay fullscreen che gestisce correttamente iOS Safari */
+/* Classe utility per overlay fullscreen */
 .fullscreen-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
-	width: calc(var(--vw, 1vw) * 100);
-	height: calc(var(--vh, 1vh) * 100);
+	width: 100vw;
+	height: 100vh;
 }
 
 ::-webkit-scrollbar {
