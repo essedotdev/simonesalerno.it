@@ -19,9 +19,6 @@ body {
 	/* Previene l'overscroll su iOS */
 	overscroll-behavior: none;
 	-webkit-overflow-scrolling: touch;
-	position: fixed;
-	width: 100%;
-	height: 100%;
 
 	background:
 		radial-gradient(at 0% 90.67755657300366%, #20327e 0px, transparent 50%),

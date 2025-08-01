@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { inview, type Options } from 'svelte-inview';
 	import type { ContactSectionProps } from '$lib/types';
+	import { inview, type Options } from 'svelte-inview';
 
 	// Receive contact data as props
 	let { contact }: ContactSectionProps = $props();
@@ -31,20 +31,22 @@
 		</p>
 	</div>
 
-	<div class="flex flex-col gap-y-2 text-xl sm:text-2xl">
+	<div class="text-xl sm:text-2xl">
 		{#each contact.links as link, index (link.name)}
-			<a
-				class="group flex transition-all duration-300 ease-in-out
-					{index === 0 ? 'mb-2 text-2xl sm:text-3xl md:text-4xl' : ''}"
-				href={link.link}
-				target="_blank"
-			>
-				<span
-					class="bg-gradient-to-r from-gray-300 to-gray-300 bg-[length:0%_2px] bg-left-bottom bg-no-repeat transition-all duration-500 ease-out group-hover:bg-[length:100%_2px]"
+			<div class="mb-2 {index === 0 ? 'mb-4' : ''}">
+				<a
+					class="inline-block transition-all duration-300 ease-in-out
+            {index === 0 ? 'text-2xl sm:text-3xl md:text-4xl' : ''}"
+					href={link.link}
+					target="_blank"
 				>
-					{link.name}
-				</span>
-			</a>
+					<span
+						class="inline-block bg-gradient-to-r from-gray-300 to-gray-300 bg-[length:0%_2px] bg-left-bottom bg-no-repeat transition-all duration-500 ease-out hover:bg-[length:100%_2px]"
+					>
+						{link.name}
+					</span>
+				</a>
+			</div>
 		{/each}
 	</div>
 </div>
