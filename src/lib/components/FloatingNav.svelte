@@ -46,7 +46,7 @@
 					onclick={handleAnchorClick}
 					aria-label="Logo"
 				>
-					<img class="h-10 w-min" src="/logo/logo.png" alt="Logo" />
+					<img class="h-10 w-10 object-contain" src="/logo/logo.png" alt="Logo" />
 				</a>
 
 				{#each data.global.navigation as route (route.name)}
@@ -68,9 +68,13 @@
 					/>
 				</div>
 
-				<div class="flex h-[40px] w-[40px] items-center justify-center sm:hidden">
+				<div class="flex h-10 w-10 items-center justify-center sm:hidden">
 					{#if !menuOpen}
-						<button transition:fade={{ duration: 100 }} onclick={handleMenuClick}>
+						<button
+							class="flex h-10 w-10 items-center justify-center"
+							transition:fade={{ duration: 100 }}
+							onclick={handleMenuClick}
+						>
 							<Menu class="h-9 w-9" />
 						</button>
 					{/if}

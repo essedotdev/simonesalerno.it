@@ -59,7 +59,7 @@
 			</div>
 		</div>
 
-		<div class="flex h-[40px] w-[40px] items-center justify-center md:hidden">
+		<div class="flex h-10 w-10 items-center justify-center md:hidden">
 			{#if menuOpen}
 				<div class="fixed top-10 left-7 z-40" transition:fade={{ duration: 300 }}>
 					<LanguageSelector
@@ -72,7 +72,7 @@
 				</div>
 
 				<button
-					class={`fixed top-[2.8rem] z-40 ${isFloatingNavVisible ? 'right-[1.1rem]' : 'right-11'}`}
+					class={`fixed top-[2.8rem] z-40 flex h-10 w-10 items-center justify-center ${isFloatingNavVisible ? 'right-4' : 'right-9'}`}
 					transition:fade={{ duration: 100 }}
 					onclick={handleMenuClick}
 				>
