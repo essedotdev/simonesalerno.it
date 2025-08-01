@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import type { LayoutData } from '$lib/types/content';
-	import { handleAnchorClick } from '$lib/utils';
+	import { handleAnchorClick, initViewportHeight } from '$lib/utils';
 	import { Menu, X } from '@lucide/svelte';
+	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Logo from './Logo.svelte';
 	import LanguageSelector from './ui/LanguageSelector.svelte';
@@ -21,6 +22,11 @@
 	let isLanguageCodeValid = $derived(
 		data.languages.some((l) => l.code === page.url.pathname.split('/')[1])
 	);
+
+	// Inizializza il viewport height quando il componente è montato
+	onMount(() => {
+		initViewportHeight();
+	});
 </script>
 
 <header id="top" class="border-b border-white/5">
@@ -80,8 +86,7 @@
 				</button>
 
 				<div
-					class="fixed z-30 flex flex-col items-center justify-center bg-black/60 text-2xl backdrop-blur-sm"
-					style="inset: 0; height: 100vh; height: 100dvh; width: 100vw; width: 100dvw;"
+					class="fullscreen-overlay z-30 flex flex-col items-center justify-center bg-black/60 text-2xl backdrop-blur-sm"
 					transition:fade={{ duration: 300 }}
 				>
 					<div class="flex flex-col gap-y-3">

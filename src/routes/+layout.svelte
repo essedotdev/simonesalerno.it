@@ -124,7 +124,7 @@
 
 	<Footer {data} />
 
-	{#if scrollY > 350}
+	{#if scrollY > 350 && !menuOpen}
 		<BackToTop global={data.global} />
 	{/if}
 </div>
