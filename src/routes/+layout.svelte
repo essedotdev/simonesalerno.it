@@ -90,6 +90,70 @@
 
 	// Dynamic locale for meta tags
 	let currentLocale = $derived(page.params.page || 'it');
+
+	// Dynamic OG image URL
+	let ogImageUrl = $derived.by(() => {
+		const currentRoute = page.route.id;
+		const params = page.params;
+		const url = page.url;
+
+		// Determine page type and parameters
+		let type = 'home';
+		let section: string | undefined;
+		let title: string | undefined;
+		let imageUrl: string | undefined;
+		let imageKey: string | undefined;
+		let excerpt: string | undefined;
+
+		// Home page
+		if (currentRoute === '/[page=lang]') {
+			type = 'home';
+		}
+		// Projects/Articles listing pages
+		else if (currentRoute === '/[page=lang]/[route=route]') {
+			type = 'listing';
+			const pageType = params.route;
+			if (pageType === 'projects' || pageType === 'progetti') {
+				section = 'projects';
+				title = data.projectsPage?.title;
+			} else if (pageType === 'blog' || pageType === 'articoli') {
+				section = 'blog';
+				title = data.blogPage?.title;
+			}
+		}
+		// Individual project/article pages
+		else if (currentRoute === '/[page=lang]/[route=route]/[sub]') {
+			type = 'detail';
+			const pageType = params.route;
+			section = pageType === 'projects' || pageType === 'progetti' ? 'projects' : 'blog';
+
+			// Get content data from page
+			const pageData = page.data;
+			if (pageData?.content?.translations?.[pageData.currentLang]) {
+				const contentData = pageData.content.translations[pageData.currentLang];
+				title = contentData.title;
+				excerpt = contentData.description || contentData.excerpt;
+
+				// For projects, try to get cover image
+				if (section === 'projects' && pageData.content?.cover_image) {
+					imageKey = pageData.content.cover_image;
+				}
+			}
+		}
+
+		// Build query parameters
+		const searchParams = new URLSearchParams({
+			type,
+			lang: currentLocale,
+			...(section && { section }),
+			...(title && { title }),
+			...(imageUrl && { image: imageUrl }),
+			...(imageKey && { imageKey }),
+			...(excerpt && { excerpt })
+		});
+
+		return `${url.origin}/api/og-image?${searchParams.toString()}`;
+	});
 </script>
 
 <svelte:head>
@@ -102,8 +166,10 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={pageTitle} />
 	<meta property="og:description" content={data.global?.description || ''} />
-	<meta property="og:image" content="/logo/logo.png" />
-	<meta property="og:image:alt" content="Simone Salerno Logo" />
+	<meta property="og:image" content={ogImageUrl} />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content="Simone Salerno" />
 	<meta property="og:url" content={page.url.href} />
 	<meta property="og:locale" content={currentLocale === 'en' ? 'en_US' : 'it_IT'} />
 	<meta property="og:site_name" content="Simone Salerno" />
@@ -112,8 +178,8 @@
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={pageTitle} />
 	<meta name="twitter:description" content={data.global?.description || ''} />
-	<meta name="twitter:image" content="/logo/logo.png" />
-	<meta name="twitter:image:alt" content="Simone Salerno Logo" />
+	<meta name="twitter:image" content={ogImageUrl} />
+	<meta name="twitter:image:alt" content="Simone Salerno" />
 	<meta name="twitter:url" content={page.url.href} />
 	<meta name="twitter:site" content="@essesdev" />
 </svelte:head>
