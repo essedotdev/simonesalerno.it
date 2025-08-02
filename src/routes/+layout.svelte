@@ -68,9 +68,9 @@
 		if (currentRoute === '/[page=lang]/[route=route]') {
 			const pageType = params.route;
 			if (pageType === 'projects' || pageType === 'progetti') {
-				return `${data.projectsPage?.title || 'Projects'} - ${data.global.title}`;
+				return `Simone Salerno • ${data.projectsPage?.title || 'Projects'}`;
 			} else {
-				return `${data.blogPage?.title || 'Blog'} - ${data.global.title}`;
+				return `Simone Salerno • ${data.blogPage?.title || 'Blog'}`;
 			}
 		}
 
@@ -87,6 +87,9 @@
 		// Fallback
 		return `Simone Salerno • ${data.global.title}`;
 	});
+
+	// Dynamic locale for meta tags
+	let currentLocale = $derived(page.params.page || 'it');
 </script>
 
 <svelte:head>
@@ -97,15 +100,22 @@
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content="Simone Salerno" />
+	<meta property="og:title" content={pageTitle} />
 	<meta property="og:description" content={data.global?.description || ''} />
 	<meta property="og:image" content="/logo/logo.png" />
+	<meta property="og:image:alt" content="Simone Salerno Logo" />
+	<meta property="og:url" content={page.url.href} />
+	<meta property="og:locale" content={currentLocale === 'en' ? 'en_US' : 'it_IT'} />
+	<meta property="og:site_name" content="Simone Salerno" />
 
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Simone Salerno" />
+	<meta name="twitter:title" content={pageTitle} />
 	<meta name="twitter:description" content={data.global?.description || ''} />
 	<meta name="twitter:image" content="/logo/logo.png" />
+	<meta name="twitter:image:alt" content="Simone Salerno Logo" />
+	<meta name="twitter:url" content={page.url.href} />
+	<meta name="twitter:site" content="@essesdev" />
 </svelte:head>
 
 <div
