@@ -2,9 +2,9 @@ import { getImageAsset } from '$lib/assets/image-assets';
 import { logoBase64 } from '$lib/assets/logo-base64';
 import { ContentLoader } from '$lib/utils/content';
 import type { RequestHandler } from '@sveltejs/kit';
-import satori from 'satori';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+import satori from 'satori';
 
 // Font cache
 let fontCache: { regular: ArrayBuffer; bold: ArrayBuffer } | null = null;
@@ -24,14 +24,14 @@ async function loadFonts(): Promise<{ regular: ArrayBuffer; bold: ArrayBuffer }>
 			join(process.cwd(), 'node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2')
 		);
 
-		fontCache = { 
-			regular: regular.buffer as ArrayBuffer, 
+		fontCache = {
+			regular: regular.buffer as ArrayBuffer,
 			bold: bold.buffer as ArrayBuffer
 		};
 		return fontCache;
 	} catch (error) {
 		console.error('Failed to load fonts:', error);
-		
+
 		// Fallback: use a basic system font approach
 		// Create empty ArrayBuffers to satisfy satori but use system fonts
 		const emptyBuffer = new ArrayBuffer(0);
