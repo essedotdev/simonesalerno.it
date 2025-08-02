@@ -1,9 +1,44 @@
 import { getImageAsset } from '$lib/assets/image-assets';
 import { logoBase64 } from '$lib/assets/logo-base64';
 import { ContentLoader } from '$lib/utils/content';
-import { Resvg } from '@resvg/resvg-js';
 import type { RequestHandler } from '@sveltejs/kit';
 import satori from 'satori';
+import { readFile } from 'fs/promises';
+import { join } from 'path';
+
+// Font cache
+let fontCache: { regular: ArrayBuffer; bold: ArrayBuffer } | null = null;
+
+/**
+ * Load fonts for satori
+ */
+async function loadFonts(): Promise<{ regular: ArrayBuffer; bold: ArrayBuffer }> {
+	if (fontCache) return fontCache;
+
+	try {
+		// Load Inter fonts from the installed package
+		const regular = await readFile(
+			join(process.cwd(), 'node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2')
+		);
+		const bold = await readFile(
+			join(process.cwd(), 'node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2')
+		);
+
+		fontCache = { 
+			regular: regular.buffer as ArrayBuffer, 
+			bold: bold.buffer as ArrayBuffer
+		};
+		return fontCache;
+	} catch (error) {
+		console.error('Failed to load fonts:', error);
+		
+		// Fallback: use a basic system font approach
+		// Create empty ArrayBuffers to satisfy satori but use system fonts
+		const emptyBuffer = new ArrayBuffer(0);
+		fontCache = { regular: emptyBuffer, bold: emptyBuffer };
+		return fontCache;
+	}
+}
 
 /**
  * Fetch external image and convert to base64
@@ -111,9 +146,8 @@ function createHomeLayout() {
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
-				background:
-					'radial-gradient(circle at 0% 90.68%, #20327e 0%, transparent 50%), radial-gradient(circle at 96.57% 2.62%, #131b49 0%, transparent 50%), radial-gradient(circle at 46.13% 45.15%, #000000 0%, transparent 50%), #0c0c0c',
-				fontFamily: 'system-ui, -apple-system, sans-serif'
+				backgroundColor: '#0c0c0c',
+				fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
 			},
 			children: [
 				{
@@ -143,10 +177,9 @@ function createListingLayout(title: string, subtitle?: string) {
 				display: 'flex',
 				flexDirection: 'column',
 				justifyContent: 'space-between',
-				background:
-					'radial-gradient(circle at 0% 90.68%, #20327e 0%, transparent 50%), radial-gradient(circle at 96.57% 2.62%, #131b49 0%, transparent 50%), radial-gradient(circle at 46.13% 45.15%, #000000 0%, transparent 50%), #0c0c0c',
+				backgroundColor: '#0c0c0c',
 				padding: '80px',
-				fontFamily: 'system-ui, -apple-system, sans-serif'
+				fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
 			},
 			children: [
 				{
@@ -228,9 +261,8 @@ function createDetailLayout(title: string, excerpt?: string, coverImage?: string
 				width: '1200px',
 				height: '630px',
 				display: 'flex',
-				background:
-					'radial-gradient(circle at 0% 90.68%, #20327e 0%, transparent 50%), radial-gradient(circle at 96.57% 2.62%, #131b49 0%, transparent 50%), radial-gradient(circle at 46.13% 45.15%, #000000 0%, transparent 50%), #0c0c0c',
-				fontFamily: 'system-ui, -apple-system, sans-serif'
+				backgroundColor: '#0c0c0c',
+				fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
 			},
 			children: hasImage
 				? [
@@ -406,21 +438,30 @@ export const GET: RequestHandler = async ({ url }) => {
 		}
 
 		// Generate SVG using satori
+		const fonts = await loadFonts();
 		const svg = await satori(layout, {
 			width: 1200,
 			height: 630,
-			fonts: [] // We'll use system fonts for now
+			fonts: [
+				{
+					name: 'Inter',
+					data: fonts.regular,
+					weight: 400,
+					style: 'normal'
+				},
+				{
+					name: 'Inter',
+					data: fonts.bold,
+					weight: 700,
+					style: 'normal'
+				}
+			]
 		});
 
-		// Convert SVG to PNG using resvg
-		const resvg = new Resvg(svg);
-		const pngData = resvg.render();
-		const pngBuffer = pngData.asPng();
-
-		// Return PNG with appropriate headers
-		return new Response(pngBuffer, {
+		// Return SVG directly (most social platforms support SVG for OG images)
+		return new Response(svg, {
 			headers: {
-				'Content-Type': 'image/png',
+				'Content-Type': 'image/svg+xml',
 				'Cache-Control': 'public, max-age=86400, s-maxage=86400',
 				'CDN-Cache-Control': 'max-age=86400',
 				'Cloudflare-CDN-Cache-Control': 'max-age=86400'
@@ -429,24 +470,20 @@ export const GET: RequestHandler = async ({ url }) => {
 	} catch (error) {
 		console.error('OG Image generation error:', error);
 
-		// Return a simple fallback image
+		// Return a simple fallback SVG
 		const fallbackSvg = `
 			<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
 				<rect width="1200" height="630" fill="#0c0c0c"/>
 				<text x="600" y="315" text-anchor="middle" dy="0.3em" 
-					  font-family="system-ui" font-size="48" fill="#ffffff">
+					  font-family="Inter, system-ui, sans-serif" font-size="48" fill="#ffffff">
 					Open Graph Image
 				</text>
 			</svg>
 		`;
 
-		const resvg = new Resvg(fallbackSvg);
-		const pngData = resvg.render();
-		const pngBuffer = pngData.asPng();
-
-		return new Response(pngBuffer, {
+		return new Response(fallbackSvg, {
 			headers: {
-				'Content-Type': 'image/png',
+				'Content-Type': 'image/svg+xml',
 				'Cache-Control': 'public, max-age=3600'
 			}
 		});
