@@ -18,7 +18,25 @@ async function loadFonts(): Promise<{ regular: ArrayBuffer; bold: ArrayBuffer }>
 	if (fontCache) return fontCache;
 
 	try {
-		// Load Geist fonts from static/fonts directory
+		// In production (Cloudflare), load fonts from URLs
+		if (!dev) {
+			const [regularResponse, boldResponse] = await Promise.all([
+				fetch('https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2'),
+				fetch('https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa25L7SUc.woff2')
+			]);
+
+			if (!regularResponse.ok || !boldResponse.ok) {
+				throw new Error('Failed to fetch fonts from Google Fonts');
+			}
+
+			const regular = await regularResponse.arrayBuffer();
+			const bold = await boldResponse.arrayBuffer();
+
+			fontCache = { regular, bold };
+			return fontCache;
+		}
+
+		// In development, load from local files
 		const regular = await readFile(join(process.cwd(), 'static/fonts/Geist-Regular.ttf'));
 		const bold = await readFile(join(process.cwd(), 'static/fonts/Geist-Bold.ttf'));
 
@@ -600,7 +618,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		console.log('[OG Image] Resvg constructor available:', typeof Resvg);
 
 		try {
-			const resvg = new Resvg(svg);
+			const resvg = await Resvg.create(svg);
 			console.log('[OG Image] Resvg created successfully');
 			const pngData = resvg.render();
 			const png = pngData.asPng();
@@ -648,7 +666,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			// Try to convert fallback SVG to PNG
 			const { Resvg } = await import('@cf-wasm/resvg');
 			console.log('[OG Image] Fallback: resvg import succeeded');
-			const resvg = new Resvg(fallbackSvg);
+			const resvg = await Resvg.create(fallbackSvg);
 			const pngData = resvg.render();
 			const pngBuffer = pngData.asPng();
 			console.log('[OG Image] Fallback PNG generated successfully');
