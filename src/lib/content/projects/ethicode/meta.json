@@ -3,6 +3,7 @@
 	"images": ["images/projects/ethicode/screenshot-1.jpg"],
 	"thumbnail": "images/projects/ethicode/thumbnail.jpg",
 	"thumbnailPlaceholder": true,
+	"og_image_key": "letsCodeItalia",
 	"link": "https://ethicode.eu/",
 	"published": true,
 	"status": "completed",

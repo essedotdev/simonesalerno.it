@@ -3,6 +3,7 @@
 	"images": ["images/projects/lrl-elettrica/screenshot-1.jpg"],
 	"thumbnail": "images/projects/lrl-elettrica/thumbnail.jpg",
 	"thumbnailPlaceholder": true,
+	"og_image_key": "lrlElettrica",
 	"link": "https://lrlelettrica.it/",
 	"published": true,
 	"status": "completed",

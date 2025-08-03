@@ -3,6 +3,7 @@
 	"images": ["images/projects/doppia-os/screenshot-1.jpg"],
 	"thumbnail": "images/projects/doppia-os/thumbnail.jpg",
 	"thumbnailPlaceholder": true,
+	"og_image_key": "doppiaOs",
 	"link": "https://doppia-os.pages.dev/",
 	"published": true,
 	"status": "completed",

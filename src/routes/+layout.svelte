@@ -134,13 +134,13 @@
 				title = contentData.title;
 				excerpt = contentData.description || contentData.excerpt;
 
-				// For projects, try to get cover image
-				if (section === 'projects' && pageData.content?.cover_image) {
-					imageKey = pageData.content.cover_image;
+				// For projects, try to get OG image key
+				if (section === 'projects' && pageData.content?.meta?.og_image_key) {
+					imageKey = pageData.content.meta.og_image_key;
 				}
-				// For blog articles, try to get featured image
-				else if (section === 'blog' && pageData.content?.meta?.featured_image) {
-					imageKey = pageData.content.meta.featured_image;
+				// For blog articles, try to get OG image key
+				else if (section === 'blog' && pageData.content?.meta?.og_image_key) {
+					imageKey = pageData.content.meta.og_image_key;
 				}
 			}
 		}

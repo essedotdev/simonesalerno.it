@@ -3,6 +3,7 @@
 	"images": ["images/projects/didattica-integrata/screenshot-1.jpg"],
 	"thumbnail": "images/projects/didattica-integrata/thumbnail.jpg",
 	"thumbnailPlaceholder": true,
+	"og_image_key": "didatticaIntegrata",
 	"link": "https://github.com/essedev/didatticaintegrata.it",
 	"published": true,
 	"status": "completed",

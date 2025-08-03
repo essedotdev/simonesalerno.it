@@ -102,6 +102,7 @@ export interface ProjectMeta {
 	images: string[];
 	thumbnail: string;
 	thumbnailPlaceholder?: boolean;
+	og_image_key?: string;
 	link: string;
 	published: boolean;
 	status: 'completed' | 'in-progress' | 'idea' | 'archived';
@@ -113,6 +114,7 @@ export interface ArticleMeta {
 	id: string;
 	featured_image: string;
 	featuredImagePlaceholder?: boolean;
+	og_image_key?: string;
 	published: boolean;
 	published_date: string;
 	created_date: string;
