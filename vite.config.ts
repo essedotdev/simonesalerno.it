@@ -23,21 +23,25 @@ export default defineConfig({
 		wasm({
 			// Inline WASM modules into the bundle and target browser-like environment (Workers)
 			targetEnv: 'browser',
-			maxFileSize: Infinity
+			maxFileSize: 0
 		}),
 		sveltekit()
 	],
+	assetsInclude: ['**/*.wasm'],
 	ssr: {
 		noExternal: ['@cf-wasm/resvg']
 	},
-	optimizeDeps: {
-		include: ['@cf-wasm/resvg']
-	},
 	build: {
 		rollupOptions: {
-			external: [],
 			output: {
-				inlineDynamicImports: false
+				inlineDynamicImports: false,
+				// Copia i .wasm anche nella cartella functions per Cloudflare
+				assetFileNames: (assetInfo) => {
+					if (assetInfo.names && assetInfo.names.some((name) => name.endsWith('.wasm'))) {
+						return '_app/immutable/assets/[name].[hash][extname]';
+					}
+					return '_app/immutable/assets/[name].[hash][extname]';
+				}
 			}
 		}
 	}
