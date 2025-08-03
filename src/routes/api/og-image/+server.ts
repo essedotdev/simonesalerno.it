@@ -507,15 +507,14 @@ function createDetailLayout(title: string, excerpt?: string, coverImage?: string
 	};
 }
 export const GET: RequestHandler = async ({ url }) => {
-	console.log('[OG Image] Request started');
-	console.log('[OG Image] Environment info:', {
-		dev,
-		nodeEnv: process.env.NODE_ENV,
-		runtime: typeof globalThis.caches !== 'undefined' ? 'cloudflare' : 'node',
-		userAgent: url.searchParams.get('ua') || 'unknown'
-	});
-
 	try {
+		console.log('[OG Image] Starting generation...');
+		console.log('[OG Image] Environment:', dev ? 'development' : 'production');
+		console.log(
+			'[OG Image] Runtime check - globalThis.caches:',
+			typeof globalThis.caches !== 'undefined'
+		);
+
 		// Parse query parameters
 		const type = url.searchParams.get('type') || 'home';
 		const section = url.searchParams.get('section') || undefined;
@@ -584,43 +583,41 @@ export const GET: RequestHandler = async ({ url }) => {
 		console.log('[OG Image] About to import resvg module');
 		console.log('[OG Image] SVG size:', svg.length, 'bytes');
 
+		// Prima di importare Resvg
+		const isCloudflareRuntime = typeof globalThis.caches !== 'undefined';
+		console.log('[OG Image] Using Cloudflare runtime:', isCloudflareRuntime);
+
+		let ResvgModule;
 		try {
-			const { Resvg } = dev ? await import('@cf-wasm/resvg/node') : await import('@cf-wasm/resvg');
-			console.log('[OG Image] resvg import succeeded');
+			ResvgModule = await import('@cf-wasm/resvg');
+			console.log('[OG Image] @cf-wasm/resvg import successful');
+		} catch (importError) {
+			console.error('[OG Image] @cf-wasm/resvg import failed:', importError);
+			throw importError;
+		}
 
-			console.log('[OG Image] Creating Resvg instance...');
-			const resvg = await Resvg.create(svg, {
-				fitTo: { mode: 'width', value: 1200 },
-				background: 'transparent'
-			});
-			console.log('[OG Image] Resvg instance created');
+		const { Resvg } = ResvgModule;
+		console.log('[OG Image] Resvg constructor available:', typeof Resvg);
 
-			console.log('[OG Image] Rendering PNG...');
+		try {
+			const resvg = new Resvg(svg);
+			console.log('[OG Image] Resvg created successfully');
 			const pngData = resvg.render();
-			console.log('[OG Image] PNG rendered, getting buffer...');
-			const pngBuffer = pngData.asPng();
-			console.log('[OG Image] PNG buffer size:', pngBuffer.length, 'bytes');
+			const png = pngData.asPng();
+			console.log('[OG Image] PNG render successful, size:', png.length);
 
-			// Return PNG image
-			return new Response(pngBuffer, {
+			return new Response(png, {
 				headers: {
 					'Content-Type': 'image/png',
-					'Cache-Control': 'public, max-age=86400, s-maxage=86400',
-					'CDN-Cache-Control': 'max-age=86400',
-					'Cloudflare-CDN-Cache-Control': 'max-age=86400'
+					'Cache-Control': 'public, max-age=86400'
 				}
 			});
 		} catch (resvgError) {
-			console.error('[OG Image] Resvg error:', resvgError);
-			console.error('[OG Image] Resvg error details:', {
-				name: (resvgError as Error)?.name,
-				message: (resvgError as Error)?.message,
-				stack: (resvgError as Error)?.stack
-			});
-			throw resvgError; // Re-throw to trigger main catch block
+			console.error('[OG Image] Resvg processing failed:', resvgError);
+			throw resvgError;
 		}
 	} catch (error) {
-		console.error('[OG Image] Main catch block - generation error:', error);
+		console.error('[OG Image] Fatal error, falling back to SVG:', error);
 		console.error('[OG Image] Error details:', {
 			name: (error as Error)?.name,
 			message: (error as Error)?.message,
@@ -649,12 +646,9 @@ export const GET: RequestHandler = async ({ url }) => {
 		console.log('[OG Image] Attempting fallback PNG generation...');
 		try {
 			// Try to convert fallback SVG to PNG
-			const { Resvg } = dev ? await import('@cf-wasm/resvg/node') : await import('@cf-wasm/resvg');
+			const { Resvg } = await import('@cf-wasm/resvg');
 			console.log('[OG Image] Fallback: resvg import succeeded');
-			const resvg = await Resvg.create(fallbackSvg, {
-				fitTo: { mode: 'width', value: 1200 },
-				background: 'transparent'
-			});
+			const resvg = new Resvg(fallbackSvg);
 			const pngData = resvg.render();
 			const pngBuffer = pngData.asPng();
 			console.log('[OG Image] Fallback PNG generated successfully');
