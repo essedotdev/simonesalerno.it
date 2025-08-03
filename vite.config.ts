@@ -1,4 +1,3 @@
-import wasm from '@rollup/plugin-wasm';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
@@ -20,17 +19,18 @@ export default defineConfig({
 				return new URLSearchParams();
 			}
 		}),
-		wasm({
-			targetEnv: 'auto-inline',
-			maxFileSize: 5 * 1024 * 1024 // 5MB, per inline-are il WASM
-		}),
 		sveltekit()
 	],
 	assetsInclude: ['**/*.wasm'],
+	server: {
+		fs: {
+			allow: ['..']
+		}
+	},
 	ssr: {
-		noExternal: ['@cf-wasm/resvg']
+		noExternal: []
 	},
 	optimizeDeps: {
-		exclude: ['@cf-wasm/resvg']
+		exclude: []
 	}
 });

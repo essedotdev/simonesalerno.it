@@ -6,37 +6,33 @@ import { ContentLoader } from '$lib/utils/content';
 import type { RequestHandler } from '@sveltejs/kit';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import satori from 'satori';
 
 // Font cache
 let fontCache: { regular: ArrayBuffer; bold: ArrayBuffer } | null = null;
 
 /**
- * Load fonts for satori
+ * Load fonts for workers-og or fallback
  */
 async function loadFonts(): Promise<{ regular: ArrayBuffer; bold: ArrayBuffer }> {
 	if (fontCache) return fontCache;
 
 	try {
-		// In production (Cloudflare), load fonts from URLs
-		if (!dev) {
-			const [regularResponse, boldResponse] = await Promise.all([
-				fetch('https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2'),
-				fetch('https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa25L7SUc.woff2')
+		// Check if we're in Cloudflare Workers environment
+		const isCloudflareRuntime = typeof globalThis.caches !== 'undefined';
+
+		if (!dev && isCloudflareRuntime) {
+			// In production (Cloudflare), load fonts via loadGoogleFont from workers-og
+			const { loadGoogleFont } = await import('workers-og');
+			const [regular, bold] = await Promise.all([
+				loadGoogleFont({ family: 'Inter', weight: 400 }),
+				loadGoogleFont({ family: 'Inter', weight: 700 })
 			]);
-
-			if (!regularResponse.ok || !boldResponse.ok) {
-				throw new Error('Failed to fetch fonts from Google Fonts');
-			}
-
-			const regular = await regularResponse.arrayBuffer();
-			const bold = await boldResponse.arrayBuffer();
 
 			fontCache = { regular, bold };
 			return fontCache;
 		}
 
-		// In development, load from local files
+		// In development or non-Cloudflare environment, load from local files
 		const regular = await readFile(join(process.cwd(), 'static/fonts/Geist-Regular.ttf'));
 		const bold = await readFile(join(process.cwd(), 'static/fonts/Geist-Bold.ttf'));
 
@@ -47,7 +43,10 @@ async function loadFonts(): Promise<{ regular: ArrayBuffer; bold: ArrayBuffer }>
 		return fontCache;
 	} catch (error) {
 		console.error('Failed to load fonts:', error);
-		throw new Error('Font loading failed');
+		// Final fallback: return empty buffers (will use system fonts)
+		const emptyBuffer = new ArrayBuffer(0);
+		fontCache = { regular: emptyBuffer, bold: emptyBuffer };
+		return fontCache;
 	}
 }
 
@@ -144,394 +143,292 @@ async function getDisplayImage(
 }
 
 /**
- * Create home page layout
+ * Create home page layout as HTML for workers-og
  */
-function createHomeLayout() {
-	return {
-		type: 'div',
-		props: {
-			style: {
-				width: '1200px',
-				height: '630px',
-				position: 'relative',
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'center',
-				alignItems: 'center',
-				background: 'linear-gradient(135deg, #0c0c0c 0%, #131b49 50%, #20327e 100%)',
-				fontFamily: 'Geist, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
-			},
-			children: [
-				// Noise overlay
-				{
-					type: 'div',
-					props: {
-						style: {
-							position: 'absolute',
-							top: 0,
-							left: 0,
-							width: '100%',
-							height: '100%',
-							backgroundImage: `url("${noiseBase64}")`,
-							backgroundRepeat: 'repeat',
-							opacity: 0.5,
-							mixBlendMode: 'overlay'
-						}
-					}
-				},
-				// Content
-				// Content
-				{
-					type: 'div',
-					props: {
-						style: {
-							display: 'flex',
-							alignItems: 'center',
-							gap: '24px',
-							position: 'relative',
-							zIndex: 1
-						},
-						children: [
-							{
-								type: 'img',
-								props: {
-									src: logoBase64,
-									width: 180,
-									height: 180,
-									style: { display: 'block' }
-								}
-							},
-							{
-								type: 'div',
-								props: {
-									style: {
-										display: 'flex',
-										flexDirection: 'column',
-										marginBottom: '8px'
-									},
-									children: [
-										{
-											type: 'span',
-											props: {
-												style: {
-													fontSize: '72px',
-													fontWeight: '500',
-													color: '#ffffff',
-													lineHeight: 1
-												},
-												children: 'esse'
-											}
-										},
-										{
-											type: 'span',
-											props: {
-												style: {
-													fontSize: '52px',
-													color: '#e5e5e5',
-													lineHeight: 0.8,
-													marginTop: '-12px'
-												},
-												children: 'dev'
-											}
-										}
-									]
-								}
-							}
-						]
-					}
-				}
-			]
-		}
-	};
+function createHomeLayout(): string {
+	return `
+		<div style="
+			width: 1200px;
+			height: 630px;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			background: linear-gradient(135deg, #0c0c0c 0%, #131b49 50%, #20327e 100%);
+			font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+		">
+			<!-- Noise overlay -->
+			<div style="
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-image: url('${noiseBase64}');
+				background-repeat: repeat;
+				opacity: 0.5;
+				mix-blend-mode: overlay;
+			"></div>
+			
+			<!-- Content -->
+			<div style="
+				display: flex;
+				align-items: center;
+				gap: 24px;
+				position: relative;
+				z-index: 1;
+			">
+				<img src="${logoBase64}" width="180" height="180" style="display: block;" />
+				<div style="
+					display: flex;
+					flex-direction: column;
+					margin-bottom: 8px;
+				">
+					<span style="
+						font-size: 72px;
+						font-weight: 500;
+						color: #ffffff;
+						line-height: 1;
+					">esse</span>
+					<span style="
+						font-size: 52px;
+						color: #e5e5e5;
+						line-height: 0.8;
+						margin-top: -12px;
+					">dev</span>
+				</div>
+			</div>
+		</div>
+	`;
 }
 
 /**
- * Create listing page layout
+ * Create listing page layout as HTML for workers-og
  */
-function createListingLayout(title: string, subtitle?: string) {
-	return {
-		type: 'div',
-		props: {
-			style: {
-				width: '1200px',
-				height: '630px',
-				position: 'relative',
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'space-between',
-				background: 'linear-gradient(135deg, #0c0c0c 0%, #131b49 50%, #20327e 100%)',
-				padding: '80px',
-				fontFamily: 'Geist, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
-			},
-			children: [
-				// Noise overlay
-				{
-					type: 'div',
-					props: {
-						style: {
-							position: 'absolute',
-							top: 0,
-							left: 0,
-							width: '100%',
-							height: '100%',
-							backgroundImage: `url("${noiseBase64}")`,
-							backgroundRepeat: 'repeat',
-							opacity: 0.5,
-							mixBlendMode: 'overlay'
-						}
-					}
-				},
-				// Content
-				// Content
-				{
-					type: 'div',
-					props: {
-						style: {
-							display: 'flex',
-							alignItems: 'center',
-							position: 'relative',
-							zIndex: 1
-						},
-						children: [
-							{
-								type: 'img',
-								props: {
-									src: logoBase64,
-									width: 80,
-									height: 80,
-									style: { marginRight: '24px' }
-								}
-							}
-						]
-					}
-				},
-				{
-					type: 'div',
-					props: {
-						style: {
-							display: 'flex',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
-							flex: 1,
-							position: 'relative',
-							zIndex: 1
-						},
-						children: [
-							{
-								type: 'h1',
-								props: {
-									style: {
-										fontSize: '64px',
-										fontWeight: 'bold',
-										color: '#ffffff',
-										textAlign: 'center',
-										margin: '0',
-										lineHeight: 1.1
-									},
-									children: title
-								}
-							},
-							subtitle && {
-								type: 'p',
-								props: {
-									style: {
-										fontSize: '24px',
-										color: '#a1a1aa',
-										textAlign: 'center',
-										margin: '16px 0 0 0',
-										maxWidth: '800px'
-									},
-									children: subtitle
-								}
-							}
-						].filter(Boolean)
-					}
+function createListingLayout(title: string, subtitle?: string): string {
+	return `
+		<div style="
+			width: 1200px;
+			height: 630px;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			background: linear-gradient(135deg, #0c0c0c 0%, #131b49 50%, #20327e 100%);
+			padding: 80px;
+			font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+		">
+			<!-- Noise overlay -->
+			<div style="
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-image: url('${noiseBase64}');
+				background-repeat: repeat;
+				opacity: 0.5;
+				mix-blend-mode: overlay;
+			"></div>
+			
+			<!-- Header -->
+			<div style="
+				display: flex;
+				align-items: center;
+				position: relative;
+				z-index: 1;
+			">
+				<img src="${logoBase64}" width="80" height="80" style="margin-right: 24px;" />
+			</div>
+			
+			<!-- Content -->
+			<div style="
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				flex: 1;
+				position: relative;
+				z-index: 1;
+			">
+				<h1 style="
+					font-size: 64px;
+					font-weight: bold;
+					color: #ffffff;
+					text-align: center;
+					margin: 0;
+					line-height: 1.1;
+				">${title}</h1>
+				${
+					subtitle
+						? `
+					<p style="
+						font-size: 24px;
+						color: #a1a1aa;
+						text-align: center;
+						margin: 16px 0 0 0;
+						max-width: 800px;
+					">${subtitle}</p>
+				`
+						: ''
 				}
-			]
-		}
-	};
+			</div>
+		</div>
+	`;
 }
 
 /**
- * Create detail page layout
+ * Create detail page layout as HTML for workers-og
  */
-function createDetailLayout(title: string, excerpt?: string, coverImage?: string) {
+function createDetailLayout(title: string, excerpt?: string, coverImage?: string): string {
 	const hasImage = !!coverImage;
 
-	return {
-		type: 'div',
-		props: {
-			style: {
-				width: '1200px',
-				height: '630px',
-				position: 'relative',
-				display: 'flex',
-				background: 'linear-gradient(135deg, #0c0c0c 0%, #131b49 50%, #20327e 100%)',
-				fontFamily: 'Geist, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
-			},
-			children: [
-				// Noise overlay
-				{
-					type: 'div',
-					props: {
-						style: {
-							position: 'absolute',
-							top: 0,
-							left: 0,
-							width: '100%',
-							height: '100%',
-							backgroundImage: `url("${noiseBase64}")`,
-							backgroundRepeat: 'repeat',
-							opacity: 0.5,
-							mixBlendMode: 'overlay'
-						}
+	if (hasImage) {
+		// With image: 60/40 split
+		return `
+			<div style="
+				width: 1200px;
+				height: 630px;
+				position: relative;
+				display: flex;
+				background: linear-gradient(135deg, #0c0c0c 0%, #131b49 50%, #20327e 100%);
+				font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+			">
+				<!-- Noise overlay -->
+				<div style="
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background-image: url('${noiseBase64}');
+					background-repeat: repeat;
+					opacity: 0.5;
+					mix-blend-mode: overlay;
+				"></div>
+				
+				<!-- Text content -->
+				<div style="
+					width: 720px;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					padding: 80px 40px 80px 80px;
+					position: relative;
+					z-index: 1;
+				">
+					<h1 style="
+						font-size: 48px;
+						font-weight: bold;
+						color: #ffffff;
+						margin: 0 0 24px 0;
+						line-height: 1.1;
+					">${title}</h1>
+					${
+						excerpt
+							? `
+						<p style="
+							font-size: 20px;
+							color: #a1a1aa;
+							margin: 0;
+							line-height: 1.4;
+						">${excerpt.length > 150 ? excerpt.slice(0, 150) + '...' : excerpt}</p>
+					`
+							: ''
 					}
-				},
-				// Content
-				...(hasImage
-					? [
-							// With image: 60/40 split
-							{
-								type: 'div',
-								props: {
-									style: {
-										width: '720px',
-										display: 'flex',
-										flexDirection: 'column',
-										justifyContent: 'center',
-										padding: '80px 40px 80px 80px',
-										position: 'relative',
-										zIndex: 1
-									},
-									children: [
-										{
-											type: 'h1',
-											props: {
-												style: {
-													fontSize: '48px',
-													fontWeight: 'bold',
-													color: '#ffffff',
-													margin: '0 0 24px 0',
-													lineHeight: 1.1
-												},
-												children: title
-											}
-										},
-										excerpt && {
-											type: 'p',
-											props: {
-												style: {
-													fontSize: '20px',
-													color: '#a1a1aa',
-													margin: '0',
-													lineHeight: 1.4
-												},
-												children: excerpt.length > 150 ? excerpt.slice(0, 150) + '...' : excerpt
-											}
-										}
-									].filter(Boolean)
-								}
-							},
-							{
-								type: 'div',
-								props: {
-									style: {
-										width: '480px',
-										display: 'flex',
-										alignItems: 'center',
-										justifyContent: 'center',
-										padding: '80px 80px 80px 40px',
-										position: 'relative',
-										zIndex: 1
-									},
-									children: [
-										{
-											type: 'img',
-											props: {
-												src: coverImage,
-												width: 400,
-												height: 300,
-												style: {
-													borderRadius: '12px',
-													objectFit: 'cover'
-												}
-											}
-										}
-									]
-								}
-							}
-						]
-					: [
-							// Without image: centered
-							{
-								type: 'div',
-								props: {
-									style: {
-										width: '100%',
-										display: 'flex',
-										flexDirection: 'column',
-										justifyContent: 'center',
-										alignItems: 'center',
-										padding: '80px',
-										position: 'relative',
-										zIndex: 1
-									},
-									children: [
-										{
-											type: 'img',
-											props: {
-												src: logoBase64,
-												width: 120,
-												height: 120,
-												style: { marginBottom: '40px' }
-											}
-										},
-										{
-											type: 'h1',
-											props: {
-												style: {
-													fontSize: '56px',
-													fontWeight: 'bold',
-													color: '#ffffff',
-													textAlign: 'center',
-													margin: '0 0 24px 0',
-													lineHeight: 1.1,
-													maxWidth: '900px'
-												},
-												children: title
-											}
-										},
-										excerpt && {
-											type: 'p',
-											props: {
-												style: {
-													fontSize: '22px',
-													color: '#a1a1aa',
-													textAlign: 'center',
-													margin: '0',
-													lineHeight: 1.4,
-													maxWidth: '800px'
-												},
-												children: excerpt.length > 200 ? excerpt.slice(0, 200) + '...' : excerpt
-											}
-										}
-									].filter(Boolean)
-								}
-							}
-						])
-			]
-		}
-	};
+				</div>
+				
+				<!-- Image -->
+				<div style="
+					width: 480px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					padding: 80px 80px 80px 40px;
+					position: relative;
+					z-index: 1;
+				">
+					<img src="${coverImage}" width="400" height="300" style="
+						border-radius: 12px;
+						object-fit: cover;
+					" />
+				</div>
+			</div>
+		`;
+	} else {
+		// Without image: centered
+		return `
+			<div style="
+				width: 1200px;
+				height: 630px;
+				position: relative;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				background: linear-gradient(135deg, #0c0c0c 0%, #131b49 50%, #20327e 100%);
+				padding: 80px;
+				font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+			">
+				<!-- Noise overlay -->
+				<div style="
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background-image: url('${noiseBase64}');
+					background-repeat: repeat;
+					opacity: 0.5;
+					mix-blend-mode: overlay;
+				"></div>
+				
+				<!-- Content -->
+				<div style="
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					position: relative;
+					z-index: 1;
+				">
+					<img src="${logoBase64}" width="120" height="120" style="margin-bottom: 40px;" />
+					<h1 style="
+						font-size: 56px;
+						font-weight: bold;
+						color: #ffffff;
+						text-align: center;
+						margin: 0 0 24px 0;
+						line-height: 1.1;
+						max-width: 900px;
+					">${title}</h1>
+					${
+						excerpt
+							? `
+						<p style="
+							font-size: 22px;
+							color: #a1a1aa;
+							text-align: center;
+							margin: 0;
+							line-height: 1.4;
+							max-width: 800px;
+						">${excerpt.length > 200 ? excerpt.slice(0, 200) + '...' : excerpt}</p>
+					`
+							: ''
+					}
+				</div>
+			</div>
+		`;
+	}
 }
 export const GET: RequestHandler = async ({ url }) => {
 	try {
-		console.log('[OG Image] Starting generation...');
+		console.log('[OG Image] Starting generation with workers-og...');
 		console.log('[OG Image] Environment:', dev ? 'development' : 'production');
-		console.log(
-			'[OG Image] Runtime check - globalThis.caches:',
-			typeof globalThis.caches !== 'undefined'
-		);
+
+		// Check if we're in Cloudflare Workers environment
+		const isCloudflareRuntime = typeof globalThis.caches !== 'undefined';
 
 		// Parse query parameters
 		const type = url.searchParams.get('type') || 'home';
@@ -545,10 +442,10 @@ export const GET: RequestHandler = async ({ url }) => {
 		// Initialize content loader
 		const contentLoader = new ContentLoader();
 
-		let layout;
+		let htmlLayout: string;
 
 		if (type === 'home') {
-			layout = createHomeLayout();
+			htmlLayout = createHomeLayout();
 		} else if (type === 'listing' && section) {
 			// Load page content for title
 			let pageTitle = section === 'projects' ? 'Projects' : 'Blog';
@@ -564,86 +461,53 @@ export const GET: RequestHandler = async ({ url }) => {
 				console.warn('Could not load page data:', error);
 			}
 
-			layout = createListingLayout(pageTitle, pageSubtitle);
+			htmlLayout = createListingLayout(pageTitle, pageSubtitle);
 		} else if (type === 'detail' && title) {
 			// Get cover image
 			const coverImage = await getDisplayImage(imageUrl, imageKey, title, section);
 
-			layout = createDetailLayout(title, excerpt, coverImage);
+			htmlLayout = createDetailLayout(title, excerpt, coverImage);
 		} else {
 			// Fallback to home
-			layout = createHomeLayout();
+			htmlLayout = createHomeLayout();
 		}
 
-		// Generate SVG using satori
-		const fonts = await loadFonts();
-		const svg = await satori(layout, {
-			width: 1200,
-			height: 630,
-			fonts: [
-				{
-					name: 'Geist',
-					data: fonts.regular,
-					weight: 400,
-					style: 'normal'
-				},
-				{
-					name: 'Geist',
-					data: fonts.bold,
-					weight: 700,
-					style: 'normal'
-				}
-			]
-		});
+		// Try to use workers-og in Cloudflare environment
+		if (!dev && isCloudflareRuntime) {
+			try {
+				console.log('[OG Image] Using workers-og for image generation');
+				const { ImageResponse } = await import('workers-og');
+				const fonts = await loadFonts();
 
-		// Convert SVG to PNG using resvg
-		console.log('[OG Image] dev flag:', dev);
-		console.log('[OG Image] About to import resvg module');
-		console.log('[OG Image] SVG size:', svg.length, 'bytes');
-
-		// Prima di importare Resvg
-		const isCloudflareRuntime = typeof globalThis.caches !== 'undefined';
-		console.log('[OG Image] Using Cloudflare runtime:', isCloudflareRuntime);
-
-		let ResvgModule;
-		try {
-			ResvgModule = await import('@cf-wasm/resvg');
-			console.log('[OG Image] @cf-wasm/resvg import successful');
-		} catch (importError) {
-			console.error('[OG Image] @cf-wasm/resvg import failed:', importError);
-			throw importError;
+				return new ImageResponse(htmlLayout, {
+					width: 1200,
+					height: 630,
+					fonts: [
+						{
+							name: 'Inter',
+							data: fonts.regular,
+							weight: 400,
+							style: 'normal'
+						},
+						{
+							name: 'Inter',
+							data: fonts.bold,
+							weight: 700,
+							style: 'normal'
+						}
+					],
+					headers: {
+						'Cache-Control': 'public, max-age=86400'
+					}
+				});
+			} catch (workersOgError) {
+				console.error('[OG Image] workers-og failed:', workersOgError);
+				// Fall through to SVG fallback
+			}
 		}
 
-		const { Resvg } = ResvgModule;
-		console.log('[OG Image] Resvg constructor available:', typeof Resvg);
-
-		try {
-			const resvg = await Resvg.create(svg);
-			console.log('[OG Image] Resvg created successfully');
-			const pngData = resvg.render();
-			const png = pngData.asPng();
-			console.log('[OG Image] PNG render successful, size:', png.length);
-
-			return new Response(png, {
-				headers: {
-					'Content-Type': 'image/png',
-					'Cache-Control': 'public, max-age=86400'
-				}
-			});
-		} catch (resvgError) {
-			console.error('[OG Image] Resvg processing failed:', resvgError);
-			throw resvgError;
-		}
-	} catch (error) {
-		console.error('[OG Image] Fatal error, falling back to SVG:', error);
-		console.error('[OG Image] Error details:', {
-			name: (error as Error)?.name,
-			message: (error as Error)?.message,
-			stack: (error as Error)?.stack,
-			toString: String(error)
-		});
-
-		// Return a simple fallback PNG
+		// Development fallback or workers-og failed: return SVG
+		console.log('[OG Image] Using SVG fallback');
 		const fallbackSvg = `
 			<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
 				<defs>
@@ -654,44 +518,49 @@ export const GET: RequestHandler = async ({ url }) => {
 					</linearGradient>
 				</defs>
 				<rect width="1200" height="630" fill="url(#bg)"/>
+				<text x="600" y="300" text-anchor="middle" dy="0.3em" 
+					  font-family="Inter, system-ui, -apple-system, sans-serif" font-size="48" fill="#ffffff">
+					${title || 'Open Graph Image'}
+				</text>
+				<text x="600" y="360" text-anchor="middle" dy="0.3em" 
+					  font-family="Inter, system-ui, -apple-system, sans-serif" font-size="24" fill="#a1a1aa">
+					${excerpt ? excerpt.slice(0, 100) + '...' : 'Generated by workers-og fallback'}
+				</text>
+			</svg>
+		`;
+
+		return new Response(fallbackSvg, {
+			headers: {
+				'Content-Type': 'image/svg+xml',
+				'Cache-Control': 'public, max-age=3600'
+			}
+		});
+	} catch (error) {
+		console.error('[OG Image] Fatal error:', error);
+
+		// Final fallback SVG
+		const finalFallbackSvg = `
+			<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+				<defs>
+					<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+						<stop offset="0%" stop-color="#0c0c0c"/>
+						<stop offset="50%" stop-color="#131b49"/>
+						<stop offset="100%" stop-color="#20327e"/>
+					</linearGradient>
+				</defs>
+				<rect width="1200" height="630" fill="url(#bg)"/>
 				<text x="600" y="315" text-anchor="middle" dy="0.3em" 
-					  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="48" fill="#ffffff">
+					  font-family="Inter, system-ui, -apple-system, sans-serif" font-size="48" fill="#ffffff">
 					Open Graph Image
 				</text>
 			</svg>
 		`;
 
-		console.log('[OG Image] Attempting fallback PNG generation...');
-		try {
-			// Try to convert fallback SVG to PNG
-			const { Resvg } = await import('@cf-wasm/resvg');
-			console.log('[OG Image] Fallback: resvg import succeeded');
-			const resvg = await Resvg.create(fallbackSvg);
-			const pngData = resvg.render();
-			const pngBuffer = pngData.asPng();
-			console.log('[OG Image] Fallback PNG generated successfully');
-
-			return new Response(pngBuffer, {
-				headers: {
-					'Content-Type': 'image/png',
-					'Cache-Control': 'public, max-age=3600'
-				}
-			});
-		} catch (fallbackError) {
-			console.error('[OG Image] Fallback PNG generation error:', fallbackError);
-			console.error('[OG Image] Fallback error details:', {
-				name: (fallbackError as Error)?.name,
-				message: (fallbackError as Error)?.message,
-				stack: (fallbackError as Error)?.stack
-			});
-			console.log('[OG Image] Returning SVG as last resort');
-			// Last resort: return the SVG
-			return new Response(fallbackSvg, {
-				headers: {
-					'Content-Type': 'image/svg+xml',
-					'Cache-Control': 'public, max-age=3600'
-				}
-			});
-		}
+		return new Response(finalFallbackSvg, {
+			headers: {
+				'Content-Type': 'image/svg+xml',
+				'Cache-Control': 'public, max-age=3600'
+			}
+		});
 	}
 };
