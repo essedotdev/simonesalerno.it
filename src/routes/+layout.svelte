@@ -138,6 +138,10 @@
 				if (section === 'projects' && pageData.content?.cover_image) {
 					imageKey = pageData.content.cover_image;
 				}
+				// For blog articles, try to get featured image
+				else if (section === 'blog' && pageData.content?.meta?.featured_image) {
+					imageKey = pageData.content.meta.featured_image;
+				}
 			}
 		}
 
