@@ -174,6 +174,7 @@
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
 	<meta property="og:image:alt" content="Simone Salerno" />
+	<meta property="og:logo" content="/logo/logo.png" />
 	<meta property="og:url" content={page.url.href} />
 	<meta property="og:locale" content={currentLocale === 'en' ? 'en_US' : 'it_IT'} />
 	<meta property="og:site_name" content="Simone Salerno" />
