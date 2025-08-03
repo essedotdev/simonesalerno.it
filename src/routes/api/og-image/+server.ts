@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import { getImageAsset } from '$lib/assets/image-assets';
 import { logoBase64 } from '$lib/assets/logo-base64';
 import { noiseBase64 } from '$lib/assets/noise-base64';
@@ -155,7 +156,7 @@ function createHomeLayout() {
 							height: '100%',
 							backgroundImage: `url("${noiseBase64}")`,
 							backgroundRepeat: 'repeat',
-							opacity: 0.8,
+							opacity: 0.5,
 							mixBlendMode: 'overlay'
 						}
 					}
@@ -257,7 +258,7 @@ function createListingLayout(title: string, subtitle?: string) {
 							height: '100%',
 							backgroundImage: `url("${noiseBase64}")`,
 							backgroundRepeat: 'repeat',
-							opacity: 0.8,
+							opacity: 0.5,
 							mixBlendMode: 'overlay'
 						}
 					}
@@ -364,7 +365,7 @@ function createDetailLayout(title: string, excerpt?: string, coverImage?: string
 							height: '100%',
 							backgroundImage: `url("${noiseBase64}")`,
 							backgroundRepeat: 'repeat',
-							opacity: 0.3,
+							opacity: 0.5,
 							mixBlendMode: 'overlay'
 						}
 					}
@@ -571,8 +572,10 @@ export const GET: RequestHandler = async ({ url }) => {
 		});
 
 		// Convert SVG to PNG using resvg
-		const { Resvg } = await import('@cf-wasm/resvg');
-		const resvg = new Resvg(svg, {
+		// Use Node.js version in development, Cloudflare version in production
+		const { Resvg } = dev ? await import('@cf-wasm/resvg/node') : await import('@cf-wasm/resvg');
+
+		const resvg = await Resvg.create(svg, {
 			fitTo: { mode: 'width', value: 1200 },
 			background: 'transparent'
 		});
@@ -611,8 +614,8 @@ export const GET: RequestHandler = async ({ url }) => {
 
 		try {
 			// Try to convert fallback SVG to PNG
-			const { Resvg } = await import('@cf-wasm/resvg');
-			const resvg = new Resvg(fallbackSvg, {
+			const { Resvg } = dev ? await import('@cf-wasm/resvg/node') : await import('@cf-wasm/resvg');
+			const resvg = await Resvg.create(fallbackSvg, {
 				fitTo: { mode: 'width', value: 1200 },
 				background: 'transparent'
 			});
