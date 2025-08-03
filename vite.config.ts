@@ -21,7 +21,9 @@ export default defineConfig({
 			}
 		}),
 		wasm({
-			targetEnv: 'auto'
+			// Inline WASM modules into the bundle and target browser-like environment (Workers)
+			targetEnv: 'browser',
+			maxFileSize: Infinity
 		}),
 		sveltekit()
 	],
