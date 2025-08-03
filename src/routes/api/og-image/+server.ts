@@ -1,5 +1,6 @@
 import { getImageAsset } from '$lib/assets/image-assets';
 import { logoBase64 } from '$lib/assets/logo-base64';
+import { noiseBase64 } from '$lib/assets/noise-base64';
 import { ContentLoader } from '$lib/utils/content';
 import type { RequestHandler } from '@sveltejs/kit';
 import { readFile } from 'fs/promises';
@@ -16,13 +17,9 @@ async function loadFonts(): Promise<{ regular: ArrayBuffer; bold: ArrayBuffer }>
 	if (fontCache) return fontCache;
 
 	try {
-		// Load Inter fonts from the installed package
-		const regular = await readFile(
-			join(process.cwd(), 'node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2')
-		);
-		const bold = await readFile(
-			join(process.cwd(), 'node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2')
-		);
+		// Load Geist fonts from static/fonts directory
+		const regular = await readFile(join(process.cwd(), 'static/fonts/Geist-Regular.ttf'));
+		const bold = await readFile(join(process.cwd(), 'static/fonts/Geist-Bold.ttf'));
 
 		fontCache = {
 			regular: regular.buffer as ArrayBuffer,
@@ -31,12 +28,7 @@ async function loadFonts(): Promise<{ regular: ArrayBuffer; bold: ArrayBuffer }>
 		return fontCache;
 	} catch (error) {
 		console.error('Failed to load fonts:', error);
-
-		// Fallback: use a basic system font approach
-		// Create empty ArrayBuffers to satisfy satori but use system fonts
-		const emptyBuffer = new ArrayBuffer(0);
-		fontCache = { regular: emptyBuffer, bold: emptyBuffer };
-		return fontCache;
+		throw new Error('Font loading failed');
 	}
 }
 
@@ -142,21 +134,91 @@ function createHomeLayout() {
 			style: {
 				width: '1200px',
 				height: '630px',
+				position: 'relative',
 				display: 'flex',
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
-				backgroundColor: '#0c0c0c',
-				fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
+				background: 'linear-gradient(135deg, #0c0c0c 0%, #131b49 50%, #20327e 100%)',
+				fontFamily: 'Geist, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
 			},
 			children: [
+				// Noise overlay
 				{
-					type: 'img',
+					type: 'div',
 					props: {
-						src: logoBase64,
-						width: 180,
-						height: 180,
-						style: { borderRadius: '16px' }
+						style: {
+							position: 'absolute',
+							top: 0,
+							left: 0,
+							width: '100%',
+							height: '100%',
+							backgroundImage: `url("${noiseBase64}")`,
+							backgroundRepeat: 'repeat',
+							opacity: 0.8,
+							mixBlendMode: 'overlay'
+						}
+					}
+				},
+				// Content
+				// Content
+				{
+					type: 'div',
+					props: {
+						style: {
+							display: 'flex',
+							alignItems: 'center',
+							gap: '24px',
+							position: 'relative',
+							zIndex: 1
+						},
+						children: [
+							{
+								type: 'img',
+								props: {
+									src: logoBase64,
+									width: 180,
+									height: 180,
+									style: { display: 'block' }
+								}
+							},
+							{
+								type: 'div',
+								props: {
+									style: {
+										display: 'flex',
+										flexDirection: 'column',
+										marginBottom: '8px'
+									},
+									children: [
+										{
+											type: 'span',
+											props: {
+												style: {
+													fontSize: '72px',
+													fontWeight: '500',
+													color: '#ffffff',
+													lineHeight: 1
+												},
+												children: 'esse'
+											}
+										},
+										{
+											type: 'span',
+											props: {
+												style: {
+													fontSize: '52px',
+													color: '#e5e5e5',
+													lineHeight: 0.8,
+													marginTop: '-12px'
+												},
+												children: 'dev'
+											}
+										}
+									]
+								}
+							}
+						]
 					}
 				}
 			]
@@ -174,20 +236,42 @@ function createListingLayout(title: string, subtitle?: string) {
 			style: {
 				width: '1200px',
 				height: '630px',
+				position: 'relative',
 				display: 'flex',
 				flexDirection: 'column',
 				justifyContent: 'space-between',
-				backgroundColor: '#0c0c0c',
+				background: 'linear-gradient(135deg, #0c0c0c 0%, #131b49 50%, #20327e 100%)',
 				padding: '80px',
-				fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
+				fontFamily: 'Geist, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
 			},
 			children: [
+				// Noise overlay
+				{
+					type: 'div',
+					props: {
+						style: {
+							position: 'absolute',
+							top: 0,
+							left: 0,
+							width: '100%',
+							height: '100%',
+							backgroundImage: `url("${noiseBase64}")`,
+							backgroundRepeat: 'repeat',
+							opacity: 0.8,
+							mixBlendMode: 'overlay'
+						}
+					}
+				},
+				// Content
+				// Content
 				{
 					type: 'div',
 					props: {
 						style: {
 							display: 'flex',
-							alignItems: 'center'
+							alignItems: 'center',
+							position: 'relative',
+							zIndex: 1
 						},
 						children: [
 							{
@@ -196,7 +280,7 @@ function createListingLayout(title: string, subtitle?: string) {
 									src: logoBase64,
 									width: 80,
 									height: 80,
-									style: { borderRadius: '8px', marginRight: '24px' }
+									style: { marginRight: '24px' }
 								}
 							}
 						]
@@ -210,7 +294,9 @@ function createListingLayout(title: string, subtitle?: string) {
 							flexDirection: 'column',
 							justifyContent: 'center',
 							alignItems: 'center',
-							flex: 1
+							flex: 1,
+							position: 'relative',
+							zIndex: 1
 						},
 						children: [
 							{
@@ -260,139 +346,165 @@ function createDetailLayout(title: string, excerpt?: string, coverImage?: string
 			style: {
 				width: '1200px',
 				height: '630px',
+				position: 'relative',
 				display: 'flex',
-				backgroundColor: '#0c0c0c',
-				fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
+				background: 'linear-gradient(135deg, #0c0c0c 0%, #131b49 50%, #20327e 100%)',
+				fontFamily: 'Geist, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
 			},
-			children: hasImage
-				? [
-						// With image: 60/40 split
-						{
-							type: 'div',
-							props: {
-								style: {
-									width: '720px',
-									display: 'flex',
-									flexDirection: 'column',
-									justifyContent: 'center',
-									padding: '80px 40px 80px 80px'
-								},
-								children: [
-									{
-										type: 'h1',
-										props: {
-											style: {
-												fontSize: '48px',
-												fontWeight: 'bold',
-												color: '#ffffff',
-												margin: '0 0 24px 0',
-												lineHeight: 1.1
-											},
-											children: title
-										}
+			children: [
+				// Noise overlay
+				{
+					type: 'div',
+					props: {
+						style: {
+							position: 'absolute',
+							top: 0,
+							left: 0,
+							width: '100%',
+							height: '100%',
+							backgroundImage: `url("${noiseBase64}")`,
+							backgroundRepeat: 'repeat',
+							opacity: 0.3,
+							mixBlendMode: 'overlay'
+						}
+					}
+				},
+				// Content
+				...(hasImage
+					? [
+							// With image: 60/40 split
+							{
+								type: 'div',
+								props: {
+									style: {
+										width: '720px',
+										display: 'flex',
+										flexDirection: 'column',
+										justifyContent: 'center',
+										padding: '80px 40px 80px 80px',
+										position: 'relative',
+										zIndex: 1
 									},
-									excerpt && {
-										type: 'p',
-										props: {
-											style: {
-												fontSize: '20px',
-												color: '#a1a1aa',
-												margin: '0',
-												lineHeight: 1.4
-											},
-											children: excerpt.length > 150 ? excerpt.slice(0, 150) + '...' : excerpt
-										}
-									}
-								].filter(Boolean)
-							}
-						},
-						{
-							type: 'div',
-							props: {
-								style: {
-									width: '480px',
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-									padding: '80px 80px 80px 40px'
-								},
-								children: [
-									{
-										type: 'img',
-										props: {
-											src: coverImage,
-											width: 400,
-											height: 300,
-											style: {
-												borderRadius: '12px',
-												objectFit: 'cover'
+									children: [
+										{
+											type: 'h1',
+											props: {
+												style: {
+													fontSize: '48px',
+													fontWeight: 'bold',
+													color: '#ffffff',
+													margin: '0 0 24px 0',
+													lineHeight: 1.1
+												},
+												children: title
+											}
+										},
+										excerpt && {
+											type: 'p',
+											props: {
+												style: {
+													fontSize: '20px',
+													color: '#a1a1aa',
+													margin: '0',
+													lineHeight: 1.4
+												},
+												children: excerpt.length > 150 ? excerpt.slice(0, 150) + '...' : excerpt
 											}
 										}
-									}
-								]
-							}
-						}
-					]
-				: [
-						// Without image: centered
-						{
-							type: 'div',
-							props: {
-								style: {
-									width: '100%',
-									display: 'flex',
-									flexDirection: 'column',
-									justifyContent: 'center',
-									alignItems: 'center',
-									padding: '80px'
-								},
-								children: [
-									{
-										type: 'img',
-										props: {
-											src: logoBase64,
-											width: 120,
-											height: 120,
-											style: { borderRadius: '12px', marginBottom: '40px' }
-										}
+									].filter(Boolean)
+								}
+							},
+							{
+								type: 'div',
+								props: {
+									style: {
+										width: '480px',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center',
+										padding: '80px 80px 80px 40px',
+										position: 'relative',
+										zIndex: 1
 									},
-									{
-										type: 'h1',
-										props: {
-											style: {
-												fontSize: '56px',
-												fontWeight: 'bold',
-												color: '#ffffff',
-												textAlign: 'center',
-												margin: '0 0 24px 0',
-												lineHeight: 1.1,
-												maxWidth: '900px'
-											},
-											children: title
+									children: [
+										{
+											type: 'img',
+											props: {
+												src: coverImage,
+												width: 400,
+												height: 300,
+												style: {
+													borderRadius: '12px',
+													objectFit: 'cover'
+												}
+											}
 										}
-									},
-									excerpt && {
-										type: 'p',
-										props: {
-											style: {
-												fontSize: '22px',
-												color: '#a1a1aa',
-												textAlign: 'center',
-												margin: '0',
-												lineHeight: 1.4,
-												maxWidth: '800px'
-											},
-											children: excerpt.length > 200 ? excerpt.slice(0, 200) + '...' : excerpt
-										}
-									}
-								].filter(Boolean)
+									]
+								}
 							}
-						}
-					]
+						]
+					: [
+							// Without image: centered
+							{
+								type: 'div',
+								props: {
+									style: {
+										width: '100%',
+										display: 'flex',
+										flexDirection: 'column',
+										justifyContent: 'center',
+										alignItems: 'center',
+										padding: '80px',
+										position: 'relative',
+										zIndex: 1
+									},
+									children: [
+										{
+											type: 'img',
+											props: {
+												src: logoBase64,
+												width: 120,
+												height: 120,
+												style: { marginBottom: '40px' }
+											}
+										},
+										{
+											type: 'h1',
+											props: {
+												style: {
+													fontSize: '56px',
+													fontWeight: 'bold',
+													color: '#ffffff',
+													textAlign: 'center',
+													margin: '0 0 24px 0',
+													lineHeight: 1.1,
+													maxWidth: '900px'
+												},
+												children: title
+											}
+										},
+										excerpt && {
+											type: 'p',
+											props: {
+												style: {
+													fontSize: '22px',
+													color: '#a1a1aa',
+													textAlign: 'center',
+													margin: '0',
+													lineHeight: 1.4,
+													maxWidth: '800px'
+												},
+												children: excerpt.length > 200 ? excerpt.slice(0, 200) + '...' : excerpt
+											}
+										}
+									].filter(Boolean)
+								}
+							}
+						])
+			]
 		}
 	};
 }
-
 export const GET: RequestHandler = async ({ url }) => {
 	try {
 		// Parse query parameters
@@ -444,13 +556,13 @@ export const GET: RequestHandler = async ({ url }) => {
 			height: 630,
 			fonts: [
 				{
-					name: 'Inter',
+					name: 'Geist',
 					data: fonts.regular,
 					weight: 400,
 					style: 'normal'
 				},
 				{
-					name: 'Inter',
+					name: 'Geist',
 					data: fonts.bold,
 					weight: 700,
 					style: 'normal'
@@ -458,10 +570,19 @@ export const GET: RequestHandler = async ({ url }) => {
 			]
 		});
 
-		// Return SVG directly (most social platforms support SVG for OG images)
-		return new Response(svg, {
+		// Convert SVG to PNG using resvg
+		const { Resvg } = await import('@cf-wasm/resvg');
+		const resvg = new Resvg(svg, {
+			fitTo: { mode: 'width', value: 1200 },
+			background: 'transparent'
+		});
+		const pngData = resvg.render();
+		const pngBuffer = pngData.asPng();
+
+		// Return PNG image
+		return new Response(pngBuffer, {
 			headers: {
-				'Content-Type': 'image/svg+xml',
+				'Content-Type': 'image/png',
 				'Cache-Control': 'public, max-age=86400, s-maxage=86400',
 				'CDN-Cache-Control': 'max-age=86400',
 				'Cloudflare-CDN-Cache-Control': 'max-age=86400'
@@ -470,22 +591,49 @@ export const GET: RequestHandler = async ({ url }) => {
 	} catch (error) {
 		console.error('OG Image generation error:', error);
 
-		// Return a simple fallback SVG
+		// Return a simple fallback PNG
 		const fallbackSvg = `
 			<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-				<rect width="1200" height="630" fill="#0c0c0c"/>
+				<defs>
+					<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+						<stop offset="0%" stop-color="#0c0c0c"/>
+						<stop offset="50%" stop-color="#131b49"/>
+						<stop offset="100%" stop-color="#20327e"/>
+					</linearGradient>
+				</defs>
+				<rect width="1200" height="630" fill="url(#bg)"/>
 				<text x="600" y="315" text-anchor="middle" dy="0.3em" 
-					  font-family="Inter, system-ui, sans-serif" font-size="48" fill="#ffffff">
+					  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="48" fill="#ffffff">
 					Open Graph Image
 				</text>
 			</svg>
 		`;
 
-		return new Response(fallbackSvg, {
-			headers: {
-				'Content-Type': 'image/svg+xml',
-				'Cache-Control': 'public, max-age=3600'
-			}
-		});
+		try {
+			// Try to convert fallback SVG to PNG
+			const { Resvg } = await import('@cf-wasm/resvg');
+			const resvg = new Resvg(fallbackSvg, {
+				fitTo: { mode: 'width', value: 1200 },
+				background: 'transparent'
+			});
+			const pngData = resvg.render();
+			const pngBuffer = pngData.asPng();
+
+			return new Response(pngBuffer, {
+				headers: {
+					'Content-Type': 'image/png',
+					'Cache-Control': 'public, max-age=3600'
+				}
+			});
+		} catch (fallbackError) {
+			console.error('Fallback PNG generation error:', fallbackError);
+			// Last resort: return the SVG
+			return new Response(fallbackSvg, {
+				headers: {
+					'Content-Type': 'image/svg+xml',
+					'Cache-Control': 'public, max-age=3600'
+				}
+			});
+		}
 	}
 };
