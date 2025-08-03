@@ -158,7 +158,6 @@ function createHomeLayout(): string {
 			background: linear-gradient(135deg, #0c0c0c 0%, #131b49 50%, #20327e 100%);
 			font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 		">
-			<!-- Noise overlay -->
 			<div style="
 				position: absolute;
 				top: 0;
@@ -169,9 +168,9 @@ function createHomeLayout(): string {
 				background-repeat: repeat;
 				opacity: 0.5;
 				mix-blend-mode: overlay;
+				display: flex;
 			"></div>
 			
-			<!-- Content -->
 			<div style="
 				display: flex;
 				align-items: center;
@@ -219,7 +218,6 @@ function createListingLayout(title: string, subtitle?: string): string {
 			padding: 80px;
 			font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 		">
-			<!-- Noise overlay -->
 			<div style="
 				position: absolute;
 				top: 0;
@@ -230,9 +228,9 @@ function createListingLayout(title: string, subtitle?: string): string {
 				background-repeat: repeat;
 				opacity: 0.5;
 				mix-blend-mode: overlay;
+				display: flex;
 			"></div>
 			
-			<!-- Header -->
 			<div style="
 				display: flex;
 				align-items: center;
@@ -242,7 +240,6 @@ function createListingLayout(title: string, subtitle?: string): string {
 				<img src="${logoBase64}" width="80" height="80" style="margin-right: 24px;" />
 			</div>
 			
-			<!-- Content -->
 			<div style="
 				display: flex;
 				flex-direction: column;
@@ -295,7 +292,6 @@ function createDetailLayout(title: string, excerpt?: string, coverImage?: string
 				background: linear-gradient(135deg, #0c0c0c 0%, #131b49 50%, #20327e 100%);
 				font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 			">
-				<!-- Noise overlay -->
 				<div style="
 					position: absolute;
 					top: 0;
@@ -306,9 +302,9 @@ function createDetailLayout(title: string, excerpt?: string, coverImage?: string
 					background-repeat: repeat;
 					opacity: 0.5;
 					mix-blend-mode: overlay;
+					display: flex;
 				"></div>
 				
-				<!-- Text content -->
 				<div style="
 					width: 720px;
 					display: flex;
@@ -339,7 +335,6 @@ function createDetailLayout(title: string, excerpt?: string, coverImage?: string
 					}
 				</div>
 				
-				<!-- Image -->
 				<div style="
 					width: 480px;
 					display: flex;
@@ -371,7 +366,6 @@ function createDetailLayout(title: string, excerpt?: string, coverImage?: string
 				padding: 80px;
 				font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 			">
-				<!-- Noise overlay -->
 				<div style="
 					position: absolute;
 					top: 0;
@@ -382,9 +376,9 @@ function createDetailLayout(title: string, excerpt?: string, coverImage?: string
 					background-repeat: repeat;
 					opacity: 0.5;
 					mix-blend-mode: overlay;
+					display: flex;
 				"></div>
 				
-				<!-- Content -->
 				<div style="
 					display: flex;
 					flex-direction: column;
