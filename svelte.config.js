@@ -5,6 +5,7 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 const config = {
 	kit: {
 		adapter: adapter({
+			includeFiles: ['**/*.wasm'],
 			routes: {
 				include: ['/*'],
 				exclude: ['<all>']
