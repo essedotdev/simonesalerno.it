@@ -6,7 +6,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "simonesalerno",
 	"compatibility_date": "2025-05-05",
-	"compatibility_flags": ["nodejs_compat", "streams_enable_constructors"],
+	"compatibility_flags": ["nodejs_compat"],
 	"pages_build_output_dir": ".svelte-kit/cloudflare",
 	"observability": {
 		"enabled": true
