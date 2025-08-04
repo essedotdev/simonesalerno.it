@@ -14,7 +14,7 @@ let fontCache: {
 const FONT_CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
 /**
- * Load Geist fonts for workers-og
+ * Load fonts for workers-og
  */
 async function loadFonts(): Promise<{ regular: ArrayBuffer; bold: ArrayBuffer }> {
 	// Check if cache is valid
@@ -23,7 +23,19 @@ async function loadFonts(): Promise<{ regular: ArrayBuffer; bold: ArrayBuffer }>
 	}
 
 	try {
-		// Always load Geist fonts from local files (consistent across environments)
+		// In production (Cloudflare), load fonts via loadGoogleFont from workers-og
+		if (!dev) {
+			const { loadGoogleFont } = await import('workers-og');
+			const [regular, bold] = await Promise.all([
+				loadGoogleFont({ family: 'Geist', weight: 400 }),
+				loadGoogleFont({ family: 'Geist', weight: 700 })
+			]);
+
+			fontCache = { regular, bold, timestamp: Date.now() };
+			return fontCache;
+		}
+
+		// In development, load from local files
 		const regular = await readFile(join(process.cwd(), 'static/fonts/Geist-Regular.ttf'));
 		const bold = await readFile(join(process.cwd(), 'static/fonts/Geist-Bold.ttf'));
 
@@ -34,7 +46,7 @@ async function loadFonts(): Promise<{ regular: ArrayBuffer; bold: ArrayBuffer }>
 		};
 		return { regular: fontCache.regular, bold: fontCache.bold };
 	} catch (error) {
-		console.error('Failed to load Geist fonts:', error);
+		console.error('Failed to load fonts:', error);
 		// Final fallback: return empty buffers (will use system fonts)
 		const emptyBuffer = new ArrayBuffer(0);
 		const fallbackFonts = { regular: emptyBuffer, bold: emptyBuffer };
