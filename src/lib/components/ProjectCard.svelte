@@ -2,8 +2,14 @@
 	import type { ProjectCardProps } from '$lib/types';
 	import OptimizedImage from './OptimizedImage.svelte';
 
-	let { title, description, thumbnail, thumbnailPlaceholder, link, tags }: ProjectCardProps =
-		$props();
+	let {
+		title,
+		description,
+		featuredImage,
+		featuredImagePlaceholder,
+		link,
+		tags
+	}: ProjectCardProps = $props();
 </script>
 
 <div
@@ -11,10 +17,10 @@
 >
 	<a href={link}>
 		<OptimizedImage
-			src={thumbnail}
+			src={featuredImage}
 			alt={title}
 			cssClass="aspect-video rounded-t-3xl"
-			showPlaceholder={thumbnailPlaceholder}
+			showPlaceholder={featuredImagePlaceholder}
 			sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
 		/>
 	</a>

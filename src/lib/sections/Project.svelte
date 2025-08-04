@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { ExternalLink, ChevronLeft } from '@lucide/svelte';
-	import { inview, type Options } from 'svelte-inview';
-	import type { ProjectSectionProps } from '$lib/types';
 	import OptimizedImage from '$lib/components/OptimizedImage.svelte';
-	import { getTranslation, translateTags } from '$lib/utils/translations';
 	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
+	import type { ProjectSectionProps } from '$lib/types';
+	import { getTranslation, translateTags } from '$lib/utils/translations';
+	import { ChevronLeft, ExternalLink } from '@lucide/svelte';
+	import { inview, type Options } from 'svelte-inview';
 
 	// Receive props from parent
 	let { content, currentLang, global }: ProjectSectionProps = $props();
@@ -43,12 +43,12 @@
 	{#if content && currentTranslation}
 		<div class="flex flex-col gap-y-6 xl:flex-row xl:gap-x-14">
 			<div class="w-full xl:w-1/2">
-				{#if (content.meta.images && content.meta.images.length > 0) || content.meta.thumbnailPlaceholder}
+				{#if content.meta.featured_image || content.meta.featuredImagePlaceholder}
 					<OptimizedImage
-						src={content.meta.images?.[0]}
+						src={content.meta.featured_image}
 						alt={currentTranslation.title}
 						cssClass="aspect-video rounded-3xl"
-						showPlaceholder={content.meta.thumbnailPlaceholder || false}
+						showPlaceholder={content.meta.featuredImagePlaceholder || false}
 						sizes="(max-width: 1280px) 100vw, 50vw"
 					/>
 				{/if}

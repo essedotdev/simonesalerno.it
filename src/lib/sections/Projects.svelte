@@ -119,8 +119,8 @@
 				<ProjectCard
 					title={project.translations[selectedLanguage].title}
 					description={project.translations[selectedLanguage].description}
-					thumbnail={project.meta.thumbnail}
-					thumbnailPlaceholder={project.meta.thumbnailPlaceholder}
+					featuredImage={project.meta.featured_image}
+					featuredImagePlaceholder={project.meta.featuredImagePlaceholder}
 					tags={translateTags(global, project.translations[selectedLanguage].tags)}
 					link={'/' +
 						selectedLanguage +

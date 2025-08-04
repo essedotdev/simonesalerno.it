@@ -100,8 +100,8 @@ export interface BlogPageContent {
 export interface ProjectMeta {
 	id: string;
 	images: string[];
-	thumbnail: string;
-	thumbnailPlaceholder?: boolean;
+	featured_image: string;
+	featuredImagePlaceholder?: boolean;
 	og_image_key?: string;
 	link: string;
 	published: boolean;
@@ -197,8 +197,8 @@ export interface LanguageSelectorProps {
 export interface ProjectCardProps {
 	title: string;
 	description: string;
-	thumbnail?: string;
-	thumbnailPlaceholder?: boolean;
+	featuredImage?: string;
+	featuredImagePlaceholder?: boolean;
 	link: string;
 	tags?: string[];
 }

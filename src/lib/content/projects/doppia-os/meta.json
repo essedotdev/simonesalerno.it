@@ -1,9 +1,9 @@
 {
 	"id": "doppia-os",
-	"images": ["images/projects/doppia-os/screenshot-1.jpg"],
-	"thumbnail": "images/projects/doppia-os/thumbnail.jpg",
-	"thumbnailPlaceholder": true,
-	"og_image_key": "doppiaOs",
+	"images": ["images/projects/doppia-os/featured.jpg"],
+	"featured_image": "images/projects/doppia-os/featured.jpg",
+	"featuredImagePlaceholder": false,
+	"og_image_key": "doppiaOsFeatured",
 	"link": "https://doppia-os.pages.dev/",
 	"published": true,
 	"status": "completed",

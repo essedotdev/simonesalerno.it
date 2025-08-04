@@ -1,12 +1,12 @@
 {
 	"id": "lrl-elettrica",
-	"images": ["images/projects/lrl-elettrica/screenshot-1.jpg"],
-	"thumbnail": "images/projects/lrl-elettrica/thumbnail.jpg",
-	"thumbnailPlaceholder": true,
-	"og_image_key": "lrlElettrica",
-	"link": "https://lrlelettrica.it/",
+	"images": ["images/projects/lrl-elettrica/featured.jpg"],
+	"featured_image": "images/projects/lrl-elettrica/featured.jpg",
+	"featuredImagePlaceholder": false,
+	"og_image_key": "lrlElettricaFeatured",
+	"link": "https://lrlelettronica.eu/",
 	"published": true,
 	"status": "completed",
-	"created_date": "2024-01-15",
-	"updated_date": "2024-01-15"
+	"created_date": "2022-03-15",
+	"updated_date": "2023-05-20"
 }

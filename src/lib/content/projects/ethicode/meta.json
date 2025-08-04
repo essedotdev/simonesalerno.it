@@ -1,9 +1,9 @@
 {
 	"id": "ethicode",
-	"images": ["images/projects/ethicode/screenshot-1.jpg"],
-	"thumbnail": "images/projects/ethicode/thumbnail.jpg",
-	"thumbnailPlaceholder": true,
-	"og_image_key": "letsCodeItalia",
+	"images": ["images/projects/ethicode/featured.jpg"],
+	"featured_image": "images/projects/ethicode/featured.jpg",
+	"featuredImagePlaceholder": false,
+	"og_image_key": "ethicodeFeatured",
 	"link": "https://ethicode.eu/",
 	"published": true,
 	"status": "completed",

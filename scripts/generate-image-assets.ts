@@ -52,7 +52,7 @@ function findImageFiles(dir: string, baseDir: string = dir): ImageFile[] {
  * Generate a clean key from file path
  */
 function generateKey(relativePath: string): string {
-	// Convert path like "projects/cover-crypto-trading-bot.jpg" to "cryptoTradingBot"
+	// Convert path like "projects/doppia-os/featured.jpg" to "doppiaOsFeatured"
 	// or "articles/il-mio-nuovo-laboratorio/featured.jpg" to "ilMioNuovoLaboratorioFeatured"
 
 	const pathParts = relativePath.split('/');
@@ -64,8 +64,10 @@ function generateKey(relativePath: string): string {
 	let key = '';
 
 	if (pathParts[0] === 'projects') {
-		// For projects: remove "cover-" prefix if present
-		key = filename.replace(/^cover-/, '');
+		// For projects: combine project folder name + filename
+		// e.g., "projects/doppia-os/featured.jpg" -> "doppiaOsFeatured"
+		const projectSlug = pathParts[1];
+		key = projectSlug + '-' + filename;
 	} else if (pathParts[0] === 'articles') {
 		// For articles: combine folder name + filename
 		const articleSlug = pathParts[1];

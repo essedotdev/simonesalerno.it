@@ -1,9 +1,9 @@
 {
 	"id": "esse-designs",
-	"images": ["images/projects/esse-designs/screenshot-1.jpg"],
-	"thumbnail": "images/projects/esse-designs/thumbnail.jpg",
-	"thumbnailPlaceholder": true,
-	"og_image_key": "ssDesigns",
+	"images": ["images/projects/esse-designs/featured.jpg"],
+	"featured_image": "images/projects/esse-designs/featured.jpg",
+	"featuredImagePlaceholder": false,
+	"og_image_key": "esseDesignsFeatured",
 	"link": "https://t.me/essedev",
 	"published": true,
 	"status": "completed",

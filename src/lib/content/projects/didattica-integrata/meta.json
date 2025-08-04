@@ -1,9 +1,9 @@
 {
 	"id": "didattica-integrata",
-	"images": ["images/projects/didattica-integrata/screenshot-1.jpg"],
-	"thumbnail": "images/projects/didattica-integrata/thumbnail.jpg",
-	"thumbnailPlaceholder": true,
-	"og_image_key": "didatticaIntegrata",
+	"images": ["images/projects/didattica-integrata/featured.jpg"],
+	"featured_image": "images/projects/didattica-integrata/featured.jpg",
+	"featuredImagePlaceholder": false,
+	"og_image_key": "didatticaIntegrataFeatured",
 	"link": "https://github.com/essedev/didatticaintegrata.it",
 	"published": true,
 	"status": "completed",
