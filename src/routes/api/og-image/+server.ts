@@ -105,7 +105,11 @@ export const GET: RequestHandler = async ({ url }) => {
 						}
 					],
 					headers: {
-						'Cache-Control': 'public, max-age=86400'
+						'Content-Type': 'image/png',
+						'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+						'CDN-Cache-Control': 'public, max-age=86400',
+						'Vercel-CDN-Cache-Control': 'public, max-age=86400',
+						'Cloudflare-CDN-Cache-Control': 'public, max-age=86400'
 					}
 				});
 			} catch (workersOgError) {
@@ -133,7 +137,8 @@ export const GET: RequestHandler = async ({ url }) => {
 					{
 						headers: {
 							'Content-Type': 'image/svg+xml',
-							'Cache-Control': 'public, max-age=3600'
+							'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+							'CDN-Cache-Control': 'public, max-age=3600'
 						}
 					}
 				);
@@ -189,7 +194,8 @@ export const GET: RequestHandler = async ({ url }) => {
 			{
 				headers: {
 					'Content-Type': 'image/svg+xml',
-					'Cache-Control': 'public, max-age=3600'
+					'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+					'CDN-Cache-Control': 'public, max-age=3600'
 				}
 			}
 		);

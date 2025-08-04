@@ -153,7 +153,9 @@
 			...(title && { title }),
 			...(imageUrl && { image: imageUrl }),
 			...(imageKey && { imageKey }),
-			...(excerpt && { excerpt })
+			...(excerpt && { excerpt }),
+			// Add version parameter for cache busting when needed
+			v: '1.0'
 		});
 
 		return `${url.origin}/api/og-image?${searchParams.toString()}`;

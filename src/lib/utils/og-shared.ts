@@ -30,6 +30,7 @@ export function parseOgParams(url: URL): OgImageParams {
 		imageKey: url.searchParams.get('imageKey') || undefined,
 		excerpt: url.searchParams.get('excerpt') || undefined,
 		lang: url.searchParams.get('lang') || 'it'
+		// Note: 'v' parameter is ignored, used only for cache busting
 	};
 }
 
