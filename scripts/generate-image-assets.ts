@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
-import { basename, dirname, extname, join } from 'path';
+import { basename, dirname, extname, join, relative } from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -34,7 +34,8 @@ function findImageFiles(dir: string, baseDir: string = dir): ImageFile[] {
 		} else if (stat.isFile()) {
 			const ext = extname(item).toLowerCase();
 			if (['.jpg', '.jpeg', '.png', '.webp'].includes(ext)) {
-				const relativePath = fullPath.replace(baseDir + '/', '');
+				// Use path.relative for cross-platform compatibility
+				const relativePath = relative(baseDir, fullPath).replace(/\\/g, '/');
 				files.push({
 					path: fullPath,
 					relativePath,

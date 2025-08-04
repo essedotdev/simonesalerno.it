@@ -46,7 +46,6 @@
 	"type": "module",
 	"dependencies": {
 		"@lucide/svelte": "^0.535.0",
-		"satori": "^0.16.2",
 		"svelte-inview": "^4.0.4",
 		"workers-og": "^0.0.27"
 	},
