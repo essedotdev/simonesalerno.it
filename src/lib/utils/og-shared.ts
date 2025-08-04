@@ -121,18 +121,21 @@ export async function generateLayoutConfig(params: OgImageParams): Promise<Layou
 	}
 
 	if (type === 'listing' && section) {
-		// Load page content for title
-		let pageTitle = section === 'projects' ? 'Projects' : 'Blog';
+		// Use provided title first, fallback to loading from content
+		let pageTitle = title || (section === 'projects' ? 'Projects' : 'Blog');
 		const pageSubtitle = '';
 
-		try {
-			if (section === 'projects' || section === 'blog') {
-				const contentLoader = new ContentLoader();
-				const pageData = await contentLoader.loadPage(section, lang);
-				pageTitle = pageData.title || pageTitle;
+		// If no title was provided, try to load from content
+		if (!title) {
+			try {
+				if (section === 'projects' || section === 'blog') {
+					const contentLoader = new ContentLoader();
+					const pageData = await contentLoader.loadPage(section, lang);
+					pageTitle = pageData.title || pageTitle;
+				}
+			} catch (error) {
+				console.warn(`[OG] Could not load page data for ${section}:`, error);
 			}
-		} catch (error) {
-			console.warn(`[OG] Could not load page data for ${section}:`, error);
 		}
 
 		return createListingLayoutData(pageTitle, pageSubtitle);
@@ -148,7 +151,11 @@ export async function generateLayoutConfig(params: OgImageParams): Promise<Layou
 		return createDetailLayoutData(sanitizedTitle, sanitizedExcerpt, coverImage);
 	}
 
-	// Fallback to home
-	console.warn(`[OG] No valid configuration found for params:`, params);
+	// Fallback to home for any unrecognized configuration
+	console.warn(
+		`[OG] No valid configuration found for params:`,
+		params,
+		`- falling back to home layout`
+	);
 	return createHomeLayoutData();
 }

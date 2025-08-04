@@ -115,10 +115,10 @@
 			const pageType = params.route;
 			if (pageType === 'projects' || pageType === 'progetti') {
 				section = 'projects';
-				title = data.projectsPage?.title;
+				title = data.projectsPage?.title || (currentLocale === 'en' ? 'Projects' : 'Progetti');
 			} else if (pageType === 'blog' || pageType === 'articoli') {
 				section = 'blog';
-				title = data.blogPage?.title;
+				title = data.blogPage?.title || (currentLocale === 'en' ? 'Blog' : 'Articoli');
 			}
 		}
 		// Individual project/article pages

@@ -1,5 +1,6 @@
 import { dev } from '$app/environment';
 import { generateHtmlLayout } from '$lib/utils/og-html-generator';
+import type { LayoutConfig } from '$lib/utils/og-layouts';
 import { generateLayoutConfig, parseOgParams } from '$lib/utils/og-shared';
 import type { RequestHandler } from '@sveltejs/kit';
 import { readFile } from 'fs/promises';
@@ -64,7 +65,19 @@ export const GET: RequestHandler = async ({ url }) => {
 	try {
 		// Parse parameters and generate layout using shared functions
 		const params = parseOgParams(url);
-		const layoutConfig = await generateLayoutConfig(params);
+		let layoutConfig: LayoutConfig;
+
+		try {
+			layoutConfig = await generateLayoutConfig(params);
+		} catch (configError) {
+			console.warn(
+				'[OG Image] Layout config generation failed, falling back to home:',
+				configError
+			);
+			// Fallback to home layout for unrecognized pages
+			const { createHomeLayoutData } = await import('$lib/utils/og-layouts');
+			layoutConfig = createHomeLayoutData();
+		}
 
 		// Try to use workers-og in production environment
 		if (!dev) {
@@ -153,10 +166,32 @@ export const GET: RequestHandler = async ({ url }) => {
 	} catch (error) {
 		console.error('[OG Image] Fatal error:', error);
 
-		// Return error response
-		return new Response(JSON.stringify({ error: 'Fatal OG image generation error' }), {
-			status: 500,
-			headers: { 'Content-Type': 'application/json' }
-		});
+		// Return home-style fallback even on fatal errors
+		return new Response(
+			`<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+				<defs>
+					<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+						<stop offset="0%" stop-color="#0c0c0c"/>
+						<stop offset="50%" stop-color="#131b49"/>
+						<stop offset="100%" stop-color="#20327e"/>
+					</linearGradient>
+				</defs>
+				<rect width="1200" height="630" fill="url(#bg)"/>
+				<text x="600" y="300" text-anchor="middle" dy="0.3em" 
+					  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="36" fill="#ffffff">
+					Simone Salerno
+				</text>
+				<text x="600" y="350" text-anchor="middle" dy="0.3em" 
+					  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="24" fill="#e5e5e5">
+					essedev
+				</text>
+			</svg>`,
+			{
+				headers: {
+					'Content-Type': 'image/svg+xml',
+					'Cache-Control': 'public, max-age=3600'
+				}
+			}
+		);
 	}
 };
