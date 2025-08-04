@@ -9,13 +9,16 @@
 		featuredImagePlaceholder,
 		link,
 		publishedDate,
-		tags
-	}: ArticleCardProps = $props();
+		tags,
+		selectedLanguage
+	}: ArticleCardProps & { selectedLanguage?: string } = $props();
 
 	// Format date for display
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString);
-		return date.toLocaleDateString('en-US', {
+		let locale = 'en-US';
+		if (selectedLanguage === 'it') locale = 'it-IT';
+		return date.toLocaleDateString(locale, {
 			year: 'numeric',
 			month: 'long',
 			day: 'numeric'

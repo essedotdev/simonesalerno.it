@@ -94,6 +94,7 @@
 						article.translations[selectedLanguage].slug}
 					publishedDate={article.meta.published_date}
 					tags={translateTags(global, article.translations[selectedLanguage].tags)}
+					{selectedLanguage}
 				/>
 			{/each}
 		</div>
