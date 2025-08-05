@@ -140,82 +140,8 @@
 		return false;
 	});
 
-	// Dynamic OG image URL with error handling
-	let ogImageUrl = $derived.by(() => {
-		const currentRoute = page.route.id;
-		const params = page.params;
-		const url = page.url;
-
-		// If page is in error state, always return home OG image
-		if (isPageError) {
-			const searchParams = new URLSearchParams({
-				type: 'home',
-				lang: currentLocale
-			});
-			return `${url.origin}/api/og-image?${searchParams.toString()}`;
-		}
-
-		// Determine page type and parameters
-		let type = 'home';
-		let section: string | undefined;
-		let title: string | undefined;
-		let imageUrl: string | undefined;
-		let imageKey: string | undefined;
-		let excerpt: string | undefined;
-
-		// Home page
-		if (currentRoute === '/[page=lang]') {
-			type = 'home';
-		}
-		// Projects/Articles listing pages
-		else if (currentRoute === '/[page=lang]/[route=route]' && params.page && params.route) {
-			const routeType = getRouteType(params.route, params.page);
-			if (routeType) {
-				type = 'listing';
-				section = routeType;
-				if (routeType === 'projects') {
-					title = data.projectsPage?.title || (currentLocale === 'en' ? 'Projects' : 'Progetti');
-				} else {
-					title = data.blogPage?.title || (currentLocale === 'en' ? 'Blog' : 'Articoli');
-				}
-			}
-		}
-		// Individual project/article pages
-		else if (currentRoute === '/[page=lang]/[route=route]/[sub]' && params.page && params.route) {
-			const routeType = getRouteType(params.route, params.page);
-			const pageData = page.data;
-
-			if (routeType && pageData?.content) {
-				type = 'detail';
-				section = routeType;
-
-				// Get content data from page
-				if (pageData.content.translations?.[pageData.currentLang]) {
-					const contentData = pageData.content.translations[pageData.currentLang];
-					title = contentData.title;
-					excerpt = contentData.description || contentData.excerpt;
-
-					// Try to get OG image key
-					if (pageData.content?.meta?.og_image_key) {
-						imageKey = pageData.content.meta.og_image_key;
-					}
-				}
-			}
-		}
-
-		// Build query parameters
-		const searchParams = new URLSearchParams({
-			type,
-			lang: currentLocale,
-			...(section && { section }),
-			...(title && { title }),
-			...(imageUrl && { image: imageUrl }),
-			...(imageKey && { imageKey }),
-			...(excerpt && { excerpt })
-		});
-
-		return `${url.origin}/api/og-image?${searchParams.toString()}`;
-	});
+	// Static OG image for now (simplified)
+	let ogImageUrl = $derived(`${page.url.origin}/logo/logo.png`);
 </script>
 
 <svelte:head>

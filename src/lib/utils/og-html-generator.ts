@@ -33,7 +33,7 @@ function createBaseContainer(children: string, additionalStyles = ''): string {
 }
 
 /**
- * Create home page layout as HTML for workers-og
+ * Create home page layout as HTML for OG preview
  */
 export function createHomeHtml(): string {
 	const content = `
@@ -78,7 +78,7 @@ export function createHomeHtml(): string {
 }
 
 /**
- * Create listing page layout as HTML for workers-og
+ * Create listing page layout as HTML for OG preview
  */
 export function createListingHtml(title: string, subtitle?: string): string {
 	const content = `
@@ -136,7 +136,7 @@ export function createListingHtml(title: string, subtitle?: string): string {
 }
 
 /**
- * Create detail page layout as HTML for workers-og
+ * Create detail page layout as HTML for OG preview
  */
 export function createDetailHtml(title: string, excerpt?: string, coverImage?: string): string {
 	const hasImage = !!coverImage;

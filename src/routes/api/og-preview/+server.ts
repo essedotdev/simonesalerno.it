@@ -1,7 +1,144 @@
+import { ContentLoader } from '$lib/utils/content';
 import { OgDataResolver } from '$lib/utils/og-data-resolver';
 import { generateHtmlLayout } from '$lib/utils/og-html-generator';
 import { parseOgParams } from '$lib/utils/og-shared';
 import type { RequestHandler } from '@sveltejs/kit';
+
+// Generate all site URLs for testing (same logic as sitemap)
+async function generateSiteUrls() {
+	try {
+		const loader = new ContentLoader();
+		const languages = await loader.loadConfig('languages');
+		const navigation = await loader.loadConfig('navigation');
+		const projects = await loader.loadProjects();
+		const articles = await loader.loadArticles();
+
+		const urls: Array<{
+			href: string;
+			title: string;
+			category: string;
+			type: string;
+			section?: string;
+			lang: string;
+			contentTitle?: string;
+			excerpt?: string;
+			imageKey?: string;
+		}> = [];
+
+		// Generate URLs for each language
+		for (const language of languages) {
+			const langCode = language.code;
+			const baseUrl = '/api/og-preview';
+
+			// Homepage
+			urls.push({
+				href: `${baseUrl}?type=home&lang=${langCode}`,
+				title: `Homepage ${langCode.toUpperCase()}`,
+				category: 'Home Pages',
+				type: 'home',
+				lang: langCode
+			});
+
+			// Listing Pages
+			if (navigation[langCode]?.projects) {
+				urls.push({
+					href: `${baseUrl}?type=listing&section=projects&lang=${langCode}`,
+					title: `Projects ${langCode.toUpperCase()}`,
+					category: 'Listing Pages',
+					type: 'listing',
+					section: 'projects',
+					lang: langCode
+				});
+			}
+
+			if (navigation[langCode]?.articles) {
+				urls.push({
+					href: `${baseUrl}?type=listing&section=blog&lang=${langCode}`,
+					title: `Blog ${langCode.toUpperCase()}`,
+					category: 'Listing Pages',
+					type: 'listing',
+					section: 'blog',
+					lang: langCode
+				});
+			}
+
+			// Individual Projects
+			if (navigation[langCode]?.projects) {
+				for (const project of projects) {
+					const translation = project.translations[langCode];
+					if (translation && translation.slug) {
+						const params = new URLSearchParams({
+							type: 'detail',
+							section: 'projects',
+							lang: langCode,
+							title: translation.title || 'Untitled Project'
+						});
+
+						if (translation.description) {
+							params.set('excerpt', translation.description);
+						}
+
+						if (project.meta.og_image_key) {
+							params.set('imageKey', project.meta.og_image_key);
+						}
+
+						urls.push({
+							href: `${baseUrl}?${params.toString()}`,
+							title: `${translation.title || 'Untitled'} (${langCode.toUpperCase()})`,
+							category: 'Project Details',
+							type: 'detail',
+							section: 'projects',
+							lang: langCode,
+							contentTitle: translation.title,
+							excerpt: translation.description,
+							imageKey: project.meta.og_image_key
+						});
+					}
+				}
+			}
+
+			// Individual Articles
+			if (navigation[langCode]?.articles) {
+				for (const article of articles) {
+					const translation = article.translations[langCode];
+					if (translation && translation.slug) {
+						const params = new URLSearchParams({
+							type: 'detail',
+							section: 'blog',
+							lang: langCode,
+							title: translation.title || 'Untitled Article'
+						});
+
+						if (translation.excerpt) {
+							params.set('excerpt', translation.excerpt);
+						}
+
+						if (article.meta.og_image_key) {
+							params.set('imageKey', article.meta.og_image_key);
+						}
+
+						urls.push({
+							href: `${baseUrl}?${params.toString()}`,
+							title: `${translation.title || 'Untitled'} (${langCode.toUpperCase()})`,
+							category: 'Article Details',
+							type: 'detail',
+							section: 'blog',
+							lang: langCode,
+							contentTitle: translation.title,
+							excerpt: translation.excerpt,
+							imageKey: article.meta.og_image_key
+						});
+					}
+				}
+			}
+		}
+
+		return urls;
+	} catch (error) {
+		console.error('Error generating site URLs:', error);
+		return [];
+	}
+}
 
 export const GET: RequestHandler = async ({ url }) => {
 	try {
@@ -12,6 +149,25 @@ export const GET: RequestHandler = async ({ url }) => {
 
 		// Generate HTML layout (same as what gets converted to PNG)
 		const htmlLayout = generateHtmlLayout(layoutConfig);
+
+		// Generate all site URLs for testing
+		const siteUrls = await generateSiteUrls();
+
+		// Group URLs by category
+		const groupedUrls = siteUrls.reduce(
+			(acc, urlItem) => {
+				if (!acc[urlItem.category]) {
+					acc[urlItem.category] = [];
+				}
+				acc[urlItem.category].push(urlItem);
+				return acc;
+			},
+			{} as Record<string, typeof siteUrls>
+		);
+
+		// Check if current URL matches any site URL
+		const currentUrl = url.toString();
+		const matchingUrl = siteUrls.find((urlItem) => currentUrl.endsWith(urlItem.href));
 
 		// Return as HTML page for browser preview
 		const previewHtml = `
@@ -43,11 +199,18 @@ export const GET: RequestHandler = async ({ url }) => {
 			background: #1a1a1a;
 			border-radius: 8px;
 			border: 1px solid #333;
+			max-height: 60vh;
+			overflow-y: auto;
 		}
 		.test-links h3 {
 			margin: 0 0 15px 0;
 			color: #4ade80;
 			font-size: 18px;
+			position: sticky;
+			top: 0;
+			background: #1a1a1a;
+			padding: 10px 0;
+			border-bottom: 1px solid #333;
 		}
 		.test-category {
 			margin-bottom: 20px;
@@ -89,44 +252,43 @@ export const GET: RequestHandler = async ({ url }) => {
 			font-size: 13px;
 			color: #d1d5db;
 		}
+		.stats {
+			margin-bottom: 10px;
+			font-size: 12px;
+			color: #9ca3af;
+		}
 	</style>
 </head>
 <body>
 	<div class="test-links">
-		<h3>🧪 Test Links - OG Image Layouts</h3>
-		
-		<div class="test-category">
-			<h4>Home Layouts</h4>
-			<a href="?type=home&lang=it" ${params.type === 'home' && params.lang === 'it' ? 'class="current"' : ''}>Home IT</a>
-			<a href="?type=home&lang=en" ${params.type === 'home' && params.lang === 'en' ? 'class="current"' : ''}>Home EN</a>
+		<h3>🧪 Real Site OG Image Tests</h3>
+		<div class="stats">
+			Total URLs: ${siteUrls.length} | Generated from actual site content
 		</div>
 		
+		${Object.entries(groupedUrls)
+			.map(
+				([category, urls]) => `
 		<div class="test-category">
-			<h4>Listing Pages</h4>
-			<a href="?type=listing&section=projects&lang=it" ${params.type === 'listing' && params.section === 'projects' && params.lang === 'it' ? 'class="current"' : ''}>Projects IT</a>
-			<a href="?type=listing&section=projects&lang=en" ${params.type === 'listing' && params.section === 'projects' && params.lang === 'en' ? 'class="current"' : ''}>Projects EN</a>
-			<a href="?type=listing&section=blog&lang=it" ${params.type === 'listing' && params.section === 'blog' && params.lang === 'it' ? 'class="current"' : ''}>Blog IT</a>
-			<a href="?type=listing&section=blog&lang=en" ${params.type === 'listing' && params.section === 'blog' && params.lang === 'en' ? 'class="current"' : ''}>Blog EN</a>
-		</div>
-		
-		<div class="test-category">
-			<h4>Detail Pages (without image)</h4>
-			<a href="?type=detail&title=Test%20Project%20Title&section=projects&lang=it&excerpt=Questo%20è%20un%20progetto%20di%20test%20per%20verificare%20il%20layout%20delle%20OG%20images%20senza%20immagine%20di%20copertina.">Project Detail IT</a>
-			<a href="?type=detail&title=Test%20Article%20Title&section=blog&lang=en&excerpt=This%20is%20a%20test%20article%20to%20verify%20the%20OG%20image%20layout%20without%20cover%20image.">Article Detail EN</a>
-		</div>
-		
-		<div class="test-category">
-			<h4>Detail Pages (with image)</h4>
-			<a href="?type=detail&title=Il%20Mio%20Nuovo%20Laboratorio&section=blog&lang=it&imageKey=ilMioNuovoLaboratorioFeatured&excerpt=Descrizione%20del%20nuovo%20setup%20del%20laboratorio%20con%20tutte%20le%20tecnologie%20moderne.">Lab Article (with image)</a>
-			<a href="?type=detail&title=Long%20Title%20That%20Should%20Be%20Truncated%20Properly%20In%20The%20Layout&section=projects&lang=en&excerpt=This%20is%20a%20very%20long%20excerpt%20that%20should%20be%20truncated%20properly%20in%20the%20OG%20image%20layout%20to%20ensure%20it%20fits%20nicely%20within%20the%20boundaries%20and%20doesn't%20overflow.">Long Title Test</a>
-		</div>
+			<h4>${category} (${urls.length})</h4>
+			${urls
+				.map(
+					(urlItem) => `
+			<a href="${urlItem.href}" ${matchingUrl?.href === urlItem.href ? 'class="current"' : ''}>
+				${urlItem.title}
+			</a>`
+				)
+				.join('')}
+		</div>`
+			)
+			.join('')}
 	</div>
 
 	<div class="info">
 		<strong>📋 Current Preview</strong><br>
 		Type: <code>${params.type}</code> | Section: <code>${params.section || 'none'}</code> | Title: <code>${params.title || 'none'}</code><br>
 		Lang: <code>${params.lang}</code> | Image Key: <code>${params.imageKey || 'none'}</code><br>
-		<small>This preview shows exactly what gets converted to PNG in production.</small>
+		<small>This preview shows exactly what would be generated for OG images. All URLs above are real pages from your site.</small>
 	</div>
 	
 	<div class="preview-container">
@@ -134,8 +296,8 @@ export const GET: RequestHandler = async ({ url }) => {
 	</div>
 	
 	<div class="note">
-		<strong>💡 Production URL:</strong> Replace <code>/api/og-preview</code> with <code>/api/og-image</code> to get the actual PNG image.<br>
-		<strong>🔧 Development:</strong> The main OG endpoint returns SVG fallback in dev mode. Use this preview for testing layouts.
+		<strong>✅ Simplified OG System:</strong> The complex og-image endpoint has been removed. This preview now shows all real site URLs.<br>
+		<strong>🔧 Development:</strong> All URLs are generated from actual site content (projects, articles, navigation).
 	</div>
 </body>
 </html>
