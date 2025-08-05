@@ -72,6 +72,32 @@
 		}
 	});
 
+	// Detect if current page is in error state or has invalid content
+	let isPageError = $derived.by(() => {
+		// Check if we're on an error page
+		if (page.error) return true;
+
+		const currentRoute = page.route.id;
+		const params = page.params;
+
+		// Validate language first
+		if (params.page && !isValidLanguage(params.page)) return true;
+
+		// For detail pages, check if content exists
+		if (currentRoute === '/[page=lang]/[route=route]/[sub]') {
+			const pageData = page.data;
+			if (!pageData?.content) return true;
+		}
+
+		// For listing pages, validate route against navigation
+		if (currentRoute === '/[page=lang]/[route=route]') {
+			if (!params.page || !params.route) return true;
+			if (!isValidRouteForLang(params.route, params.page)) return true;
+		}
+
+		return false;
+	});
+
 	// Dynamic title based on current route with error handling
 	let pageTitle = $derived.by(() => {
 		if (!data?.global?.title) return 'Simone Salerno';
@@ -113,32 +139,6 @@
 
 	// Dynamic locale for meta tags
 	let currentLocale = $derived(page.params.page || 'it');
-
-	// Detect if current page is in error state or has invalid content
-	let isPageError = $derived.by(() => {
-		// Check if we're on an error page
-		if (page.error) return true;
-
-		const currentRoute = page.route.id;
-		const params = page.params;
-
-		// Validate language first
-		if (params.page && !isValidLanguage(params.page)) return true;
-
-		// For detail pages, check if content exists
-		if (currentRoute === '/[page=lang]/[route=route]/[sub]') {
-			const pageData = page.data;
-			if (!pageData?.content) return true;
-		}
-
-		// For listing pages, validate route against navigation
-		if (currentRoute === '/[page=lang]/[route=route]') {
-			if (!params.page || !params.route) return true;
-			if (!isValidRouteForLang(params.route, params.page)) return true;
-		}
-
-		return false;
-	});
 
 	// Static OG image for now (simplified)
 	let ogImageUrl = $derived(`${page.url.origin}/logo/logo.png`);
