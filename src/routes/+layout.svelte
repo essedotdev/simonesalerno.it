@@ -7,7 +7,6 @@
 	import BackToTop from '$lib/components/ui/BackToTop.svelte';
 	import '$lib/style/globals.css';
 	import { initializeAnalytics, isAnalyticsReady, trackPageView } from '$lib/utils/analytics';
-	import { getOgImageUrlWithNavigation } from '$lib/utils/og-image-mapper';
 	import { setContext } from 'svelte';
 
 	let { children, data } = $props();
@@ -141,10 +140,77 @@
 	// Dynamic locale for meta tags
 	let currentLocale = $derived(page.params.page || 'it');
 
-	// Dynamic OG image based on current route using generated images
-	let ogImageUrl = $derived(
-		getOgImageUrlWithNavigation(page.url.origin, page.route.id, page.params, data.navigation)
-	);
+	// Dynamic OG image URL using /api/og endpoint
+	let ogImageUrl = $derived.by(() => {
+		const baseUrl = page.url.origin;
+		const params = new URLSearchParams();
+		const currentRoute = page.route.id;
+		const routeParams = page.params;
+		const lang = routeParams.page || 'it';
+
+		// Set language
+		params.set('lang', lang);
+
+		// Map routes to OG parameters
+		switch (currentRoute) {
+			case '/[page=lang]':
+				// Home page
+				params.set('type', 'home');
+				break;
+
+			case '/[page=lang]/[route=route]':
+				// Listing pages
+				params.set('type', 'listing');
+
+				// Determine section based on navigation
+				if (data.navigation?.[lang]) {
+					const navRoutes = data.navigation[lang];
+					if (routeParams.route === navRoutes.projects) {
+						params.set('section', 'projects');
+					} else if (routeParams.route === navRoutes.articles) {
+						params.set('section', 'blog');
+					}
+				}
+				break;
+
+			case '/[page=lang]/[route=route]/[sub]':
+				// Detail pages
+				params.set('type', 'detail');
+
+				// Add content-specific parameters
+				const pageData = page.data;
+				if (pageData?.content) {
+					const translation = pageData.content.translations?.[lang];
+					if (translation?.title) {
+						params.set('title', translation.title);
+					}
+					if (translation?.excerpt || translation?.description) {
+						params.set('excerpt', translation.excerpt || translation.description);
+					}
+					if (pageData.content.meta?.og_image_key) {
+						params.set('imageKey', pageData.content.meta.og_image_key);
+					}
+				}
+
+				// Determine section based on navigation
+				if (data.navigation?.[lang]) {
+					const navRoutes = data.navigation[lang];
+					if (routeParams.route === navRoutes.projects) {
+						params.set('section', 'projects');
+					} else if (routeParams.route === navRoutes.articles) {
+						params.set('section', 'blog');
+					}
+				}
+				break;
+
+			default:
+				// Fallback to home
+				params.set('type', 'home');
+				break;
+		}
+
+		return `${baseUrl}/api/og?${params.toString()}`;
+	});
 </script>
 
 <svelte:head>
