@@ -1,4 +1,4 @@
-import { getImageAsset } from '$lib/assets/image-assets';
+import { getImageAsset } from '../assets/image-assets.js';
 
 /**
  * Parse URL search parameters for OG image generation

@@ -1,5 +1,5 @@
-import { logoBase64 } from '$lib/assets/logo-base64';
-import { noiseBase64 } from '$lib/assets/noise-base64';
+import { logoBase64 } from '../assets/logo-base64.js';
+import { noiseBase64 } from '../assets/noise-base64.js';
 
 /**
  * Common styles and constants for OG layouts

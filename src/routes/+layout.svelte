@@ -143,12 +143,7 @@
 
 	// Dynamic OG image based on current route using generated images
 	let ogImageUrl = $derived(
-		getOgImageUrlWithNavigation(
-			page.url.origin,
-			page.route.id,
-			page.params,
-			data.navigation
-		)
+		getOgImageUrlWithNavigation(page.url.origin, page.route.id, page.params, data.navigation)
 	);
 </script>
 

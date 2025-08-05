@@ -1,4 +1,4 @@
-import { logoBase64 } from '$lib/assets/logo-base64';
+import { logoBase64 } from '../assets/logo-base64.js';
 import { OG_CONSTANTS, getCommonBackgroundElements, type LayoutConfig } from './og-layouts';
 
 /**

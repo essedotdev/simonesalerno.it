@@ -65,7 +65,7 @@ export function getOgImageUrl(
 				type: 'listing',
 				lang: params.page || 'it'
 			};
-			
+
 			// Determine section based on route
 			// You'll need to map your navigation routes here
 			// For now, using generic mapping - you can enhance this
@@ -83,7 +83,7 @@ export function getOgImageUrl(
 				lang: params.page || 'it',
 				slug: params.sub
 			};
-			
+
 			// Determine section based on route
 			if (params.route === 'progetti' || params.route === 'projects') {
 				ogParams.section = 'projects';
@@ -131,7 +131,7 @@ export function getOgImageUrlWithNavigation(
 
 		case '/[page=lang]/[route=route]':
 			ogParams = { type: 'listing', lang };
-			
+
 			// Use navigation config to determine section
 			if (navigation?.[lang]) {
 				const navRoutes = navigation[lang];
@@ -145,7 +145,7 @@ export function getOgImageUrlWithNavigation(
 
 		case '/[page=lang]/[route=route]/[sub]':
 			ogParams = { type: 'detail', lang, slug: params.sub };
-			
+
 			// Use navigation config to determine section
 			if (navigation?.[lang]) {
 				const navRoutes = navigation[lang];

@@ -1,4 +1,4 @@
-import { ContentLoader } from '$lib/utils/content';
+import { ContentLoader } from './content.js';
 import type { LayoutConfig } from './og-layouts';
 import {
 	createDetailLayoutData,

@@ -2,7 +2,7 @@ import { existsSync } from 'fs';
 import { mkdir, writeFile } from 'fs/promises';
 import { join } from 'path';
 
-// Dynamic import for workers-og to handle WASM loading  
+// Dynamic import for workers-og to handle WASM loading
 let ImageResponse: typeof import('workers-og').ImageResponse | null = null;
 
 // Import the existing utilities
@@ -35,7 +35,7 @@ function generatePlaceholderSvg(filename: string): string {
 	const title = filename
 		.replace('.png', '')
 		.split('-')
-		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 		.join(' ');
 
 	return `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
@@ -187,7 +187,7 @@ async function generateOgImage(
 			if (urlData.imageKey) searchParams.set('imageKey', urlData.imageKey);
 
 			const fakeUrl = new URL(`http://localhost?${searchParams.toString()}`);
-			
+
 			// Reuse existing logic
 			const params = parseOgParams(fakeUrl);
 			const resolver = new OgDataResolver();
@@ -197,7 +197,7 @@ async function generateOgImage(
 			// Generate the image using workers-og
 			const response = await new ImageResponse(htmlLayout, {
 				width: 1200,
-				height: 630,
+				height: 630
 			});
 
 			// Save to file
@@ -212,13 +212,13 @@ async function generateOgImage(
 		console.log(`✅ Generated: ${urlData.filename}`);
 	} catch (error) {
 		console.error(`❌ Failed to generate ${urlData.filename}:`, error);
-		
+
 		// Ultimate fallback: generate simple placeholder
 		try {
 			const outputPath = join('static', 'og-images', urlData.filename);
 			const fallbackSvg = generatePlaceholderSvg(urlData.filename);
 			await writeFile(outputPath, fallbackSvg);
-			
+
 			console.log(`⚠️  Generated fallback for: ${urlData.filename}`);
 		} catch (fallbackError) {
 			console.error(`❌ Failed to generate fallback for ${urlData.filename}:`, fallbackError);
@@ -231,10 +231,10 @@ async function generateOgImage(
  */
 async function generateAllOgImages(): Promise<void> {
 	console.log('🎨 Starting OG image generation...');
-	
+
 	// Initialize workers-og and check if it's available
 	const workersOgAvailable = await initializeWorkersOg();
-	
+
 	// Ensure output directory exists
 	const ogImagesDir = join('static', 'og-images');
 	if (!existsSync(ogImagesDir)) {
@@ -252,9 +252,12 @@ async function generateAllOgImages(): Promise<void> {
 		const homeHtml = generateHtmlLayout(homeConfig);
 		const defaultResponse = await new ImageResponse(homeHtml, {
 			width: 1200,
-			height: 630,
+			height: 630
 		});
-		await writeFile(join(ogImagesDir, 'default.png'), Buffer.from(await defaultResponse.arrayBuffer()));
+		await writeFile(
+			join(ogImagesDir, 'default.png'),
+			Buffer.from(await defaultResponse.arrayBuffer())
+		);
 	} else {
 		const defaultSvg = generatePlaceholderSvg('default.png');
 		await writeFile(join(ogImagesDir, 'default.png'), defaultSvg);
@@ -279,7 +282,7 @@ async function generateAllOgImages(): Promise<void> {
 	console.log(`✅ Success: ${successCount}`);
 	console.log(`❌ Failures: ${failureCount}`);
 	console.log(`📁 Images saved to: ${ogImagesDir}`);
-	
+
 	if (!workersOgAvailable) {
 		console.log('\n⚠️  Note: Placeholder images generated for local development');
 		console.log('🚀 Real OG images will be generated on Cloudflare build');
