@@ -5,12 +5,16 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "simonesalerno",
-	"compatibility_date": "2025-05-05",
+	"compatibility_date": "2025-08-05",
 	"compatibility_flags": ["nodejs_compat"],
-	"pages_build_output_dir": ".svelte-kit/cloudflare",
+	"assets": {
+		"directory": ".svelte-kit/cloudflare",
+		"binding": "ASSETS"
+	},
 	"observability": {
 		"enabled": true
 	},
+	"preview_urls": true,
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
