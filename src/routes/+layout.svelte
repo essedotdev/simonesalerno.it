@@ -7,6 +7,7 @@
 	import BackToTop from '$lib/components/ui/BackToTop.svelte';
 	import '$lib/style/globals.css';
 	import { initializeAnalytics, isAnalyticsReady, trackPageView } from '$lib/utils/analytics';
+	import { getOgImageUrlWithNavigation } from '$lib/utils/og-image-mapper';
 	import { setContext } from 'svelte';
 
 	let { children, data } = $props();
@@ -140,8 +141,15 @@
 	// Dynamic locale for meta tags
 	let currentLocale = $derived(page.params.page || 'it');
 
-	// Static OG image for now (simplified)
-	let ogImageUrl = $derived(`${page.url.origin}/logo/logo.png`);
+	// Dynamic OG image based on current route using generated images
+	let ogImageUrl = $derived(
+		getOgImageUrlWithNavigation(
+			page.url.origin,
+			page.route.id,
+			page.params,
+			data.navigation
+		)
+	);
 </script>
 
 <svelte:head>
