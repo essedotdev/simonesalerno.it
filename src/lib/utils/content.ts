@@ -1,19 +1,19 @@
 import type {
-	GlobalContent,
-	WelcomeContent,
 	AboutContent,
-	ContactContent,
-	ProjectItem,
 	ArticleItem,
-	ProjectMeta,
 	ArticleMeta,
-	ProjectTranslation,
 	ArticleTranslation,
-	ConfigFileNames,
-	PageNames,
-	ContentType,
 	CacheKey,
-	LoadConfigType
+	ConfigFileNames,
+	ContactContent,
+	ContentType,
+	GlobalContent,
+	LoadConfigType,
+	PageNames,
+	ProjectItem,
+	ProjectMeta,
+	ProjectTranslation,
+	WelcomeContent
 } from '../types';
 
 export class ContentLoader {
@@ -229,5 +229,61 @@ export class ContentLoader {
 
 		// CORREZIONE CRITICA: Cerca nella lingua corrente, non in translations[0]
 		return collection.find((item) => item.translations[lang]?.slug === slug);
+	}
+
+	/**
+	 * Check if content exists by slug without loading it
+	 */
+	async contentExists(slug: string, lang: string, type: ContentType): Promise<boolean> {
+		try {
+			const content = await this.findContentBySlug(slug, lang, type);
+			return !!content;
+		} catch {
+			return false;
+		}
+	}
+
+	/**
+	 * Validate if a route is valid for the given language
+	 */
+	async isValidRoute(route: string, lang: string): Promise<boolean> {
+		try {
+			const navigation = await this.loadConfig('navigation');
+			const routeMap = navigation[lang];
+			if (!routeMap) return false;
+
+			return Object.values(routeMap).includes(route);
+		} catch {
+			return false;
+		}
+	}
+
+	/**
+	 * Validate if a language code is supported
+	 */
+	async isValidLanguage(lang: string): Promise<boolean> {
+		try {
+			const languages = await this.loadConfig('languages');
+			return languages.some((l) => l.code === lang);
+		} catch {
+			return false;
+		}
+	}
+
+	/**
+	 * Get route type (projects/blog) from route string
+	 */
+	async getRouteType(route: string, lang: string): Promise<'projects' | 'blog' | null> {
+		try {
+			const navigation = await this.loadConfig('navigation');
+			const routeMap = navigation[lang];
+			if (!routeMap) return null;
+
+			if (route === routeMap.projects) return 'projects';
+			if (route === routeMap.articles) return 'blog';
+			return null;
+		} catch {
+			return null;
+		}
 	}
 }

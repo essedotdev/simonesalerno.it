@@ -21,6 +21,26 @@
 	// Fornisce i dati come context invece di store
 	setContext('layoutData', data);
 
+	// Helper functions for route validation
+	function isValidLanguage(lang: string): boolean {
+		const validLanguages = data.languages?.map((l) => l.code) || ['it', 'en'];
+		return validLanguages.includes(lang);
+	}
+
+	function isValidRouteForLang(route: string, lang: string): boolean {
+		if (!data.navigation?.[lang]) return false;
+		const routeMap = data.navigation[lang];
+		return Object.values(routeMap).includes(route);
+	}
+
+	function getRouteType(route: string, lang: string): 'projects' | 'blog' | null {
+		if (!data.navigation?.[lang]) return null;
+		const routeMap = data.navigation[lang];
+		if (route === routeMap.projects) return 'projects';
+		if (route === routeMap.articles) return 'blog';
+		return null;
+	}
+
 	$effect(() => {
 		if (browser) {
 			document.documentElement.classList.toggle('overflow-hidden', menuOpen);
@@ -52,9 +72,14 @@
 		}
 	});
 
-	// Dynamic title based on current route
+	// Dynamic title based on current route with error handling
 	let pageTitle = $derived.by(() => {
 		if (!data?.global?.title) return 'Simone Salerno';
+
+		// If page is in error state, return default title
+		if (isPageError) {
+			return `Simone Salerno • ${data.global.title}`;
+		}
 
 		const currentRoute = page.route.id;
 		const params = page.params;
@@ -65,23 +90,21 @@
 		}
 
 		// Projects/Articles listing pages
-		if (currentRoute === '/[page=lang]/[route=route]') {
-			const pageType = params.route;
-			if (pageType === 'projects' || pageType === 'progetti') {
+		if (currentRoute === '/[page=lang]/[route=route]' && params.page && params.route) {
+			const routeType = getRouteType(params.route, params.page);
+			if (routeType === 'projects') {
 				return `Simone Salerno • ${data.projectsPage?.title || 'Projects'}`;
-			} else {
+			} else if (routeType === 'blog') {
 				return `Simone Salerno • ${data.blogPage?.title || 'Blog'}`;
 			}
 		}
 
-		// Individual project/article pages - get title from page data
+		// Individual project/article pages
 		if (currentRoute === '/[page=lang]/[route=route]/[sub]') {
-			// Try to get page data from page store
 			const pageData = page.data;
 			if (pageData?.content?.translations?.[pageData.currentLang]?.title) {
 				return `Simone Salerno • ${pageData.content.translations[pageData.currentLang].title}`;
 			}
-			return `Simone Salerno • ${data.global.title}`;
 		}
 
 		// Fallback
@@ -91,11 +114,46 @@
 	// Dynamic locale for meta tags
 	let currentLocale = $derived(page.params.page || 'it');
 
-	// Dynamic OG image URL
+	// Detect if current page is in error state or has invalid content
+	let isPageError = $derived.by(() => {
+		// Check if we're on an error page
+		if (page.error) return true;
+
+		const currentRoute = page.route.id;
+		const params = page.params;
+
+		// Validate language first
+		if (params.page && !isValidLanguage(params.page)) return true;
+
+		// For detail pages, check if content exists
+		if (currentRoute === '/[page=lang]/[route=route]/[sub]') {
+			const pageData = page.data;
+			if (!pageData?.content) return true;
+		}
+
+		// For listing pages, validate route against navigation
+		if (currentRoute === '/[page=lang]/[route=route]') {
+			if (!params.page || !params.route) return true;
+			if (!isValidRouteForLang(params.route, params.page)) return true;
+		}
+
+		return false;
+	});
+
+	// Dynamic OG image URL with error handling
 	let ogImageUrl = $derived.by(() => {
 		const currentRoute = page.route.id;
 		const params = page.params;
 		const url = page.url;
+
+		// If page is in error state, always return home OG image
+		if (isPageError) {
+			const searchParams = new URLSearchParams({
+				type: 'home',
+				lang: currentLocale
+			});
+			return `${url.origin}/api/og-image?${searchParams.toString()}`;
+		}
 
 		// Determine page type and parameters
 		let type = 'home';
@@ -110,37 +168,37 @@
 			type = 'home';
 		}
 		// Projects/Articles listing pages
-		else if (currentRoute === '/[page=lang]/[route=route]') {
-			type = 'listing';
-			const pageType = params.route;
-			if (pageType === 'projects' || pageType === 'progetti') {
-				section = 'projects';
-				title = data.projectsPage?.title || (currentLocale === 'en' ? 'Projects' : 'Progetti');
-			} else if (pageType === 'blog' || pageType === 'articoli') {
-				section = 'blog';
-				title = data.blogPage?.title || (currentLocale === 'en' ? 'Blog' : 'Articoli');
+		else if (currentRoute === '/[page=lang]/[route=route]' && params.page && params.route) {
+			const routeType = getRouteType(params.route, params.page);
+			if (routeType) {
+				type = 'listing';
+				section = routeType;
+				if (routeType === 'projects') {
+					title = data.projectsPage?.title || (currentLocale === 'en' ? 'Projects' : 'Progetti');
+				} else {
+					title = data.blogPage?.title || (currentLocale === 'en' ? 'Blog' : 'Articoli');
+				}
 			}
 		}
 		// Individual project/article pages
-		else if (currentRoute === '/[page=lang]/[route=route]/[sub]') {
-			type = 'detail';
-			const pageType = params.route;
-			section = pageType === 'projects' || pageType === 'progetti' ? 'projects' : 'blog';
-
-			// Get content data from page
+		else if (currentRoute === '/[page=lang]/[route=route]/[sub]' && params.page && params.route) {
+			const routeType = getRouteType(params.route, params.page);
 			const pageData = page.data;
-			if (pageData?.content?.translations?.[pageData.currentLang]) {
-				const contentData = pageData.content.translations[pageData.currentLang];
-				title = contentData.title;
-				excerpt = contentData.description || contentData.excerpt;
 
-				// For projects, try to get OG image key
-				if (section === 'projects' && pageData.content?.meta?.og_image_key) {
-					imageKey = pageData.content.meta.og_image_key;
-				}
-				// For blog articles, try to get OG image key
-				else if (section === 'blog' && pageData.content?.meta?.og_image_key) {
-					imageKey = pageData.content.meta.og_image_key;
+			if (routeType && pageData?.content) {
+				type = 'detail';
+				section = routeType;
+
+				// Get content data from page
+				if (pageData.content.translations?.[pageData.currentLang]) {
+					const contentData = pageData.content.translations[pageData.currentLang];
+					title = contentData.title;
+					excerpt = contentData.description || contentData.excerpt;
+
+					// Try to get OG image key
+					if (pageData.content?.meta?.og_image_key) {
+						imageKey = pageData.content.meta.og_image_key;
+					}
 				}
 			}
 		}

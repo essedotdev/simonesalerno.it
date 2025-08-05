@@ -93,35 +93,33 @@ export function getDisplayImage(
 }
 
 /**
- * Generate layout configuration from parameters
+ * Generate layout configuration from parameters with enhanced validation
  */
 export async function generateLayoutConfig(params: OgImageParams): Promise<LayoutConfig> {
 	const { type, section, title, imageKey, excerpt, lang } = params;
 
-	// Validate type parameter
+	// Validate and sanitize language parameter
+	if (!['it', 'en'].includes(lang)) {
+		console.warn(`[OG] Invalid language parameter: ${lang}, falling back to 'it'`);
+		params.lang = 'it';
+	}
+
+	// Validate type parameter with strict checking
 	const validTypes = ['home', 'listing', 'detail'] as const;
 	if (!validTypes.includes(type as (typeof validTypes)[number])) {
 		console.warn(`[OG] Invalid type parameter: ${type}, falling back to 'home'`);
 		return createHomeLayoutData();
 	}
 
-	// Validate section parameter when needed
-	if (type === 'listing' && section && !['projects', 'blog'].includes(section)) {
-		console.warn(`[OG] Invalid section parameter: ${section}, falling back to 'home'`);
-		return createHomeLayoutData();
-	}
+	// Enhanced validation for listing type
+	if (type === 'listing') {
+		if (!section || !['projects', 'blog'].includes(section)) {
+			console.warn(
+				`[OG] Invalid or missing section parameter for listing: ${section}, falling back to 'home'`
+			);
+			return createHomeLayoutData();
+		}
 
-	// Validate language parameter
-	if (!['it', 'en'].includes(lang)) {
-		console.warn(`[OG] Invalid language parameter: ${lang}, falling back to 'it'`);
-		params.lang = 'it';
-	}
-
-	if (type === 'home') {
-		return createHomeLayoutData();
-	}
-
-	if (type === 'listing' && section) {
 		// Use provided title first, fallback to loading from content
 		let pageTitle = title || (section === 'projects' ? 'Projects' : 'Blog');
 		const pageSubtitle = '';
@@ -129,27 +127,63 @@ export async function generateLayoutConfig(params: OgImageParams): Promise<Layou
 		// If no title was provided, try to load from content
 		if (!title) {
 			try {
-				if (section === 'projects' || section === 'blog') {
+				// Type-safe section validation for ContentLoader
+				const validPageNames = ['projects', 'blog'] as const;
+				if (validPageNames.includes(section as 'projects' | 'blog')) {
 					const contentLoader = new ContentLoader();
-					const pageData = await contentLoader.loadPage(section, lang);
+					const pageData = await contentLoader.loadPage(section as 'projects' | 'blog', lang);
 					pageTitle = pageData.title || pageTitle;
 				}
 			} catch (error) {
 				console.warn(`[OG] Could not load page data for ${section}:`, error);
+				// If content loading fails completely, fallback to home
+				return createHomeLayoutData();
 			}
 		}
 
 		return createListingLayoutData(pageTitle, pageSubtitle);
 	}
 
-	if (type === 'detail' && title) {
-		// Sanitize title and excerpt
-		const sanitizedTitle = title.slice(0, 100); // Limit title length
-		const sanitizedExcerpt = excerpt ? excerpt.slice(0, 300) : undefined; // Limit excerpt length
+	// Enhanced validation for detail type
+	if (type === 'detail') {
+		if (!title || title.trim() === '') {
+			console.warn(`[OG] Missing or empty title for detail page, falling back to 'home'`);
+			return createHomeLayoutData();
+		}
 
-		// Get cover image
-		const coverImage = getDisplayImage(imageKey, sanitizedTitle, section);
+		// Validate section if provided
+		if (section && !['projects', 'blog'].includes(section)) {
+			console.warn(
+				`[OG] Invalid section parameter for detail: ${section}, proceeding without section validation`
+			);
+		}
+
+		// Sanitize title and excerpt with length limits
+		const sanitizedTitle = title.slice(0, 100).trim();
+		const sanitizedExcerpt = excerpt ? excerpt.slice(0, 300).trim() : undefined;
+
+		// Validate that sanitized title is not empty
+		if (!sanitizedTitle) {
+			console.warn(`[OG] Title became empty after sanitization, falling back to 'home'`);
+			return createHomeLayoutData();
+		}
+
+		// Get cover image with error handling
+		let coverImage: string | undefined;
+		try {
+			coverImage = getDisplayImage(imageKey, sanitizedTitle, section);
+		} catch (error) {
+			console.warn(`[OG] Error getting display image:`, error);
+			// Continue without image rather than failing completely
+			coverImage = undefined;
+		}
+
 		return createDetailLayoutData(sanitizedTitle, sanitizedExcerpt, coverImage);
+	}
+
+	// Default to home layout
+	if (type === 'home') {
+		return createHomeLayoutData();
 	}
 
 	// Fallback to home for any unrecognized configuration

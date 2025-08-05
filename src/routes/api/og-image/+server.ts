@@ -74,7 +74,7 @@ export const GET: RequestHandler = async ({ url }) => {
 				'[OG Image] Layout config generation failed, falling back to home:',
 				configError
 			);
-			// Fallback to home layout for unrecognized pages
+			// Fallback to home layout for any configuration errors
 			const { createHomeLayoutData } = await import('$lib/utils/og-layouts');
 			layoutConfig = createHomeLayoutData();
 		}
@@ -114,90 +114,135 @@ export const GET: RequestHandler = async ({ url }) => {
 				});
 			} catch (workersOgError) {
 				console.error('[OG Image] workers-og failed:', workersOgError);
-				// Fallback to SVG in production if workers-og fails
-				return new Response(
-					`<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-						<defs>
-							<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-								<stop offset="0%" stop-color="#0c0c0c"/>
-								<stop offset="50%" stop-color="#131b49"/>
-								<stop offset="100%" stop-color="#20327e"/>
-							</linearGradient>
-						</defs>
-						<rect width="1200" height="630" fill="url(#bg)"/>
-						<text x="600" y="300" text-anchor="middle" dy="0.3em" 
-							  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="36" fill="#ffffff">
-							${params.title || 'Simone Salerno'}
-						</text>
-						<text x="600" y="350" text-anchor="middle" dy="0.3em" 
-							  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="24" fill="#e5e5e5">
-							OG Image Generation Fallback
-						</text>
-					</svg>`,
-					{
-						headers: {
-							'Content-Type': 'image/svg+xml',
-							'Cache-Control': 'public, max-age=3600, s-maxage=3600',
-							'CDN-Cache-Control': 'public, max-age=3600'
-						}
-					}
-				);
+				// Enhanced fallback: Use layout-specific fallback instead of generic
+				return createFallbackSvgResponse(layoutConfig);
 			}
 		}
 
-		// In development, return a simple fallback message
-		return new Response(
-			`<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-				<defs>
-					<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-						<stop offset="0%" stop-color="#0c0c0c"/>
-						<stop offset="50%" stop-color="#131b49"/>
-						<stop offset="100%" stop-color="#20327e"/>
-					</linearGradient>
-				</defs>
-				<rect width="1200" height="630" fill="url(#bg)"/>
-				<text x="600" y="315" text-anchor="middle" dy="0.3em" 
-					  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="48" fill="#ffffff">
-					Development Mode - Use /api/og-preview for testing
-				</text>
-			</svg>`,
-			{
-				headers: {
-					'Content-Type': 'image/svg+xml',
-					'Cache-Control': 'no-cache'
-				}
-			}
-		);
+		// In development, return layout-specific development fallback
+		return createDevelopmentFallbackResponse(layoutConfig);
 	} catch (error) {
 		console.error('[OG Image] Fatal error:', error);
 
-		// Return home-style fallback even on fatal errors
-		return new Response(
-			`<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-				<defs>
-					<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-						<stop offset="0%" stop-color="#0c0c0c"/>
-						<stop offset="50%" stop-color="#131b49"/>
-						<stop offset="100%" stop-color="#20327e"/>
-					</linearGradient>
-				</defs>
-				<rect width="1200" height="630" fill="url(#bg)"/>
-				<text x="600" y="300" text-anchor="middle" dy="0.3em" 
-					  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="36" fill="#ffffff">
-					Simone Salerno
-				</text>
-				<text x="600" y="350" text-anchor="middle" dy="0.3em" 
-					  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="24" fill="#e5e5e5">
-					essedev
-				</text>
-			</svg>`,
-			{
-				headers: {
-					'Content-Type': 'image/svg+xml',
-					'Cache-Control': 'public, max-age=3600, s-maxage=3600',
-					'CDN-Cache-Control': 'public, max-age=3600'
-				}
-			}
-		);
+		// Return error-specific fallback
+		return createErrorFallbackResponse();
 	}
 };
+
+/**
+ * Create a layout-specific SVG fallback for production errors
+ */
+function createFallbackSvgResponse(layoutConfig: LayoutConfig): Response {
+	const title = layoutConfig.title || 'Simone Salerno';
+	const subtitle =
+		layoutConfig.type === 'home'
+			? 'essedev'
+			: layoutConfig.subtitle || 'OG Image Generation Fallback';
+
+	return new Response(
+		`<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+			<defs>
+				<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+					<stop offset="0%" stop-color="#0c0c0c"/>
+					<stop offset="50%" stop-color="#131b49"/>
+					<stop offset="100%" stop-color="#20327e"/>
+				</linearGradient>
+			</defs>
+			<rect width="1200" height="630" fill="url(#bg)"/>
+			<text x="600" y="280" text-anchor="middle" dy="0.3em" 
+				  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="42" font-weight="700" fill="#ffffff">
+				${escapeXml(title)}
+			</text>
+			<text x="600" y="340" text-anchor="middle" dy="0.3em" 
+				  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="24" fill="#e5e5e5">
+				${escapeXml(subtitle)}
+			</text>
+		</svg>`,
+		{
+			headers: {
+				'Content-Type': 'image/svg+xml',
+				'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+				'CDN-Cache-Control': 'public, max-age=3600'
+			}
+		}
+	);
+}
+
+/**
+ * Create development-specific fallback response
+ */
+function createDevelopmentFallbackResponse(layoutConfig: LayoutConfig): Response {
+	const title = layoutConfig.title || 'Development Mode';
+
+	return new Response(
+		`<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+			<defs>
+				<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+					<stop offset="0%" stop-color="#0c0c0c"/>
+					<stop offset="50%" stop-color="#131b49"/>
+					<stop offset="100%" stop-color="#20327e"/>
+				</linearGradient>
+			</defs>
+			<rect width="1200" height="630" fill="url(#bg)"/>
+			<text x="600" y="280" text-anchor="middle" dy="0.3em" 
+				  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="36" fill="#ffffff">
+				${escapeXml(title)}
+			</text>
+			<text x="600" y="340" text-anchor="middle" dy="0.3em" 
+				  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="20" fill="#e5e5e5">
+				Use /api/og-preview for testing
+			</text>
+		</svg>`,
+		{
+			headers: {
+				'Content-Type': 'image/svg+xml',
+				'Cache-Control': 'no-cache'
+			}
+		}
+	);
+}
+
+/**
+ * Create error-specific fallback response
+ */
+function createErrorFallbackResponse(): Response {
+	return new Response(
+		`<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+			<defs>
+				<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+					<stop offset="0%" stop-color="#0c0c0c"/>
+					<stop offset="50%" stop-color="#131b49"/>
+					<stop offset="100%" stop-color="#20327e"/>
+				</linearGradient>
+			</defs>
+			<rect width="1200" height="630" fill="url(#bg)"/>
+			<text x="600" y="300" text-anchor="middle" dy="0.3em" 
+				  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="36" fill="#ffffff">
+				Simone Salerno
+			</text>
+			<text x="600" y="350" text-anchor="middle" dy="0.3em" 
+				  font-family="Geist, system-ui, -apple-system, sans-serif" font-size="24" fill="#e5e5e5">
+				essedev
+			</text>
+		</svg>`,
+		{
+			headers: {
+				'Content-Type': 'image/svg+xml',
+				'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+				'CDN-Cache-Control': 'public, max-age=3600'
+			}
+		}
+	);
+}
+
+/**
+ * Escape XML special characters for SVG text
+ */
+function escapeXml(text: string): string {
+	return text
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;');
+}
