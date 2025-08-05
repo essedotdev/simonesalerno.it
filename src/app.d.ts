@@ -5,7 +5,14 @@ declare global {
 		// interface Error {}
 		// interface Locals {}
 		// interface PageData {}
-		// interface Platform {}
+		interface Platform {
+			env?: Record<string, unknown>;
+			cf?: IncomingRequestCfProperties;
+			ctx?: {
+				waitUntil(promise: Promise<unknown>): void;
+				passThroughOnException(): void;
+			};
+		}
 	}
 }
 

@@ -4,14 +4,18 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
-		"build": "pnpm generate-images && pnpm generate-og && vite build",
+		"build": "pnpm generate-images && pnpm generate-og:auto && vite build",
+		"build:local": "pnpm generate-images && pnpm generate-og:skip && vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"generate-images": "tsx scripts/generate-image-assets.ts",
-		"generate-og": "tsx scripts/generate-og-images.ts"
+		"generate-og": "tsx scripts/generate-og-images.ts",
+		"generate-og:auto": "tsx scripts/generate-og-images.ts",
+		"generate-og:force": "tsx scripts/generate-og-images.ts --force",
+		"generate-og:skip": "tsx scripts/generate-og-images.ts --skip-local"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250731.0",

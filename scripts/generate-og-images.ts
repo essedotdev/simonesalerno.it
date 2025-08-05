@@ -4,6 +4,7 @@ import { join } from 'path';
 
 // Dynamic import for workers-og to handle WASM loading
 let ImageResponse: typeof import('workers-og').ImageResponse | null = null;
+let loadGoogleFont: typeof import('workers-og').loadGoogleFont | null = null;
 
 // Import the existing utilities
 import { ContentLoader } from '../src/lib/utils/content.js';
@@ -13,17 +14,36 @@ import { createHomeLayoutData } from '../src/lib/utils/og-layouts.js';
 import { parseOgParams } from '../src/lib/utils/og-shared.js';
 
 /**
+ * Check if we're running in a Cloudflare environment
+ */
+function isCloudflareEnvironment(): boolean {
+	// Check for the most reliable Cloudflare Pages environment variable
+	return process.env.CF_PAGES === '1';
+}
+
+/**
  * Initialize workers-og with fallback for local development
  */
 async function initializeWorkersOg(): Promise<boolean> {
+	const isCloudflare = isCloudflareEnvironment();
+
+	if (!isCloudflare) {
+		console.log('🏠 Local environment detected - will generate placeholder images');
+		return false;
+	}
+
 	try {
 		const workersOg = await import('workers-og');
 		ImageResponse = workersOg.ImageResponse;
-		console.log('✅ workers-og initialized successfully');
+		loadGoogleFont = workersOg.loadGoogleFont;
+		console.log('✅ workers-og initialized successfully in Cloudflare environment');
 		return true;
 	} catch (error) {
-		console.warn('⚠️  workers-og failed to initialize (expected in local dev):', error.message);
-		console.log('🔄 Will generate placeholder images for local development');
+		console.warn(
+			'⚠️  workers-og failed to initialize even in Cloudflare environment:',
+			error.message
+		);
+		console.log('🔄 Will generate placeholder images as fallback');
 		return false;
 	}
 }
@@ -176,7 +196,7 @@ async function generateOgImage(
 	try {
 		const outputPath = join('static', 'og-images', urlData.filename);
 
-		if (useWorkersOg && ImageResponse) {
+		if (useWorkersOg && ImageResponse && loadGoogleFont) {
 			// Use workers-og (Cloudflare environment)
 			const searchParams = new URLSearchParams();
 			searchParams.set('type', urlData.type);
@@ -194,15 +214,56 @@ async function generateOgImage(
 			const layoutConfig = await resolver.resolveLayout(params);
 			const htmlLayout = generateHtmlLayout(layoutConfig);
 
-			// Generate the image using workers-og
-			const response = await new ImageResponse(htmlLayout, {
-				width: 1200,
-				height: 630
-			});
+			// Load Google Font (Geist) for better typography
+			try {
+				const geistFont = await loadGoogleFont({
+					family: 'Geist',
+					weight: 400
+				});
 
-			// Save to file
-			const buffer = await response.arrayBuffer();
-			await writeFile(outputPath, Buffer.from(buffer));
+				const geistBoldFont = await loadGoogleFont({
+					family: 'Geist',
+					weight: 700
+				});
+
+				// Generate the image using workers-og with fonts
+				const response = await new ImageResponse(htmlLayout, {
+					width: 1200,
+					height: 630,
+					fonts: [
+						{
+							name: 'Geist',
+							data: geistFont,
+							weight: 400,
+							style: 'normal'
+						},
+						{
+							name: 'Geist',
+							data: geistBoldFont,
+							weight: 700,
+							style: 'normal'
+						}
+					]
+				});
+
+				// Save to file
+				const buffer = await response.arrayBuffer();
+				await writeFile(outputPath, Buffer.from(buffer));
+			} catch (fontError) {
+				console.warn(
+					`⚠️  Failed to load Geist font for ${urlData.filename}, using fallback:`,
+					fontError.message
+				);
+
+				// Fallback without custom fonts
+				const response = await new ImageResponse(htmlLayout, {
+					width: 1200,
+					height: 630
+				});
+
+				const buffer = await response.arrayBuffer();
+				await writeFile(outputPath, Buffer.from(buffer));
+			}
 		} else {
 			// Fallback for local development
 			const placeholderSvg = generatePlaceholderSvg(urlData.filename);
@@ -232,6 +293,9 @@ async function generateOgImage(
 async function generateAllOgImages(): Promise<void> {
 	console.log('🎨 Starting OG image generation...');
 
+	// Check if we're in Cloudflare environment
+	const isCloudflare = isCloudflareEnvironment();
+
 	// Initialize workers-og and check if it's available
 	const workersOgAvailable = await initializeWorkersOg();
 
@@ -242,27 +306,94 @@ async function generateAllOgImages(): Promise<void> {
 		console.log(`📁 Created directory: ${ogImagesDir}`);
 	}
 
+	// If we're not in Cloudflare environment, just generate placeholders
+	if (!isCloudflare) {
+		console.log('🏠 Local environment detected - generating placeholder images only');
+
+		// Generate minimal set of placeholder images
+		const placeholders = [
+			'default.png',
+			'home-en.png',
+			'home-it.png',
+			'listing-projects-en.png',
+			'listing-projects-it.png',
+			'listing-blog-en.png',
+			'listing-blog-it.png'
+		];
+
+		for (const filename of placeholders) {
+			const placeholderSvg = generatePlaceholderSvg(filename);
+			await writeFile(join(ogImagesDir, filename), placeholderSvg);
+			console.log(`✅ Generated placeholder: ${filename}`);
+		}
+
+		console.log('\n🎯 Placeholder generation complete!');
+		console.log(`✅ Generated ${placeholders.length} placeholder images`);
+		console.log(`📁 Images saved to: ${ogImagesDir}`);
+		console.log('\n⚠️  Note: Placeholder images generated for local development');
+		console.log('🚀 Real OG images will be generated dynamically via /api/og endpoint');
+		return;
+	}
+
+	// We're in Cloudflare environment - try to generate real images
+	console.log('☁️  Cloudflare environment detected - attempting real OG image generation');
+
 	// Generate all site URLs
 	const urls = await generateSiteUrls();
 	console.log(`📋 Found ${urls.length} pages to generate OG images for`);
 
 	// Generate default/fallback image (home)
-	if (workersOgAvailable && ImageResponse) {
-		const homeConfig = createHomeLayoutData();
-		const homeHtml = generateHtmlLayout(homeConfig);
-		const defaultResponse = await new ImageResponse(homeHtml, {
-			width: 1200,
-			height: 630
-		});
-		await writeFile(
-			join(ogImagesDir, 'default.png'),
-			Buffer.from(await defaultResponse.arrayBuffer())
-		);
+	if (workersOgAvailable && ImageResponse && loadGoogleFont) {
+		try {
+			const homeConfig = createHomeLayoutData();
+			const homeHtml = generateHtmlLayout(homeConfig);
+
+			// Load Google Font (Geist) for better typography
+			const geistFont = await loadGoogleFont({
+				family: 'Geist',
+				weight: 400
+			});
+
+			const geistBoldFont = await loadGoogleFont({
+				family: 'Geist',
+				weight: 700
+			});
+
+			const defaultResponse = await new ImageResponse(homeHtml, {
+				width: 1200,
+				height: 630,
+				fonts: [
+					{
+						name: 'Geist',
+						data: geistFont,
+						weight: 400,
+						style: 'normal'
+					},
+					{
+						name: 'Geist',
+						data: geistBoldFont,
+						weight: 700,
+						style: 'normal'
+					}
+				]
+			});
+
+			await writeFile(
+				join(ogImagesDir, 'default.png'),
+				Buffer.from(await defaultResponse.arrayBuffer())
+			);
+			console.log('✅ Generated: default.png (fallback)');
+		} catch (error) {
+			console.error('❌ Failed to generate default.png:', error);
+			const defaultSvg = generatePlaceholderSvg('default.png');
+			await writeFile(join(ogImagesDir, 'default.png'), defaultSvg);
+			console.log('⚠️  Generated fallback for: default.png');
+		}
 	} else {
 		const defaultSvg = generatePlaceholderSvg('default.png');
 		await writeFile(join(ogImagesDir, 'default.png'), defaultSvg);
+		console.log('⚠️  Generated placeholder: default.png');
 	}
-	console.log('✅ Generated: default.png (fallback)');
 
 	// Generate images for all URLs
 	let successCount = 0;
@@ -284,13 +415,33 @@ async function generateAllOgImages(): Promise<void> {
 	console.log(`📁 Images saved to: ${ogImagesDir}`);
 
 	if (!workersOgAvailable) {
-		console.log('\n⚠️  Note: Placeholder images generated for local development');
-		console.log('🚀 Real OG images will be generated on Cloudflare build');
+		console.log('\n⚠️  Note: Some images may be placeholders due to workers-og limitations');
+		console.log('🚀 Dynamic OG images available via /api/og endpoint');
 	}
 }
 
 // Run the generator
-generateAllOgImages().catch((error) => {
+async function main() {
+	const forceGeneration = process.argv.includes('--force');
+	const skipLocalGeneration = process.argv.includes('--skip-local');
+	const isCloudflare = isCloudflareEnvironment();
+
+	if (skipLocalGeneration && !isCloudflare) {
+		console.log('🏠 Local environment detected and --skip-local flag provided');
+		console.log('⏭️  Skipping OG image generation - will be handled dynamically via /api/og');
+		return;
+	}
+
+	if (!forceGeneration && !isCloudflare) {
+		console.log('🏠 Local environment detected');
+		console.log('💡 Use --force flag to generate placeholders locally');
+		console.log('⚡ Or use --skip-local to skip generation entirely');
+	}
+
+	await generateAllOgImages();
+}
+
+main().catch((error) => {
 	console.error('❌ OG image generation failed:', error);
 	process.exit(1);
 });
