@@ -1,28 +1,9 @@
 import { getImageAsset } from '$lib/assets/image-assets';
-import { ContentLoader } from '$lib/utils/content';
-import {
-	createDetailLayoutData,
-	createHomeLayoutData,
-	createListingLayoutData,
-	type LayoutConfig
-} from './og-layouts';
 
 /**
- * Parameters for OG image generation
+ * Parse URL search parameters for OG image generation
  */
-export interface OgImageParams {
-	type: string;
-	section?: string;
-	title?: string;
-	imageKey?: string;
-	excerpt?: string;
-	lang: string;
-}
-
-/**
- * Parse URL search parameters into OgImageParams
- */
-export function parseOgParams(url: URL): OgImageParams {
+export function parseOgParams(url: URL) {
 	return {
 		type: url.searchParams.get('type') || 'home',
 		section: url.searchParams.get('section') || undefined,
@@ -90,107 +71,4 @@ export function getDisplayImage(
 	}
 
 	return undefined;
-}
-
-/**
- * Generate layout configuration from parameters with enhanced validation
- */
-export async function generateLayoutConfig(params: OgImageParams): Promise<LayoutConfig> {
-	const { type, section, title, imageKey, excerpt, lang } = params;
-
-	// Validate and sanitize language parameter
-	if (!['it', 'en'].includes(lang)) {
-		console.warn(`[OG] Invalid language parameter: ${lang}, falling back to 'it'`);
-		params.lang = 'it';
-	}
-
-	// Validate type parameter with strict checking
-	const validTypes = ['home', 'listing', 'detail'] as const;
-	if (!validTypes.includes(type as (typeof validTypes)[number])) {
-		console.warn(`[OG] Invalid type parameter: ${type}, falling back to 'home'`);
-		return createHomeLayoutData();
-	}
-
-	// Enhanced validation for listing type
-	if (type === 'listing') {
-		if (!section || !['projects', 'blog'].includes(section)) {
-			console.warn(
-				`[OG] Invalid or missing section parameter for listing: ${section}, falling back to 'home'`
-			);
-			return createHomeLayoutData();
-		}
-
-		// Use provided title first, fallback to loading from content
-		let pageTitle = title || (section === 'projects' ? 'Projects' : 'Blog');
-		const pageSubtitle = '';
-
-		// If no title was provided, try to load from content
-		if (!title) {
-			try {
-				// Type-safe section validation for ContentLoader
-				const validPageNames = ['projects', 'blog'] as const;
-				if (validPageNames.includes(section as 'projects' | 'blog')) {
-					const contentLoader = new ContentLoader();
-					const pageData = await contentLoader.loadPage(section as 'projects' | 'blog', lang);
-					pageTitle = pageData.title || pageTitle;
-				}
-			} catch (error) {
-				console.warn(`[OG] Could not load page data for ${section}:`, error);
-				// If content loading fails completely, fallback to home
-				return createHomeLayoutData();
-			}
-		}
-
-		return createListingLayoutData(pageTitle, pageSubtitle);
-	}
-
-	// Enhanced validation for detail type
-	if (type === 'detail') {
-		if (!title || title.trim() === '') {
-			console.warn(`[OG] Missing or empty title for detail page, falling back to 'home'`);
-			return createHomeLayoutData();
-		}
-
-		// Validate section if provided
-		if (section && !['projects', 'blog'].includes(section)) {
-			console.warn(
-				`[OG] Invalid section parameter for detail: ${section}, proceeding without section validation`
-			);
-		}
-
-		// Sanitize title and excerpt with length limits
-		const sanitizedTitle = title.slice(0, 100).trim();
-		const sanitizedExcerpt = excerpt ? excerpt.slice(0, 300).trim() : undefined;
-
-		// Validate that sanitized title is not empty
-		if (!sanitizedTitle) {
-			console.warn(`[OG] Title became empty after sanitization, falling back to 'home'`);
-			return createHomeLayoutData();
-		}
-
-		// Get cover image with error handling
-		let coverImage: string | undefined;
-		try {
-			coverImage = getDisplayImage(imageKey, sanitizedTitle, section);
-		} catch (error) {
-			console.warn(`[OG] Error getting display image:`, error);
-			// Continue without image rather than failing completely
-			coverImage = undefined;
-		}
-
-		return createDetailLayoutData(sanitizedTitle, sanitizedExcerpt, coverImage);
-	}
-
-	// Default to home layout
-	if (type === 'home') {
-		return createHomeLayoutData();
-	}
-
-	// Fallback to home for any unrecognized configuration
-	console.warn(
-		`[OG] No valid configuration found for params:`,
-		params,
-		`- falling back to home layout`
-	);
-	return createHomeLayoutData();
 }

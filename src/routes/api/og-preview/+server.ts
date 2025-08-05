@@ -1,12 +1,14 @@
+import { OgDataResolver } from '$lib/utils/og-data-resolver';
 import { generateHtmlLayout } from '$lib/utils/og-html-generator';
-import { generateLayoutConfig, parseOgParams } from '$lib/utils/og-shared';
+import { parseOgParams } from '$lib/utils/og-shared';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ url }) => {
 	try {
-		// Parse parameters and generate layout using shared functions
+		// Parse parameters and generate layout using the new resolver
 		const params = parseOgParams(url);
-		const layoutConfig = await generateLayoutConfig(params);
+		const resolver = new OgDataResolver();
+		const layoutConfig = await resolver.resolveLayout(params);
 
 		// Generate HTML layout (same as what gets converted to PNG)
 		const htmlLayout = generateHtmlLayout(layoutConfig);

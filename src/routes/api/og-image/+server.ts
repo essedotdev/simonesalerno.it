@@ -1,28 +1,16 @@
 import { dev } from '$app/environment';
+import { OgDataResolver } from '$lib/utils/og-data-resolver';
 import { generateHtmlLayout } from '$lib/utils/og-html-generator';
 import type { LayoutConfig } from '$lib/utils/og-layouts';
-import { generateLayoutConfig, parseOgParams } from '$lib/utils/og-shared';
+import { parseOgParams } from '$lib/utils/og-shared';
 import type { RequestHandler } from '@sveltejs/kit';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 
-// Font cache with TTL
-let fontCache: {
-	regular: ArrayBuffer;
-	bold: ArrayBuffer;
-	timestamp: number;
-} | null = null;
-const FONT_CACHE_TTL = 30 * 60 * 1000; // 30 minutes
-
 /**
- * Load fonts for workers-og
+ * Load fonts for workers-og (no cache for reliability)
  */
 async function loadFonts(): Promise<{ regular: ArrayBuffer; bold: ArrayBuffer }> {
-	// Check if cache is valid
-	if (fontCache && Date.now() - fontCache.timestamp < FONT_CACHE_TTL) {
-		return { regular: fontCache.regular, bold: fontCache.bold };
-	}
-
 	try {
 		// In production (Cloudflare), load fonts via loadGoogleFont from workers-og
 		if (!dev) {
@@ -32,43 +20,34 @@ async function loadFonts(): Promise<{ regular: ArrayBuffer; bold: ArrayBuffer }>
 				loadGoogleFont({ family: 'Geist', weight: 700 })
 			]);
 
-			fontCache = { regular, bold, timestamp: Date.now() };
-			return fontCache;
+			return { regular, bold };
 		}
 
 		// In development, load from local files
 		const regular = await readFile(join(process.cwd(), 'static/fonts/Geist-Regular.ttf'));
 		const bold = await readFile(join(process.cwd(), 'static/fonts/Geist-Bold.ttf'));
 
-		fontCache = {
+		return {
 			regular: regular.buffer as ArrayBuffer,
-			bold: bold.buffer as ArrayBuffer,
-			timestamp: Date.now()
+			bold: bold.buffer as ArrayBuffer
 		};
-		return { regular: fontCache.regular, bold: fontCache.bold };
 	} catch (error) {
 		console.error('Failed to load fonts:', error);
-		// Final fallback: return empty buffers (will use system fonts)
+		// Fallback: return empty buffers (will use system fonts)
 		const emptyBuffer = new ArrayBuffer(0);
-		const fallbackFonts = { regular: emptyBuffer, bold: emptyBuffer };
-
-		// Cache the fallback for a shorter time
-		fontCache = {
-			...fallbackFonts,
-			timestamp: Date.now()
-		};
-		return fallbackFonts;
+		return { regular: emptyBuffer, bold: emptyBuffer };
 	}
 }
 
 export const GET: RequestHandler = async ({ url }) => {
 	try {
-		// Parse parameters and generate layout using shared functions
+		// Parse parameters and generate layout using the new resolver
 		const params = parseOgParams(url);
 		let layoutConfig: LayoutConfig;
 
 		try {
-			layoutConfig = await generateLayoutConfig(params);
+			const resolver = new OgDataResolver();
+			layoutConfig = await resolver.resolveLayout(params);
 		} catch (configError) {
 			console.warn(
 				'[OG Image] Layout config generation failed, falling back to home:',
