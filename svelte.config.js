@@ -1,11 +1,17 @@
 import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
+export default {
 	kit: {
 		adapter: adapter({
-			includeFiles: ['**/*.wasm'],
+			// See below for an explanation of these options
+			config: undefined,
+			platformProxy: {
+				configPath: undefined,
+				environment: undefined,
+				persist: undefined
+			},
+			fallback: 'plaintext',
 			routes: {
 				include: ['/*'],
 				exclude: ['<all>']
@@ -14,5 +20,3 @@ const config = {
 	},
 	preprocess: vitePreprocess()
 };
-
-export default config;
