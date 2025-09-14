@@ -1,0 +1,17 @@
+{
+	"slug": "budokan",
+	"title": "Budokan Sports Center",
+	"description": "Complete website for gym with dynamic content management, free trial booking system, courses and instructors sections",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Budokan Sports Center is a modern gym website offering comprehensive content management via Sanity CMS. It includes dedicated sections for offered courses, instructor profiles, free trial booking system via email, photo gallery, and responsive interface optimized for all devices. The site facilitates interaction between the gym and clients through attractive design and user-friendly functionality."
+				}
+			}
+		]
+	},
+	"image_captions": ["Budokan Sports Center homepage with courses, instructors sections and booking system"],
+	"tags": ["SvelteKit", "Sanity", "Sport", "Fitness", "CMS", "TypeScript"]
+}

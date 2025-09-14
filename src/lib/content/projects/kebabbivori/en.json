@@ -1,0 +1,17 @@
+{
+	"slug": "kebabbivori",
+	"title": "Kebabbivori",
+	"description": "Ultimate platform for professional kebab shop reviews in Varese province with advanced rating system",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Kebabbivori is a comprehensive web application for kebab reviews featuring a 10-category rating system (meat, bread, vegetables, sauces, fries, extras, service, location, value-for-money, grease factor), interactive map with geolocation, amateur reviewer team with personalized profiles, photo galleries, comprehensive administrative dashboard, and weighted scoring algorithm for accurate rankings. Built with modern stack and optimized for performance and SEO."
+				}
+			}
+		]
+	},
+	"image_captions": ["Kebab review platform with interactive map and advanced 10-category rating system"],
+	"tags": ["Next.js", "React", "Food", "Reviews", "Supabase", "Maps", "TypeScript"]
+}

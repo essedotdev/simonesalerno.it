@@ -1,0 +1,17 @@
+{
+	"slug": "kebabbivori",
+	"title": "Kebabbivori",
+	"description": "Piattaforma definitiva per le recensioni professionali dei kebab shops nella provincia di Varese con sistema di valutazione avanzato",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Kebabbivori è una web application completa per recensioni kebab con sistema di valutazione a 10 categorie (carne, pane, verdure, salse, patatine, extra, servizio, location, qualità-prezzo, fattore unto), mappa interattiva con geolocalizzazione, team di recensori amatori con profili personalizzati, gallerie fotografiche, dashboard amministrativa completa, e algoritmo di scoring ponderato per classifiche accurate. Sviluppata con stack moderno e ottimizzata per performance e SEO."
+				}
+			}
+		]
+	},
+	"image_captions": ["Piattaforma di recensioni kebab con mappa interattiva e sistema di valutazione avanzato a 10 categorie"],
+	"tags": ["Next.js", "React", "Food", "Reviews", "Supabase", "Maps", "TypeScript"]
+}

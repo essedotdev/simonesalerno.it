@@ -12,7 +12,7 @@
 >
 	{#if data.pageType === 'projects'}
 		<Projects
-			projects={data.items.filter((item): item is ProjectItem => 'link' in item.meta)}
+			projects={data.items.filter((item): item is ProjectItem => 'status' in item.meta)}
 			selectedLanguage={data.currentLang}
 			navigation={data.navigation}
 			projectsPage={data.projectsPage}

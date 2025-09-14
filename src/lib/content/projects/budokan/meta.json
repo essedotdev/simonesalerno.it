@@ -1,0 +1,12 @@
+{
+	"id": "budokan",
+	"images": ["images/projects/budokan/featured.png"],
+	"featured_image": "images/projects/budokan/featured.png",
+	"featuredImagePlaceholder": false,
+	"og_image_key": "budokanFeatured",
+	"link": "https://budokan.it",
+	"published": true,
+	"status": "completed",
+	"created_date": "2024-09-09",
+	"updated_date": "2025-09-10"
+}

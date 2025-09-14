@@ -1,0 +1,12 @@
+{
+	"id": "kebabbivori",
+	"images": ["images/projects/kebabbivori/featured.png"],
+	"featured_image": "images/projects/kebabbivori/featured.png",
+	"featuredImagePlaceholder": false,
+	"og_image_key": "kebabbivoriFeature",
+	"link": "https://kebabbivori.it",
+	"published": true,
+	"status": "completed",
+	"created_date": "2025-06-09",
+	"updated_date": "2025-09-10"
+}

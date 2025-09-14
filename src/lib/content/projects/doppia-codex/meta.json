@@ -1,0 +1,11 @@
+{
+	"id": "doppia-codex",
+	"images": ["images/projects/doppia-codex/featured.png"],
+	"featured_image": "images/projects/doppia-codex/featured.png",
+	"featuredImagePlaceholder": false,
+	"og_image_key": "doppiaCodexFeatured",
+	"published": true,
+	"status": "completed",
+	"created_date": "2025-08-07",
+	"updated_date": "2025-09-10"
+}
