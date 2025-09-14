@@ -1,7 +1,7 @@
 import { logoBase64 } from '../assets/logo-base64.js';
 import {
-	OG_CONSTANTS,
 	OG_BANNER_CONSTANTS,
+	OG_CONSTANTS,
 	getCommonBackgroundElements,
 	type LayoutConfig
 } from './og-layouts';
@@ -43,99 +43,56 @@ function createBaseContainer(children: string, additionalStyles = '', isBanner =
  * Create home page layout as HTML for OG preview
  */
 export function createHomeHtml(isBanner = false): string {
-	if (isBanner) {
-		// Banner-specific layout with reduced logo size and proper text alignment
-		const logoSize = Math.round(180 * 2.2); // Slightly smaller scale for banner
-		const primaryFontSize = Math.round(72 * 2.6);
-		const secondaryFontSize = Math.round(52 * 2.6);
-		const gap = Math.round(24 * 2.6);
+	// Scale sizes for banner format (3168x792 vs 1200x630)
+	const scaleFactor = isBanner ? 2.6 : 1;
+	const logoSize = Math.round(180 * scaleFactor);
+	const primaryFontSize = Math.round(72 * scaleFactor);
+	const secondaryFontSize = Math.round(52 * scaleFactor);
+	const gap = Math.round(24 * scaleFactor);
+	const marginTop = Math.round(-12 * scaleFactor);
 
-		const content = `
+	const constants = isBanner ? OG_BANNER_CONSTANTS : OG_CONSTANTS;
+
+	const content = `
+		<div style="
+			display: flex;
+			align-items: center;
+			gap: ${gap}px;
+			position: relative;
+			z-index: 1;
+		">
+			<img src="${logoBase64}" width="${logoSize}" height="${logoSize}" style="display: block;" />
 			<div style="
 				display: flex;
-				align-items: flex-end;
-				gap: ${gap}px;
-				position: relative;
-				z-index: 1;
+				flex-direction: column;
+				margin-bottom: 8px;
 			">
-				<img src="${logoBase64}" width="${logoSize}" height="${logoSize}" style="display: block;" />
-				<div style="
-					display: flex;
-					flex-direction: column;
-					align-items: flex-start;
-					justify-content: flex-end;
-					height: ${logoSize}px;
-					padding-bottom: 8px;
-				">
-					<span style="
-						font-size: ${primaryFontSize}px;
-						font-weight: 500;
-						color: ${OG_BANNER_CONSTANTS.COLORS.TEXT.PRIMARY};
-						line-height: 1;
-						margin-bottom: 12px;
-					">esse</span>
-					<span style="
-						font-size: ${secondaryFontSize}px;
-						color: ${OG_BANNER_CONSTANTS.COLORS.TEXT.SECONDARY};
-						line-height: 1;
-					">dev</span>
-				</div>
+				<span style="
+					font-size: ${primaryFontSize}px;
+					font-weight: 500;
+					color: ${constants.COLORS.TEXT.PRIMARY};
+					line-height: 1;
+				">esse</span>
+				<span style="
+					font-size: ${secondaryFontSize}px;
+					color: ${constants.COLORS.TEXT.SECONDARY};
+					line-height: 0.8;
+					margin-top: ${marginTop}px;
+				">dev</span>
 			</div>
-		`;
+		</div>
+	`;
 
-		return createBaseContainer(
-			content,
-			`
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-		`,
-			true
-		);
-	} else {
-		// Standard OG layout (unchanged)
-		const content = `
-			<div style="
-				display: flex;
-				align-items: center;
-				gap: 24px;
-				position: relative;
-				z-index: 1;
-			">
-				<img src="${logoBase64}" width="180" height="180" style="display: block;" />
-				<div style="
-					display: flex;
-					flex-direction: column;
-					margin-bottom: 8px;
-				">
-					<span style="
-						font-size: 72px;
-						font-weight: 500;
-						color: ${OG_CONSTANTS.COLORS.TEXT.PRIMARY};
-						line-height: 1;
-					">esse</span>
-					<span style="
-						font-size: 52px;
-						color: ${OG_CONSTANTS.COLORS.TEXT.SECONDARY};
-						line-height: 0.8;
-						margin-top: -12px;
-					">dev</span>
-				</div>
-			</div>
-		`;
-
-		return createBaseContainer(
-			content,
-			`
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-		`,
-			false
-		);
-	}
+	return createBaseContainer(
+		content,
+		`
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	`,
+		isBanner
+	);
 }
 
 /**
