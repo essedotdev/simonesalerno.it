@@ -12,6 +12,8 @@
 			}
 		]
 	},
-	"image_captions": ["Interfaccia principale di Creativium per la condivisione e scoperta di idee creative"],
+	"image_captions": [
+		"Interfaccia principale di Creativium per la condivisione e scoperta di idee creative"
+	],
 	"tags": ["SvelteKit", "Tailwind CSS", "PocketBase", "Community", "Creatività", "Collaborazione"]
 }

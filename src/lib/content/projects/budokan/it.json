@@ -12,6 +12,8 @@
 			}
 		]
 	},
-	"image_captions": ["Homepage del sito Budokan Polisportiva con sezioni corsi, istruttori e sistema di prenotazione"],
+	"image_captions": [
+		"Homepage del sito Budokan Polisportiva con sezioni corsi, istruttori e sistema di prenotazione"
+	],
 	"tags": ["SvelteKit", "Sanity", "Sport", "Fitness", "CMS", "TypeScript"]
 }

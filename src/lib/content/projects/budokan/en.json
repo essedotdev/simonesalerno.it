@@ -12,6 +12,8 @@
 			}
 		]
 	},
-	"image_captions": ["Budokan Sports Center homepage with courses, instructors sections and booking system"],
+	"image_captions": [
+		"Budokan Sports Center homepage with courses, instructors sections and booking system"
+	],
 	"tags": ["SvelteKit", "Sanity", "Sport", "Fitness", "CMS", "TypeScript"]
 }

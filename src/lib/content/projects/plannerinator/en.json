@@ -12,6 +12,15 @@
 			}
 		]
 	},
-	"image_captions": ["Main dashboard of the personal information management system with tasks, projects and collections"],
-	"tags": ["SvelteKit", "TypeScript", "Productivity", "Task Management", "PostgreSQL", "Personal Organization"]
+	"image_captions": [
+		"Main dashboard of the personal information management system with tasks, projects and collections"
+	],
+	"tags": [
+		"SvelteKit",
+		"TypeScript",
+		"Productivity",
+		"Task Management",
+		"PostgreSQL",
+		"Personal Organization"
+	]
 }

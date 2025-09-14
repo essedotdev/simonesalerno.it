@@ -12,6 +12,8 @@
 			}
 		]
 	},
-	"image_captions": ["Dashboard di amministrazione per la gestione centralizzata di email e template"],
+	"image_captions": [
+		"Dashboard di amministrazione per la gestione centralizzata di email e template"
+	],
 	"tags": ["Node.js", "TypeScript", "Email", "Communication", "Fastify", "PostgreSQL", "API"]
 }

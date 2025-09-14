@@ -12,6 +12,8 @@
 			}
 		]
 	},
-	"image_captions": ["Piattaforma di recensioni kebab con mappa interattiva e sistema di valutazione avanzato a 10 categorie"],
+	"image_captions": [
+		"Piattaforma di recensioni kebab con mappa interattiva e sistema di valutazione avanzato a 10 categorie"
+	],
 	"tags": ["Next.js", "React", "Food", "Reviews", "Supabase", "Maps", "TypeScript"]
 }

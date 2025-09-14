@@ -103,8 +103,8 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 		const resolver = new OgDataResolver();
 		const layoutConfig = await resolver.resolveLayout(params);
 
-		// Generate HTML layout
-		const htmlLayout = generateHtmlLayout(layoutConfig);
+		// Generate HTML layout for banner format
+		const htmlLayout = generateHtmlLayout(layoutConfig, true);
 
 		// Load Google Font (Geist) for better typography
 		let fonts: Array<{ name: string; data: ArrayBuffer; weight: number; style: string }> = [];

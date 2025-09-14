@@ -25,6 +25,16 @@ export const OG_CONSTANTS = {
 } as const;
 
 /**
+ * Banner-specific constants for 3168x792 dimensions
+ */
+export const OG_BANNER_CONSTANTS = {
+	WIDTH: 3168,
+	HEIGHT: 792,
+	COLORS: OG_CONSTANTS.COLORS,
+	FONTS: OG_CONSTANTS.FONTS
+} as const;
+
+/**
  * Base layout configuration for different page types
  */
 export interface LayoutConfig {

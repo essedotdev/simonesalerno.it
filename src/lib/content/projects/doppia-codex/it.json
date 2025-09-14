@@ -12,6 +12,8 @@
 			}
 		]
 	},
-	"image_captions": ["Interfaccia del blog di ricerca scientifica con tema scuro e sfondo stellato animato"],
+	"image_captions": [
+		"Interfaccia del blog di ricerca scientifica con tema scuro e sfondo stellato animato"
+	],
 	"tags": ["Research", "Space Science", "Cryptography", "Blog", "Static Site", "Philosophy"]
 }

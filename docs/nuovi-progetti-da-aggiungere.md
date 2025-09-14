@@ -9,7 +9,7 @@ Ogni progetto richiede questi 3 file:
 ```
 src/lib/content/projects/{slug}/
 ├── meta.json     # Metadati del progetto
-├── it.json       # Contenuto in italiano  
+├── it.json       # Contenuto in italiano
 └── en.json       # Contenuto in inglese
 ```
 
@@ -18,6 +18,7 @@ src/lib/content/projects/{slug}/
 ## 1. BUDOKAN
 
 ### ✅ **Dati Disponibili:**
+
 - **Slug**: `budokan`
 - **Titolo**: `Budokan Polisportiva`
 - **Link**: `https://budokan.it`
@@ -29,6 +30,7 @@ src/lib/content/projects/{slug}/
 - **Date**: created_date: 2025-09-10, updated_date: 2025-09-10
 
 ### 📝 **Dati Completati:**
+
 - **Tags**: `["SvelteKit", "Sanity", "Sport", "Fitness", "CMS", "TypeScript"]`
 - **Descrizione dettagliata**: Budokan Polisportiva è un sito web moderno per palestra che offre una gestione completa dei contenuti tramite Sanity CMS. Include sezioni dedicate ai corsi offerti, profili degli istruttori, sistema di prenotazione per prove gratuite via email, gallery fotografica, e interfaccia responsive ottimizzata per tutti i dispositivi. Il sito facilita l'interazione tra la palestra e i clienti attraverso un design accattivante e funzionalità user-friendly.
 - **Image caption**: "Homepage del sito Budokan Polisportiva con sezioni corsi, istruttori e sistema di prenotazione"
@@ -39,6 +41,7 @@ src/lib/content/projects/{slug}/
 ## 2. CREATIVIUM
 
 ### ✅ **Dati Disponibili:**
+
 - **Slug**: `creativium`
 - **Tipo**: Piattaforma login/SaaS → **Dashboard SaaS per creativi**
 - **Status**: `completed`
@@ -46,6 +49,7 @@ src/lib/content/projects/{slug}/
 - **Link**: ❌ (nessun link)
 
 ### 📝 **Dati Completati:**
+
 - **Titolo**: `Creativium`
 - **Categoria**: `Design/SaaS`
 - **Tecnologie**: `Next.js`, `React`, `TypeScript`, `Tailwind CSS`, `PostgreSQL`, `Prisma`
@@ -60,6 +64,7 @@ src/lib/content/projects/{slug}/
 ## 3. DOPPIA CODEX
 
 ### ✅ **Dati Disponibili:**
+
 - **Slug**: `doppia-codex`
 - **Titolo**: `Doppia Codex`
 - **Tipo**: Blog tecnologico
@@ -69,6 +74,7 @@ src/lib/content/projects/{slug}/
 - **Link**: ❌ (nessun link)
 
 ### 📝 **Dati Completati:**
+
 - **Categoria**: `Research/Blog`
 - **Tecnologie**: `Handlebars`, `JavaScript`, `Static Site Generator`, `PNPM`
 - **Descrizione breve**: Collezione curata di saggi ed esplorazioni che spaziano tra scienza spaziale, crittografia e design di sistemi, mantenuta da 0xDoppia.
@@ -82,6 +88,7 @@ src/lib/content/projects/{slug}/
 ## 4. KEBABBIVORI
 
 ### ✅ **Dati Disponibili:**
+
 - **Slug**: `kebabbivori`
 - **Titolo**: `Kebabbivori`
 - **Link**: `https://kebabbivori.it`
@@ -90,6 +97,7 @@ src/lib/content/projects/{slug}/
 - **Date**: created_date: 2025-09-10, updated_date: 2025-09-10
 
 ### 📝 **Dati Completati:**
+
 - **Categoria**: `Food/Reviews`
 - **Tecnologie**: `Next.js 15`, `React 19`, `TypeScript`, `Supabase`, `PostgreSQL`, `Tailwind CSS`, `Cloudflare`, `Leaflet`
 - **Descrizione breve**: Piattaforma definitiva per le recensioni professionali dei kebab shops nella provincia di Varese con sistema di valutazione avanzato.
@@ -103,6 +111,7 @@ src/lib/content/projects/{slug}/
 ## 5. PLANNERINATOR
 
 ### ✅ **Dati Disponibili:**
+
 - **Slug**: `plannerinator`
 - **Titolo**: `Plannerinator`
 - **Tipo**: Project management app
@@ -111,6 +120,7 @@ src/lib/content/projects/{slug}/
 - **Link**: ❌ (nessun link)
 
 ### 📝 **Dati Completati:**
+
 - **Categoria**: `Productivity/Management`
 - **Tecnologie**: `SvelteKit`, `Svelte 5`, `TypeScript`, `PostgreSQL`, `Tailwind`, `Drizzle ORM`, `Docker`
 - **Descrizione breve**: Sistema di gestione informazioni personali per organizzare task, progetti, note, eventi e collezioni in un'unica piattaforma.
@@ -124,6 +134,7 @@ src/lib/content/projects/{slug}/
 ## 6. S-MAIL
 
 ### ✅ **Dati Disponibili:**
+
 - **Slug**: `s-mail`
 - **Titolo**: `S-Mail`
 - **Link**: `https://smail.essedev.it`
@@ -135,6 +146,7 @@ src/lib/content/projects/{slug}/
 - **Date**: created_date: 2025-09-10, updated_date: 2025-09-10
 
 ### 📝 **Dati Completati:**
+
 - **Tecnologie**: `Node.js`, `TypeScript`, `Fastify`, `PostgreSQL`, `Alpine.js`, `Handlebars`, `Tailwind`, `Drizzle ORM`
 - **Descrizione breve**: Piattaforma web per la gestione e invio di email con supporto per template e pannello di amministrazione.
 - **Descrizione dettagliata**: esse-mail fornisce un sistema centralizzato per l'invio di email basate su template, gestione delle configurazioni SMTP per progetto, monitoraggio delle attività tramite log e statistiche. Include autenticazione utenti, gestione template e progetti, sistema di log, dashboard con statistiche, gestione API key e controllo delle origini consentite.
@@ -147,6 +159,7 @@ src/lib/content/projects/{slug}/
 ## 7. VERBOSA
 
 ### ✅ **Dati Disponibili:**
+
 - **Slug**: `verbosa`
 - **Titolo**: `Verbosa`
 - **Link**: `https://verbosa.it`
@@ -158,6 +171,7 @@ src/lib/content/projects/{slug}/
 - **Date**: created_date: 2025-09-10, updated_date: 2025-09-10
 
 ### 📝 **Dati Completati:**
+
 - **Tecnologie**: `Flutter`, `Go`, `Riverpod`, `WebSocket`, `Material 3`, `PostgreSQL`, `Dio`
 - **Descrizione breve**: Piattaforma unificata per interagire con diversi modelli linguistici AI come OpenAI, Anthropic, Google Gemini e OpenRouter con selezione dinamica dei modelli.
 - **Descrizione dettagliata**: Verbosa è una chat AI multi-provider sviluppata con Flutter per frontend responsive e backend Go con WebSocket. Supporta selezione dinamica di modelli AI (Gemini, GPT-4, Claude), messaggi in streaming tempo reale, autenticazione sicura con JWT, gestione sessioni chat, organizzazione per progetti, e interfaccia Material Design 3 adattiva per desktop e mobile. Il sistema utilizza Riverpod per state management e repository pattern per l'astrazione delle API.
@@ -170,6 +184,7 @@ src/lib/content/projects/{slug}/
 ## Progetti con Info Complete (Riferimenti)
 
 ### ETHICODE ✅
+
 - **Tutti i dati**: Disponibili dal portfolio esistente
 - **Categoria**: Istruzione
 - **Tech**: SvelteKit, Tailwind
@@ -179,11 +194,12 @@ src/lib/content/projects/{slug}/
 ## Template JSON da Completare
 
 ### meta.json
+
 ```json
 {
     "id": "{slug}",
     "images": ["images/projects/{slug}/featured.png"],
-    "featured_image": "images/projects/{slug}/featured.png", 
+    "featured_image": "images/projects/{slug}/featured.png",
     "featuredImagePlaceholder": false,
     "og_image_key": "{slug}Featured",
     "link": "{url}" // OPZIONALE,
@@ -195,44 +211,46 @@ src/lib/content/projects/{slug}/
 ```
 
 ### it.json
+
 ```json
 {
-    "slug": "{slug}",
-    "title": "{titolo}",
-    "description": "{descrizione_breve}",
-    "body": {
-        "blocks": [
-            {
-                "type": "paragraph",
-                "data": {
-                    "text": "{descrizione_dettagliata}"
-                }
-            }
-        ]
-    },
-    "image_captions": ["{caption_immagine}"],
-    "tags": ["{tag1}", "{tag2}", "{tag3}"]
+	"slug": "{slug}",
+	"title": "{titolo}",
+	"description": "{descrizione_breve}",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "{descrizione_dettagliata}"
+				}
+			}
+		]
+	},
+	"image_captions": ["{caption_immagine}"],
+	"tags": ["{tag1}", "{tag2}", "{tag3}"]
 }
 ```
 
-### en.json  
+### en.json
+
 ```json
 {
-    "slug": "{slug}",
-    "title": "{title_english}",
-    "description": "{description_english}",
-    "body": {
-        "blocks": [
-            {
-                "type": "paragraph",
-                "data": {
-                    "text": "{detailed_description_english}"
-                }
-            }
-        ]
-    },
-    "image_captions": ["{image_caption_english}"],
-    "tags": ["{tag1_en}", "{tag2_en}", "{tag3_en}"]
+	"slug": "{slug}",
+	"title": "{title_english}",
+	"description": "{description_english}",
+	"body": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "{detailed_description_english}"
+				}
+			}
+		]
+	},
+	"image_captions": ["{image_caption_english}"],
+	"tags": ["{tag1_en}", "{tag2_en}", "{tag3_en}"]
 }
 ```
 
@@ -253,12 +271,14 @@ src/lib/content/projects/{slug}/
 ### 🏷️ **Tag Ottimizzati (evitando duplicati simili)**
 
 **Tecnologie**:
+
 - Frontend: `SvelteKit`, `Next.js`, `React`, `Flutter`, `TypeScript`
 - Backend: `Node.js`, `Go`, `Fastify`, `PostgreSQL`, `Supabase`
 - CMS/Tools: `Sanity`, `Drizzle ORM`, `WebSocket`, `Static Site`
 - Styling: `Material Design`, `Tailwind` (implicito, non sempre necessario nei tag)
 
 **Categorie Uniche**:
+
 - Business: `SaaS`, `CRM`, `Dashboard`, `API`
 - Content: `Blog`, `CMS`, `Research`, `Reviews`
 - Lifestyle: `Sport`, `Fitness`, `Food`, `Productivity`, `Personal Organization`
@@ -273,6 +293,7 @@ src/lib/content/projects/{slug}/
 ## 🌍 Traduzioni Inglesi Complete
 
 ### 1. **BUDOKAN**
+
 - **Title**: `Budokan Sports Center`
 - **Description**: Complete website for gym with dynamic content management, free trial booking system, courses and instructors sections
 - **Detailed Description**: Budokan Sports Center is a modern gym website offering comprehensive content management via Sanity CMS. It includes dedicated sections for offered courses, instructor profiles, free trial booking system via email, photo gallery, and responsive interface optimized for all devices. The site facilitates interaction between the gym and clients through attractive design and user-friendly functionality.
@@ -280,6 +301,7 @@ src/lib/content/projects/{slug}/
 - **Tags**: `["SvelteKit", "Sanity", "Sport", "Fitness", "CMS", "TypeScript"]`
 
 ### 2. **CREATIVIUM**
+
 - **Title**: `Creativium`
 - **Description**: SaaS dashboard for creatives and designers with project management, portfolio, client management and integrated billing
 - **Detailed Description**: Creativium is a comprehensive SaaS platform designed for creative freelancers, designers and agencies. It offers integrated tools for project management with timelines and milestones, customizable portfolio for work showcase, CRM system for client and lead management, automated billing with customizable templates, analytics dashboard for performance tracking, and collaboration tools for creative teams. The platform optimizes the creative workflow from client acquisition to final delivery.
@@ -287,6 +309,7 @@ src/lib/content/projects/{slug}/
 - **Tags**: `["Next.js", "SaaS", "Design", "Dashboard", "CRM", "TypeScript"]`
 
 ### 3. **DOPPIA CODEX**
+
 - **Title**: `Doppia Codex`
 - **Description**: Curated collection of essays and explorations spanning space science, cryptography and system design, maintained by 0xDoppia
 - **Detailed Description**: Doppia Codex is a research project exploring intersections between cosmic discoveries, cryptographic principles and technological mystery. The site features essays on space missions and astronomical phenomena, explorations of digital assets and mathematical foundations of digital scarcity, notes on speculative fiction and philosophy of science. A personal knowledge database connecting the technical to the philosophical, the terrestrial to the cosmic.
@@ -294,6 +317,7 @@ src/lib/content/projects/{slug}/
 - **Tags**: `["Research", "Space Science", "Cryptography", "Blog", "Static Site", "Philosophy"]`
 
 ### 4. **KEBABBIVORI**
+
 - **Title**: `Kebabbivori`
 - **Description**: Ultimate platform for professional kebab shop reviews in Varese province with advanced rating system
 - **Detailed Description**: Kebabbivori is a comprehensive web application for kebab reviews featuring a 10-category rating system (meat, bread, vegetables, sauces, fries, extras, service, location, value-for-money, grease factor), interactive map with geolocation, amateur reviewer team with personalized profiles, photo galleries, comprehensive administrative dashboard, and weighted scoring algorithm for accurate rankings. Built with modern stack and optimized for performance and SEO.
@@ -301,6 +325,7 @@ src/lib/content/projects/{slug}/
 - **Tags**: `["Next.js", "React", "Food", "Reviews", "Supabase", "Maps", "TypeScript"]`
 
 ### 5. **PLANNERINATOR**
+
 - **Title**: `Plannerinator`
 - **Description**: Personal information management system to organize tasks, projects, notes, events and collections in a single platform
 - **Detailed Description**: Plannerinator is a comprehensive productivity platform integrating task management with priorities and deadlines, project organization with hierarchies, rich text note system, event and appointment tracking, customizable collections (movies, books, recipes, tools), habit and metrics counters, and universal tagging system to categorize all content.
@@ -308,6 +333,7 @@ src/lib/content/projects/{slug}/
 - **Tags**: `["SvelteKit", "TypeScript", "Productivity", "Task Management", "PostgreSQL", "Personal Organization"]`
 
 ### 6. **S-MAIL**
+
 - **Title**: `S-Mail`
 - **Description**: Web platform for email management and sending with template support and administration panel
 - **Detailed Description**: S-Mail provides a centralized system for template-based email sending, SMTP configuration management per project, activity monitoring through logs and statistics. It includes user authentication, template and project management, logging system, statistics dashboard, API key management and allowed origins control.
@@ -315,6 +341,7 @@ src/lib/content/projects/{slug}/
 - **Tags**: `["Node.js", "TypeScript", "Email", "Communication", "Fastify", "PostgreSQL", "API"]`
 
 ### 7. **VERBOSA**
+
 - **Title**: `Verbosa`
 - **Description**: Unified platform to interact with different AI language models like OpenAI, Anthropic, Google Gemini and OpenRouter with dynamic model selection
 - **Detailed Description**: Verbosa is a multi-provider AI chat developed with Flutter for responsive frontend and Go backend with WebSocket. It supports dynamic AI model selection (Gemini, GPT-4, Claude), real-time streaming messages, secure authentication with JWT, chat session management, project organization, and Material Design 3 adaptive interface for desktop and mobile. The system uses Riverpod for state management and repository pattern for API abstraction.
@@ -324,6 +351,7 @@ src/lib/content/projects/{slug}/
 ## ✅ Completamento Finale
 
 **Status**: Tutti i 7 progetti hanno ora informazioni complete:
+
 - ✅ Featured images verificate e presenti
 - ✅ Tecnologie complete estratte da README
 - ✅ Descrizioni brevi e dettagliate

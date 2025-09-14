@@ -12,6 +12,8 @@
 			}
 		]
 	},
-	"image_captions": ["Scientific research blog interface with dark theme and animated starry background"],
+	"image_captions": [
+		"Scientific research blog interface with dark theme and animated starry background"
+	],
 	"tags": ["Research", "Space Science", "Cryptography", "Blog", "Static Site", "Philosophy"]
 }

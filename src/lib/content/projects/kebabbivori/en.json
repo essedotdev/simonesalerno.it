@@ -12,6 +12,8 @@
 			}
 		]
 	},
-	"image_captions": ["Kebab review platform with interactive map and advanced 10-category rating system"],
+	"image_captions": [
+		"Kebab review platform with interactive map and advanced 10-category rating system"
+	],
 	"tags": ["Next.js", "React", "Food", "Reviews", "Supabase", "Maps", "TypeScript"]
 }

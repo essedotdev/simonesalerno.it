@@ -12,6 +12,8 @@
 			}
 		]
 	},
-	"image_captions": ["Interfaccia chat AI multi-provider con selezione dinamica di modelli e streaming in tempo reale"],
+	"image_captions": [
+		"Interfaccia chat AI multi-provider con selezione dinamica di modelli e streaming in tempo reale"
+	],
 	"tags": ["Flutter", "Go", "AI", "Chat", "Multi-Provider", "WebSocket", "Material Design"]
 }
