@@ -14,7 +14,7 @@
 </script>
 
 <div
-	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
+	class="rounded-3xl border border-white/10 bg-white/1 backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
 >
 	<a href={`${base}${link}`}>
 		<OptimizedImage

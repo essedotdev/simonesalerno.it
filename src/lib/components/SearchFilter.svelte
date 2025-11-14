@@ -176,7 +176,7 @@
 			value={filters.query}
 			oninput={handleQueryChange}
 			{placeholder}
-			class="w-full rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3 pl-12 text-white placeholder-white/50 backdrop-blur-sm focus:border-white/20 focus:outline-none"
+			class="w-full rounded-2xl border border-white/10 bg-white/2 px-4 py-3 pl-12 text-white placeholder-white/50 backdrop-blur-sm focus:border-white/20 focus:outline-none"
 		/>
 		<Search class="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-white/50" />
 	</div>

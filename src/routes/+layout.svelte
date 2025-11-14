@@ -8,6 +8,7 @@
 	import '$lib/styles/globals.css';
 	import { initializeAnalytics, isAnalyticsReady, trackPageView } from '$lib/utils/analytics';
 	import { setContext } from 'svelte';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	let { children, data } = $props();
 
