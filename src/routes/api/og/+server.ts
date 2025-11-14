@@ -1,7 +1,7 @@
-import { OgDataResolver } from '$lib/utils/og-data-resolver';
-import { generateHtmlLayout } from '$lib/utils/og-html-generator';
-import { parseOgParams } from '$lib/utils/og-shared';
 import { dev } from '$app/environment';
+import { OgDataResolver } from '$lib/utils/og/data-resolver';
+import { generateHtmlLayout } from '$lib/utils/og/html-generator';
+import { parseOgParams } from '$lib/utils/og/shared';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ url, platform }) => {
@@ -144,8 +144,8 @@ export const GET: RequestHandler = async ({ url, platform }) => {
 		return new Response(response.body, {
 			headers: {
 				'Content-Type': 'image/png',
-				'Cache-Control': 'public, max-age=31536000, immutable',
-				'CDN-Cache-Control': 'max-age=31536000'
+				'Cache-Control': 'public, max-age=86400',
+				'CDN-Cache-Control': 'max-age=86400'
 			}
 		});
 	} catch (error) {

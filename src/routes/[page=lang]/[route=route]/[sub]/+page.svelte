@@ -6,7 +6,7 @@
 </script>
 
 <div
-	class="mx-auto w-full max-w-screen-2xl px-4 pt-8 pb-52 sm:px-8 sm:pt-10 sm:pb-64 lg:px-14 2xl:pt-14 2xl:pb-72"
+	class="mx-auto w-full max-w-screen-2xl px-4 pb-52 pt-8 sm:px-8 sm:pb-64 sm:pt-10 lg:px-14 2xl:pb-72 2xl:pt-14"
 >
 	{#if data.type === 'project'}
 		<Project

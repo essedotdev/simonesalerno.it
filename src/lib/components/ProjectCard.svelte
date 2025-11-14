@@ -13,13 +13,13 @@
 </script>
 
 <div
-	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
+	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:rotate-1 hover:scale-105"
 >
 	<a href={link}>
 		<OptimizedImage
 			src={featuredImage}
 			alt={title}
-			cssClass="aspect-video rounded-t-3xl"
+			className="aspect-video rounded-t-3xl saturate-[0.8] hover:saturate-100 transition-all duration-300 ease-in-out"
 			showPlaceholder={featuredImagePlaceholder}
 			sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
 		/>

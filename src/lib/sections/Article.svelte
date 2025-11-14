@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { inview, type Options } from 'svelte-inview';
-	import type { ArticleSectionProps } from '$lib/types';
 	import OptimizedImage from '$lib/components/OptimizedImage.svelte';
+	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
+	import type { ArticleSectionProps } from '$lib/types';
 	import { getTranslation, translateTags } from '$lib/utils/translations';
 	import { ChevronLeft } from '@lucide/svelte';
-	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
+	import { inview, type Options } from 'svelte-inview';
 
 	// Receive props from parent
 	let { content, currentLang, global }: ArticleSectionProps = $props();
@@ -64,7 +64,7 @@
 					</time>
 
 					{#if currentTranslation.excerpt}
-						<p class="text-2xl text-gray-300 italic">
+						<p class="text-2xl italic text-gray-300">
 							{currentTranslation.excerpt}
 						</p>
 					{/if}
@@ -87,7 +87,7 @@
 					<OptimizedImage
 						src={content.meta.featured_image}
 						alt={currentTranslation.title}
-						cssClass="aspect-video rounded-3xl"
+						className="aspect-video rounded-3xl"
 						showPlaceholder={content.meta.featuredImagePlaceholder || false}
 						sizes="100vw"
 					/>

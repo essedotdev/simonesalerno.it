@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ContentBlocks, ContentBlock } from '$lib/types/content.ts';
+	import type { ContentBlock, ContentBlocks } from '$lib/types/content.ts';
 	import OptimizedImage from '../OptimizedImage.svelte';
 
 	export let content: ContentBlocks;
@@ -189,7 +189,7 @@
 					<OptimizedImage
 						src={group.image.data.src}
 						alt={group.image.data.alt || ''}
-						cssClass="h-full w-full rounded-xl"
+						className="h-full w-full rounded-xl"
 						loading="lazy"
 					/>
 
@@ -285,7 +285,7 @@
 					<OptimizedImage
 						src={block.data.src || ''}
 						alt={block.data.alt || ''}
-						cssClass={classes.image}
+						className={classes.image}
 						loading="lazy"
 					/>
 					{#if block.data.alt}

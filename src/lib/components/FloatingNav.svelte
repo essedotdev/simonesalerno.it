@@ -26,15 +26,15 @@
 
 {#if show()}
 	<header
-		class="pointer-events-none fixed top-[1.7rem] z-50 flex w-full justify-end sm:top-4 sm:left-0 sm:justify-center"
+		class="pointer-events-none fixed top-[1.7rem] z-50 flex w-full justify-end sm:left-0 sm:top-4 sm:justify-center"
 		in:fade={{ duration: 300 }}
 		out:fade={{ duration: 200 }}
 	>
 		<nav
-			class="pointer-events-auto rounded-s-full rounded-e-none bg-neutral-900/20 sm:rounded-full"
+			class="pointer-events-auto rounded-e-none rounded-s-full bg-neutral-900/20 sm:rounded-full"
 		>
 			<div
-				class="flex items-center justify-between rounded-s-full rounded-e-none border border-white/5 bg-white/[.01] ps-8 pe-[calc(0.95rem+5vw)] text-lg backdrop-blur-md sm:rounded-full sm:bg-white/[.02] sm:px-4"
+				class="flex items-center justify-between rounded-e-none rounded-s-full border border-white/5 bg-white/[.01] pe-[calc(0.95rem+5vw)] ps-8 text-lg backdrop-blur-md sm:rounded-full sm:bg-white/[.02] sm:px-4"
 			>
 				<a
 					href={page.url.pathname.split('/')[2]
@@ -42,7 +42,7 @@
 						: isLanguageCodeValid
 							? '/' + data.selectedLanguage + '#top'
 							: '/' + 'en'}
-					class="me-4 pt-[0.95rem] pb-4 sm:px-3"
+					class="me-4 pb-4 pt-[0.95rem] sm:px-3"
 					onclick={handleAnchorClick}
 					aria-label="Logo"
 				>

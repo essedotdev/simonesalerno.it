@@ -1,5 +1,5 @@
 import type { FilterState, ProjectItem } from '$lib/types';
-import { applyFilters, extractStatuses, extractTags } from '$lib/utils/searchUtils';
+import { applyFilters, extractTags, extractStatuses } from '$lib/utils/searchUtils';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 

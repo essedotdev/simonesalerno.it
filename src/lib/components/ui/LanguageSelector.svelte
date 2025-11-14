@@ -91,7 +91,7 @@
 		<button
 			type="button"
 			class="flex w-16 cursor-pointer justify-center gap-x-1.5 border border-white/5 bg-white/[.02] backdrop-blur-md {isFloatingNav
-				? 'rounded-s-lg rounded-e-2xl pt-[0.5rem] pb-2 text-sm'
+				? 'rounded-e-2xl rounded-s-lg pb-2 pt-[0.5rem] text-sm'
 				: 'rounded-lg py-3 text-base'}"
 			id="menu-button"
 			aria-expanded={isOpen}

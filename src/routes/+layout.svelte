@@ -151,6 +151,15 @@
 		// Set language
 		params.set('lang', lang);
 
+		// Add build timestamp for cache busting
+		params.set('v', __BUILD_TIMESTAMP__);
+
+		// If page is in error state, use home fallback
+		if (isPageError) {
+			params.set('type', 'home');
+			return `${baseUrl}/api/og?${params.toString()}`;
+		}
+
 		// Map routes to OG parameters
 		switch (currentRoute) {
 			case '/[page=lang]':

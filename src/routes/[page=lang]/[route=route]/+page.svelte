@@ -8,7 +8,7 @@
 </script>
 
 <section
-	class="xs:pt-20 xs:pb-32 mx-auto max-w-screen-2xl px-4 pt-14 pb-24 sm:px-8 sm:pt-28 sm:pb-44 lg:px-14"
+	class="xs:pt-20 xs:pb-32 mx-auto max-w-screen-2xl px-4 pb-24 pt-14 sm:px-8 sm:pb-44 sm:pt-28 lg:px-14"
 >
 	{#if data.pageType === 'projects'}
 		<Projects

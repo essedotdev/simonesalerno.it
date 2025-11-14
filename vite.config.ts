@@ -3,7 +3,13 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 import { imagetools } from 'vite-imagetools';
 
+// Generate build timestamp for cache busting
+const BUILD_TIMESTAMP = Date.now().toString();
+
 export default defineConfig({
+	define: {
+		__BUILD_TIMESTAMP__: JSON.stringify(BUILD_TIMESTAMP)
+	},
 	plugins: [
 		tailwindcss(),
 		imagetools({
@@ -20,17 +26,5 @@ export default defineConfig({
 			}
 		}),
 		sveltekit()
-	],
-	assetsInclude: ['**/*.wasm'],
-	server: {
-		fs: {
-			allow: ['..']
-		}
-	},
-	ssr: {
-		noExternal: []
-	},
-	optimizeDeps: {
-		exclude: []
-	}
+	]
 });

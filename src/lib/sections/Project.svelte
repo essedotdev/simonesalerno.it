@@ -47,7 +47,7 @@
 					<OptimizedImage
 						src={content.meta.featured_image}
 						alt={currentTranslation.title}
-						cssClass="aspect-video rounded-3xl"
+						className="aspect-video rounded-3xl"
 						showPlaceholder={content.meta.featuredImagePlaceholder || false}
 						sizes="(max-width: 1280px) 100vw, 50vw"
 					/>

@@ -1,7 +1,7 @@
 import { ContentLoader } from '$lib/utils/content';
-import { OgDataResolver } from '$lib/utils/og-data-resolver';
-import { generateHtmlLayout } from '$lib/utils/og-html-generator';
-import { parseOgParams } from '$lib/utils/og-shared';
+import { OgDataResolver } from '$lib/utils/og/data-resolver';
+import { generateHtmlLayout } from '$lib/utils/og/html-generator';
+import { parseOgParams } from '$lib/utils/og/shared';
 import type { RequestHandler } from '@sveltejs/kit';
 
 // Generate all site URLs for testing (same logic as sitemap)

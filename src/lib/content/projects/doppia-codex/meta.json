@@ -4,8 +4,9 @@
 	"featured_image": "images/projects/doppia-codex/featured.png",
 	"featuredImagePlaceholder": false,
 	"og_image_key": "doppiaCodexFeatured",
+	"link": "https://codex.essedev.it",
 	"published": true,
-	"status": "completed",
+	"status": "archived",
 	"created_date": "2025-08-07",
 	"updated_date": "2025-09-10"
 }

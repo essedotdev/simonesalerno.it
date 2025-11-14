@@ -103,7 +103,7 @@ export interface ProjectMeta {
 	featured_image: string;
 	featuredImagePlaceholder?: boolean;
 	og_image_key?: string;
-	link: string;
+	link?: string;
 	published: boolean;
 	status: 'completed' | 'in-progress' | 'idea' | 'archived';
 	created_date: string;
@@ -309,7 +309,7 @@ export type LoadConfigType<T extends ConfigFileNames> = T extends 'languages'
 
 // Type guards
 export function isProjectItem(item: ProjectItem | ArticleItem): item is ProjectItem {
-	return 'link' in item.meta;
+	return 'status' in item.meta;
 }
 
 export function isArticleItem(item: ProjectItem | ArticleItem): item is ArticleItem {

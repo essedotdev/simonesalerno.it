@@ -1,19 +1,16 @@
-// See https://kit.svelte.dev/docs/types#app
+// See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
 declare global {
 	namespace App {
-		// interface Error {}
-		// interface Locals {}
-		// interface PageData {}
 		interface Platform {
-			env?: Record<string, unknown>;
-			cf?: IncomingRequestCfProperties;
-			ctx?: {
-				waitUntil(promise: Promise<unknown>): void;
-				passThroughOnException(): void;
-			};
+			env: Env;
+			cf: CfProperties;
+			ctx: ExecutionContext;
 		}
 	}
+
+	// Build-time constants
+	const __BUILD_TIMESTAMP__: string;
 }
 
 export {};

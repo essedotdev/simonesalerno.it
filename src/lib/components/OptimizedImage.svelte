@@ -2,7 +2,7 @@
 	let {
 		src = null,
 		alt = '',
-		cssClass = '',
+		className = '',
 		loading = 'lazy',
 		showPlaceholder = false,
 		sizes = '100vw',
@@ -10,7 +10,7 @@
 	}: {
 		src?: string | null;
 		alt?: string;
-		cssClass?: string;
+		className?: string;
 		loading?: 'lazy' | 'eager';
 		showPlaceholder?: boolean;
 		sizes?: string;
@@ -121,7 +121,7 @@
 	});
 </script>
 
-<div class="relative overflow-hidden {cssClass}">
+<div class="relative overflow-hidden {className}">
 	{#if showPlaceholder || imageNotFound}
 		<div class="flex h-full w-full items-center justify-center bg-white/10 backdrop-blur-md">
 			<img

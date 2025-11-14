@@ -23,7 +23,7 @@
 		: 'opacity-0'}"
 >
 	<div class="flex flex-col gap-y-4 sm:gap-y-6">
-		<h3 class="text-[2.5rem] leading-none font-normal sm:text-5xl md:text-6xl 2xl:text-7xl">
+		<h3 class="text-[2.5rem] font-normal leading-none sm:text-5xl md:text-6xl 2xl:text-7xl">
 			{contact.title}
 		</h3>
 		<p class="text-xl sm:text-2xl md:text-[1.7rem] xl:text-3xl">

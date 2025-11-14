@@ -61,7 +61,7 @@
 
 		<div class="flex h-10 w-10 items-center justify-center md:hidden">
 			{#if menuOpen}
-				<div class="fixed top-10 left-7 z-40" transition:fade={{ duration: 300 }}>
+				<div class="fixed left-7 top-10 z-40" transition:fade={{ duration: 300 }}>
 					<LanguageSelector
 						languages={data.languages}
 						selectedLanguage={data.selectedLanguage}

@@ -1,5 +1,5 @@
-import { logoBase64 } from '../assets/logo-base64.js';
-import { noiseBase64 } from '../assets/noise-base64.js';
+import { logoBase64 } from '$lib/assets/logo-base64.js';
+import { noiseBase64 } from '$lib/assets/noise-base64.js';
 
 /**
  * Common styles and constants for OG layouts
@@ -22,16 +22,6 @@ export const OG_CONSTANTS = {
 	FONTS: {
 		FAMILY: "Geist, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
 	}
-} as const;
-
-/**
- * Banner-specific constants for 3168x792 dimensions
- */
-export const OG_BANNER_CONSTANTS = {
-	WIDTH: 3168,
-	HEIGHT: 792,
-	COLORS: OG_CONSTANTS.COLORS,
-	FONTS: OG_CONSTANTS.FONTS
 } as const;
 
 /**

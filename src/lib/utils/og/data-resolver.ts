@@ -1,11 +1,11 @@
-import { ContentLoader } from './content.js';
-import type { LayoutConfig } from './og-layouts';
+import { ContentLoader } from '../content.js';
+import type { LayoutConfig } from './layouts.js';
 import {
 	createDetailLayoutData,
 	createHomeLayoutData,
 	createListingLayoutData
-} from './og-layouts';
-import { getDisplayImage } from './og-shared';
+} from './layouts.js';
+import { getDisplayImage } from './shared.js';
 
 /**
  * Resolve OG image data using the same logic as SvelteKit routing
