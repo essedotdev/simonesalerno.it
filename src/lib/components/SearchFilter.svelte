@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import type { GlobalContent } from '$lib/types';
 	import type { FilterState } from '$lib/types/content';
@@ -90,7 +91,10 @@
 			}
 		}
 
-		goto(`?${searchParams.toString()}`, { keepFocus: true, noScroll: true });
+		goto(`${base}${page.url.pathname}?${searchParams.toString()}`, {
+			keepFocus: true,
+			noScroll: true
+		});
 	};
 
 	const handleQueryChange = (event: Event) => {
@@ -149,7 +153,10 @@
 		// Keep sorting parameters or clear them as well
 		// searchParams.delete('sortBy');
 		// searchParams.delete('sortOrder');
-		goto(`?${searchParams.toString()}`, { keepFocus: true, noScroll: true });
+		goto(`${base}${page.url.pathname}?${searchParams.toString()}`, {
+			keepFocus: true,
+			noScroll: true
+		});
 	};
 
 	const hasActiveFilters = $derived(
@@ -171,11 +178,11 @@
 			{placeholder}
 			class="w-full rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3 pl-12 text-white placeholder-white/50 backdrop-blur-sm focus:border-white/20 focus:outline-none"
 		/>
-		<Search class="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/50" />
+		<Search class="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-white/50" />
 	</div>
 
 	<!-- Filters Row -->
-	<div class="xs:grid-cols-2 grid grid-cols-1 gap-3 sm:grid-cols-3 md:flex">
+	<div class="grid grid-cols-1 gap-3 xs:grid-cols-2 sm:grid-cols-3 md:flex">
 		<!-- Tag Filter -->
 		{#if availableTags.length > 0}
 			<TagDropdown

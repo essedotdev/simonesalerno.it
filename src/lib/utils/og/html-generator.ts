@@ -81,8 +81,8 @@ export function createHomeHtml(): string {
  * Create listing page layout as HTML for OG preview
  */
 export function createListingHtml(title: string, subtitle?: string): string {
-   // Wrap logo and text divs in a single flex wrapper
-   const content = `
+	// Wrap logo and text divs in a single flex wrapper
+	const content = `
   <div style="
 	position: relative;
 	width: 100%;
@@ -141,8 +141,8 @@ export function createListingHtml(title: string, subtitle?: string): string {
 		line-height: 1.1;
 	  ">${title}</h1>
 	  ${
-		subtitle
-		  ? `
+			subtitle
+				? `
 	  <p style="
 		font-size: 24px;
 		color: ${OG_CONSTANTS.COLORS.TEXT.MUTED};
@@ -150,17 +150,14 @@ export function createListingHtml(title: string, subtitle?: string): string {
 		line-height: 1.2;
 	  ">${subtitle}</p>
 	`
-		  : ''
-	  }
+				: ''
+		}
 	</div>
   </div>
 `;
 
 	// Logo and text are positioned absolutely within the base container; set display:flex on container to satisfy renderer requirement
-	return createBaseContainer(
-		content,
-		`display: flex;`
-	);
+	return createBaseContainer(content, `display: flex;`);
 }
 
 /**
@@ -205,15 +202,18 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		    margin: 0 0 24px 0;
 		    line-height: 1.1;
 		  ">${title}</h1>
-		  ${excerpt
-		    ? `
+		  ${
+				excerpt
+					? `
 		  <p style="
 		    font-size: 20px;
 		    color: ${OG_CONSTANTS.COLORS.TEXT.MUTED};
 		    margin: 0;
 		    line-height: 1.4;
 		  ">${excerpt.length > 150 ? excerpt.slice(0, 150) + '...' : excerpt}</p>
-		` : ''}
+		`
+					: ''
+			}
 		</div>
 		
 		<div style="
@@ -271,15 +271,18 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		      margin: 0 0 24px 0;
 		      line-height: 1.1;
 		    ">${title}</h1>
-		    ${excerpt
-		      ? `
+		    ${
+					excerpt
+						? `
 		    <p style="
 		      font-size: 20px;
 		      color: ${OG_CONSTANTS.COLORS.TEXT.MUTED};
 		      margin: 0;
 		      line-height: 1.4;
 		    ">${excerpt.length > 150 ? excerpt.slice(0, 150) + '...' : excerpt}</p>
-		  ` : ''}
+		  `
+						: ''
+				}
 		  </div>
 		  <div style="
 		    width: 480px;

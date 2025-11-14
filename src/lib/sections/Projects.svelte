@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { base } from '$app/paths';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import SearchFilter from '$lib/components/SearchFilter.svelte';
 	import Pagination from '$lib/components/ui/Pagination.svelte';
@@ -83,7 +84,9 @@
 	let t = $derived(getTranslations(global, translationKeys));
 
 	// Generate link to projects page
-	let projectsPageLink = $derived(`/${selectedLanguage}/${navigation[selectedLanguage].projects}`);
+	let projectsPageLink = $derived(
+		`${base}/${selectedLanguage}/${navigation[selectedLanguage].projects}`
+	);
 </script>
 
 <div
@@ -94,7 +97,7 @@
 	}}
 	class="flex flex-col gap-y-10 sm:gap-y-16 2xl:gap-y-[4.5rem] {isInView ? 'animate' : 'opacity-0'}"
 >
-	<h2 class="text-[2.5rem] font-normal leading-none sm:text-5xl md:text-6xl 2xl:text-7xl">
+	<h2 class="text-[2.5rem] leading-none font-normal sm:text-5xl md:text-6xl 2xl:text-7xl">
 		{projectsPage.title}
 	</h2>
 

@@ -27,7 +27,7 @@
 >
 	<div class="mb-12 overflow-hidden">
 		<h1
-			class="-mt-2 text-center text-[4rem] font-medium leading-[1.1] tracking-tight sm:text-[7rem] lg:-mt-3 xl:-mt-4 xl:text-[8rem] 2xl:-mt-6 2xl:text-[10rem]"
+			class="-mt-2 text-center text-[4rem] leading-[1.1] font-medium tracking-tight sm:text-[7rem] lg:-mt-3 xl:-mt-4 xl:text-[8rem] 2xl:-mt-6 2xl:text-[10rem]"
 		>
 			{#each titleWords as word, i (i)}
 				{#if isInView}

@@ -5,7 +5,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import BackToTop from '$lib/components/ui/BackToTop.svelte';
-	import '$lib/style/globals.css';
+	import '$lib/styles/globals.css';
 	import { initializeAnalytics, isAnalyticsReady, trackPageView } from '$lib/utils/analytics';
 	import { setContext } from 'svelte';
 
@@ -143,7 +143,7 @@
 	// Dynamic OG image URL using /api/og endpoint
 	let ogImageUrl = $derived.by(() => {
 		const baseUrl = page.url.origin;
-		const params = new URLSearchParams();
+		const params = new SvelteURLSearchParams();
 		const currentRoute = page.route.id;
 		const routeParams = page.params;
 		const lang = routeParams.page || 'it';
@@ -182,7 +182,7 @@
 				}
 				break;
 
-			case '/[page=lang]/[route=route]/[sub]':
+			case '/[page=lang]/[route=route]/[sub]': {
 				// Detail pages
 				params.set('type', 'detail');
 
@@ -211,6 +211,7 @@
 					}
 				}
 				break;
+			}
 
 			default:
 				// Fallback to home

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import OptimizedImage from '$lib/components/OptimizedImage.svelte';
 	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 	import type { ArticleSectionProps } from '$lib/types';
@@ -18,7 +19,7 @@
 		unobserveOnEnter: true
 	};
 
-	let homeUrl = $derived(currentLang === 'en' ? '/' : `/${currentLang}`);
+	let homeUrl = $derived(`${base}${currentLang === 'en' ? '/' : `/${currentLang}`}`);
 	let currentTranslation = $derived(content.translations[currentLang]);
 	let translatedTags = $derived(
 		currentTranslation?.tags ? translateTags(global, currentTranslation.tags) : []
@@ -64,7 +65,7 @@
 					</time>
 
 					{#if currentTranslation.excerpt}
-						<p class="text-2xl italic text-gray-300">
+						<p class="text-2xl text-gray-300 italic">
 							{currentTranslation.excerpt}
 						</p>
 					{/if}

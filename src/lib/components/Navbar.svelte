@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import type { LayoutData } from '$lib/types/content';
 	import { handleAnchorClick } from '$lib/utils';
@@ -28,11 +29,7 @@
 		class="mx-auto flex w-full max-w-screen-2xl items-center justify-between px-4 py-8 sm:px-8 lg:px-14"
 	>
 		<a
-			href={page.url.pathname.split('/')[2]
-				? '/' + data.selectedLanguage
-				: isLanguageCodeValid
-					? '/' + data.selectedLanguage + '#top'
-					: '/' + 'en'}
+			href={`${base}${page.url.pathname.split('/')[2] ? '/' + data.selectedLanguage : isLanguageCodeValid ? '/' + data.selectedLanguage + '#top' : '/' + 'en'}`}
 			onclick={handleAnchorClick}
 			aria-label="Simone Salerno"
 		>
@@ -43,7 +40,7 @@
 			class="hidden items-center gap-x-5 text-[1.25rem] md:flex lg:gap-x-7 lg:text-[1.5rem] xl:gap-x-8"
 		>
 			{#each data.global.navigation as route (route.name)}
-				<a href={'/' + data.selectedLanguage + route.link} onclick={handleAnchorClick}
+				<a href={`${base}/${data.selectedLanguage}${route.link}`} onclick={handleAnchorClick}
 					>{route.name}</a
 				>
 			{/each}
@@ -61,7 +58,7 @@
 
 		<div class="flex h-10 w-10 items-center justify-center md:hidden">
 			{#if menuOpen}
-				<div class="fixed left-7 top-10 z-40" transition:fade={{ duration: 300 }}>
+				<div class="fixed top-10 left-7 z-40" transition:fade={{ duration: 300 }}>
 					<LanguageSelector
 						languages={data.languages}
 						selectedLanguage={data.selectedLanguage}
@@ -86,7 +83,7 @@
 					<div class="flex flex-col gap-y-3">
 						{#each data.global.navigation as route (route.name)}
 							<a
-								href={'/' + data.selectedLanguage + route.link}
+								href={`${base}/${data.selectedLanguage}${route.link}`}
 								onclick={(event) => (handleAnchorClick(event), handleMenuClick())}>{route.name}</a
 							>
 						{/each}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import type { ArticleCardProps } from '$lib/types';
 	import OptimizedImage from './OptimizedImage.svelte';
 
@@ -27,9 +28,9 @@
 </script>
 
 <div
-	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:rotate-1 hover:scale-105"
+	class="rounded-3xl border border-white/10 bg-white/[.01] backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-1"
 >
-	<a href={link}>
+	<a href={`${base}${link}`}>
 		<OptimizedImage
 			src={featuredImage}
 			alt={title}
@@ -43,7 +44,7 @@
 			{formatDate(publishedDate)}
 		</div>
 
-		<a href={link}>
+		<a href={`${base}${link}`}>
 			<h5 class="mb-2 text-2xl font-medium text-gray-100">
 				{title}
 			</h5>

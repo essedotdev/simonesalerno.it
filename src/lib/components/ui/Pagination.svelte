@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import { ChevronLeft, ChevronRight } from '@lucide/svelte';
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
@@ -13,7 +14,7 @@
 	const createPageLink = (pageNumber: number) => {
 		const searchParams = new SvelteURLSearchParams(page.url.searchParams);
 		searchParams.set('page', pageNumber.toString());
-		return `?${searchParams.toString()}`;
+		return `${base}${page.url.pathname}?${searchParams.toString()}`;
 	};
 </script>
 

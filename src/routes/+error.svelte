@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { base } from '$app/paths';
 	import { page } from '$app/state';
 	import { ContentLoader } from '$lib/utils/content';
 	import { getTranslation } from '$lib/utils/translations';
@@ -39,7 +40,9 @@
 	let backHomeText = $derived(getTranslation(errorState.global, 'backHome', 'Back Home'));
 
 	// Generate home URL based on current language
-	let homeUrl = $derived(errorState.currentLang === 'en' ? '/' : `/${errorState.currentLang}`);
+	let homeUrl = $derived(
+		`${base}${errorState.currentLang === 'en' ? '/' : `/${errorState.currentLang}`}`
+	);
 </script>
 
 <div class="flex min-h-[80vh] flex-col items-center justify-center">

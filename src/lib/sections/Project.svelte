@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import OptimizedImage from '$lib/components/OptimizedImage.svelte';
 	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 	import type { ProjectSectionProps } from '$lib/types';
@@ -18,7 +19,7 @@
 		unobserveOnEnter: true
 	};
 
-	let homeUrl = $derived(currentLang === 'en' ? '/' : `/${currentLang}`);
+	let homeUrl = $derived(`${base}${currentLang === 'en' ? '/' : `/${currentLang}`}`);
 	let currentTranslation = $derived(content.translations[currentLang]);
 	let translatedTags = $derived(
 		currentTranslation?.tags ? translateTags(global, currentTranslation.tags) : []
@@ -65,7 +66,11 @@
 				{/if}
 
 				{#if content.meta.link}
-					<a href={content.meta.link} class="flex w-min items-center gap-x-2 text-2xl underline">
+					<a
+						href={content.meta.link}
+						class="flex w-min items-center gap-x-2 text-2xl underline"
+						data-sveltekit-reload
+					>
 						<ExternalLink class="h-6 w-6" />
 						{content.meta.link}
 					</a>

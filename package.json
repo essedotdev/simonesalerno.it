@@ -17,32 +17,32 @@
 		"generate-images": "tsx scripts/generate-image-assets.ts"
 	},
 	"devDependencies": {
-		"@eslint/compat": "^1.3.2",
-		"@eslint/js": "^9.35.0",
-		"@sveltejs/adapter-auto": "^6.1.0",
-		"@sveltejs/adapter-cloudflare": "^7.2.3",
-		"@sveltejs/kit": "^2.39.1",
-		"@sveltejs/vite-plugin-svelte": "^6.2.0",
-		"@tailwindcss/vite": "^4.1.13",
-		"@types/node": "^24.4.0",
-		"eslint": "^9.35.0",
+		"@eslint/compat": "^2.0.0",
+		"@eslint/js": "^9.39.1",
+		"@sveltejs/adapter-auto": "^7.0.0",
+		"@sveltejs/adapter-cloudflare": "^7.2.4",
+		"@sveltejs/kit": "^2.48.5",
+		"@sveltejs/vite-plugin-svelte": "^6.2.1",
+		"@tailwindcss/vite": "^4.1.17",
+		"@types/node": "^24.10.1",
+		"eslint": "^9.39.1",
 		"eslint-config-prettier": "^10.1.8",
-		"eslint-plugin-svelte": "^3.12.3",
-		"globals": "^16.4.0",
+		"eslint-plugin-svelte": "^3.13.0",
+		"globals": "^16.5.0",
 		"prettier": "^3.6.2",
 		"prettier-plugin-svelte": "^3.4.0",
-		"prettier-plugin-tailwindcss": "^0.6.14",
-		"sharp": "^0.34.3",
-		"svelte": "^5.38.10",
-		"svelte-check": "^4.3.1",
-		"tailwindcss": "^4.1.13",
-		"tsx": "^4.20.5",
-		"typescript": "^5.9.2",
-		"typescript-eslint": "^8.43.0",
-		"vite": "^7.1.5",
-		"vite-imagetools": "^8.0.0",
+		"prettier-plugin-tailwindcss": "^0.7.1",
+		"sharp": "^0.34.5",
+		"svelte": "^5.43.6",
+		"svelte-check": "^4.3.4",
+		"tailwindcss": "^4.1.17",
+		"tsx": "^4.20.6",
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.46.4",
+		"vite": "^7.2.2",
+		"vite-imagetools": "^9.0.0",
 		"workers-og": "^0.0.27",
-		"wrangler": "^4.37.0"
+		"wrangler": "^4.48.0"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
@@ -53,7 +53,8 @@
 		]
 	},
 	"dependencies": {
-		"@lucide/svelte": "^0.544.0",
+		"@lucide/svelte": "^0.553.0",
 		"svelte-inview": "^4.0.4"
-	}
+	},
+	"packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c"
 }
