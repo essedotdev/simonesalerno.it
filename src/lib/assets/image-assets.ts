@@ -68,5 +68,5 @@ export const imageStats = {
   "progressive": true,
   "mozjpeg": true
 },
-  generatedAt: '2026-01-07T18:55:35.278Z'
+  generatedAt: '2026-01-07T19:14:08.523Z'
 };

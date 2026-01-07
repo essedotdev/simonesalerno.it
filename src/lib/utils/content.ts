@@ -16,6 +16,19 @@ import type {
 	WelcomeContent
 } from '../types';
 
+import {
+	LanguagesConfigSchema,
+	NavigationConfigSchema,
+	GlobalContentSchema,
+	ProjectMetaSchema,
+	ArticleMetaSchema,
+	ProjectTranslationSchema,
+	ArticleTranslationSchema,
+	pageSchemas,
+	validateContent,
+	type PageSchemaKey
+} from '../schemas/content';
+
 export class ContentLoader {
 	private cache: Map<CacheKey, unknown> = new Map();
 
@@ -28,11 +41,20 @@ export class ContentLoader {
 		try {
 			const module = await import(`../content/config/${file}.json`);
 			const data = module.default;
-			this.cache.set(cacheKey, data);
-			return data as LoadConfigType<T>;
+
+			// Validazione con schema appropriato
+			let validated: unknown;
+			if (file === 'languages') {
+				validated = validateContent(LanguagesConfigSchema, data, 'config', `config/${file}.json`);
+			} else {
+				validated = validateContent(NavigationConfigSchema, data, 'config', `config/${file}.json`);
+			}
+
+			this.cache.set(cacheKey, validated);
+			return validated as LoadConfigType<T>;
 		} catch (error) {
 			console.error(`Error loading config ${file}:`, error);
-			throw new Error(`Config file ${file} not found`);
+			throw error;
 		}
 	}
 
@@ -44,13 +66,18 @@ export class ContentLoader {
 
 		try {
 			const module = await import(`../content/global/${lang}.json`);
-			const data: GlobalContent = module.default;
+			const validated = validateContent(
+				GlobalContentSchema,
+				module.default,
+				'global',
+				`global/${lang}.json`
+			);
 
-			this.cache.set(cacheKey, data);
-			return data;
+			this.cache.set(cacheKey, validated);
+			return validated as GlobalContent;
 		} catch (error) {
 			console.error(`Error loading global content for ${lang}:`, error);
-			throw new Error(`Global content for ${lang} not found`);
+			throw error;
 		}
 	}
 
@@ -65,12 +92,19 @@ export class ContentLoader {
 
 		try {
 			const module = await import(`../content/pages/${page}/${lang}.json`);
-			const data = module.default;
-			this.cache.set(cacheKey, data);
-			return data;
+			const schema = pageSchemas[page as PageSchemaKey];
+			const validated = validateContent(
+				schema,
+				module.default,
+				'page',
+				`pages/${page}/${lang}.json`
+			);
+
+			this.cache.set(cacheKey, validated);
+			return validated as WelcomeContent | AboutContent | ContactContent;
 		} catch (error) {
 			console.error(`Error loading page ${page} for ${lang}:`, error);
-			throw new Error(`Page ${page} for ${lang} not found`);
+			throw error;
 		}
 	}
 
@@ -80,60 +114,74 @@ export class ContentLoader {
 			return this.cache.get(cacheKey) as ProjectItem[];
 		}
 
-		try {
-			// Carica tutti i meta.json dei progetti
-			const metaFiles = import.meta.glob('../content/projects/*/meta.json');
-			const projects: ProjectItem[] = [];
+		// Carica tutti i meta.json dei progetti
+		const metaFiles = import.meta.glob('../content/projects/*/meta.json');
+		const projects: ProjectItem[] = [];
 
-			for (const [path, moduleLoader] of Object.entries(metaFiles)) {
-				const projectId = path.split('/').slice(-2, -1)[0];
-				const module = await moduleLoader();
-				const meta = (module as { default: ProjectMeta }).default;
+		for (const [path, moduleLoader] of Object.entries(metaFiles)) {
+			const projectId = path.split('/').slice(-2, -1)[0];
+			const module = await moduleLoader();
 
-				// Carica le traduzioni
-				const translations: Record<string, ProjectTranslation> = {};
+			// Valida meta.json
+			const meta = validateContent(
+				ProjectMetaSchema,
+				(module as { default: unknown }).default,
+				'project meta',
+				`projects/${projectId}/meta.json`
+			) as ProjectMeta;
 
-				if (lang) {
-					// Carica solo la lingua richiesta
+			// Carica le traduzioni
+			const translations: Record<string, ProjectTranslation> = {};
+
+			if (lang) {
+				// Carica solo la lingua richiesta
+				try {
+					const translationModule = await import(`../content/projects/${projectId}/${lang}.json`);
+					const validated = validateContent(
+						ProjectTranslationSchema,
+						translationModule.default,
+						'project translation',
+						`projects/${projectId}/${lang}.json`
+					);
+					translations[lang] = validated as ProjectTranslation;
+				} catch {
+					// Traduzione non disponibile per questa lingua
+					continue;
+				}
+			} else {
+				// Carica tutte le lingue disponibili
+				const languages = await this.loadConfig('languages');
+				for (const language of languages) {
 					try {
-						const translationModule = await import(`../content/projects/${projectId}/${lang}.json`);
-						translations[lang] = translationModule.default as ProjectTranslation;
+						const translationModule = await import(
+							`../content/projects/${projectId}/${language.code}.json`
+						);
+						const validated = validateContent(
+							ProjectTranslationSchema,
+							translationModule.default,
+							'project translation',
+							`projects/${projectId}/${language.code}.json`
+						);
+						translations[language.code] = validated as ProjectTranslation;
 					} catch {
 						// Traduzione non disponibile per questa lingua
 						continue;
 					}
-				} else {
-					// Carica tutte le lingue disponibili
-					const languages = await this.loadConfig('languages');
-					for (const language of languages) {
-						try {
-							const translationModule = await import(
-								`../content/projects/${projectId}/${language.code}.json`
-							);
-							translations[language.code] = translationModule.default as ProjectTranslation;
-						} catch {
-							// Traduzione non disponibile per questa lingua
-							continue;
-						}
-					}
-				}
-
-				if (Object.keys(translations).length > 0 && meta.published) {
-					projects.push({ translations, meta });
 				}
 			}
 
-			// Ordina per data di creazione (dal più recente al più vecchio)
-			projects.sort(
-				(a, b) => new Date(b.meta.created_date).getTime() - new Date(a.meta.created_date).getTime()
-			);
-
-			this.cache.set(cacheKey, projects);
-			return projects;
-		} catch (error) {
-			console.error('Error loading projects:', error);
-			return [];
+			if (Object.keys(translations).length > 0 && meta.published) {
+				projects.push({ translations, meta });
+			}
 		}
+
+		// Ordina per data di creazione (dal più recente al più vecchio)
+		projects.sort(
+			(a, b) => new Date(b.meta.created_date).getTime() - new Date(a.meta.created_date).getTime()
+		);
+
+		this.cache.set(cacheKey, projects);
+		return projects;
 	}
 
 	async loadArticles(lang?: string): Promise<ArticleItem[]> {
@@ -142,61 +190,75 @@ export class ContentLoader {
 			return this.cache.get(cacheKey) as ArticleItem[];
 		}
 
-		try {
-			// Carica tutti i meta.json degli articoli
-			const metaFiles = import.meta.glob('../content/articles/*/meta.json');
-			const articles: ArticleItem[] = [];
+		// Carica tutti i meta.json degli articoli
+		const metaFiles = import.meta.glob('../content/articles/*/meta.json');
+		const articles: ArticleItem[] = [];
 
-			for (const [path, moduleLoader] of Object.entries(metaFiles)) {
-				const articleId = path.split('/').slice(-2, -1)[0];
-				const module = await moduleLoader();
-				const meta = (module as { default: ArticleMeta }).default;
+		for (const [path, moduleLoader] of Object.entries(metaFiles)) {
+			const articleId = path.split('/').slice(-2, -1)[0];
+			const module = await moduleLoader();
 
-				// Carica le traduzioni
-				const translations: Record<string, ArticleTranslation> = {};
+			// Valida meta.json
+			const meta = validateContent(
+				ArticleMetaSchema,
+				(module as { default: unknown }).default,
+				'article meta',
+				`articles/${articleId}/meta.json`
+			) as ArticleMeta;
 
-				if (lang) {
-					// Carica solo la lingua richiesta
+			// Carica le traduzioni
+			const translations: Record<string, ArticleTranslation> = {};
+
+			if (lang) {
+				// Carica solo la lingua richiesta
+				try {
+					const translationModule = await import(`../content/articles/${articleId}/${lang}.json`);
+					const validated = validateContent(
+						ArticleTranslationSchema,
+						translationModule.default,
+						'article translation',
+						`articles/${articleId}/${lang}.json`
+					);
+					translations[lang] = validated as ArticleTranslation;
+				} catch {
+					// Traduzione non disponibile per questa lingua
+					continue;
+				}
+			} else {
+				// Carica tutte le lingue disponibili
+				const languages = await this.loadConfig('languages');
+				for (const language of languages) {
 					try {
-						const translationModule = await import(`../content/articles/${articleId}/${lang}.json`);
-						translations[lang] = translationModule.default as ArticleTranslation;
+						const translationModule = await import(
+							`../content/articles/${articleId}/${language.code}.json`
+						);
+						const validated = validateContent(
+							ArticleTranslationSchema,
+							translationModule.default,
+							'article translation',
+							`articles/${articleId}/${language.code}.json`
+						);
+						translations[language.code] = validated as ArticleTranslation;
 					} catch {
 						// Traduzione non disponibile per questa lingua
 						continue;
 					}
-				} else {
-					// Carica tutte le lingue disponibili
-					const languages = await this.loadConfig('languages');
-					for (const language of languages) {
-						try {
-							const translationModule = await import(
-								`../content/articles/${articleId}/${language.code}.json`
-							);
-							translations[language.code] = translationModule.default as ArticleTranslation;
-						} catch {
-							// Traduzione non disponibile per questa lingua
-							continue;
-						}
-					}
-				}
-
-				if (Object.keys(translations).length > 0 && meta.published) {
-					articles.push({ translations, meta });
 				}
 			}
 
-			// Ordina per data di pubblicazione
-			articles.sort(
-				(a, b) =>
-					new Date(b.meta.published_date).getTime() - new Date(a.meta.published_date).getTime()
-			);
-
-			this.cache.set(cacheKey, articles);
-			return articles;
-		} catch (error) {
-			console.error('Error loading articles:', error);
-			return [];
+			if (Object.keys(translations).length > 0 && meta.published) {
+				articles.push({ translations, meta });
+			}
 		}
+
+		// Ordina per data di pubblicazione
+		articles.sort(
+			(a, b) =>
+				new Date(b.meta.published_date).getTime() - new Date(a.meta.published_date).getTime()
+		);
+
+		this.cache.set(cacheKey, articles);
+		return articles;
 	}
 
 	async getAvailableLanguages(contentType: ContentType, id: string): Promise<string[]> {
