@@ -32,3 +32,6 @@ vite.config.ts.timestamp-*
 /.claude
 /.vscode
 /docs/internal
+
+# Image assets
+src/lib/assets/image-assets.ts
