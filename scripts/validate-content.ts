@@ -122,8 +122,8 @@ const ArticleMetaSchema = z.object({
 const ProjectTranslationSchema = z.object({
 	slug: z.string().min(1),
 	title: z.string().min(1),
-	description: z.string().min(1),
-	body: ContentBlocksSchema,
+	excerpt: z.string().min(1),
+	content: ContentBlocksSchema,
 	image_captions: z.array(z.string()),
 	tags: z.array(z.string())
 });
