@@ -1,8 +1,8 @@
 {
 	"slug": "creativium",
 	"title": "Creativium",
-	"description": "Web platform for sharing creative ideas and finding collaborators to bring them to life",
-	"body": {
+	"excerpt": "Web platform for sharing creative ideas and finding collaborators to bring them to life",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

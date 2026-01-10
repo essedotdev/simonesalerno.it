@@ -2,7 +2,6 @@
 	"id": "plannerinator",
 	"images": ["images/projects/plannerinator/featured.png"],
 	"featured_image": "images/projects/plannerinator/featured.png",
-	"featuredImagePlaceholder": false,
 	"og_image_key": "plannerinatorFeatured",
 	"published": true,
 	"status": "in-progress",

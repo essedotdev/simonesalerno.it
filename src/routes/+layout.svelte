@@ -7,7 +7,6 @@
 	import BackToTop from '$lib/components/ui/BackToTop.svelte';
 	import '$lib/styles/globals.css';
 	import { initializeAnalytics, isAnalyticsReady, trackPageView } from '$lib/utils/analytics';
-	import { setContext } from 'svelte';
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	let { children, data } = $props();
@@ -18,9 +17,6 @@
 	let isLanguageCodeValid = $derived(
 		data.languages.some((l: { code: string }) => l.code === page.url.pathname.split('/')[1])
 	);
-
-	// Fornisce i dati come context invece di store
-	setContext('layoutData', data);
 
 	// Helper functions for route validation
 	function isValidLanguage(lang: string): boolean {

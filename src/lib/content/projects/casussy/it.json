@@ -1,0 +1,23 @@
+{
+	"slug": "casussy",
+	"title": "Casussy",
+	"excerpt": "App iOS nativa per la gestione domestica collaborativa con task, lista spesa, menu settimanale e tracciamento spese",
+	"content": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Casussy è un'applicazione iOS nativa per la gestione domestica collaborativa. Progettata per famiglie e conviventi, permette di organizzare insieme task quotidiani, liste della spesa, piani settimanali dei pasti e tracciamento delle spese. La caratteristica principale è la condivisione totale: quando qualcuno aggiunge un task o completa un compito, è visibile a tutti i membri della casa in tempo reale."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Frontend sviluppato in Swift + SwiftUI con design Glass Morphism, gestione stato con Combine/async-await, persistenza offline con Core Data. Backend API con Hono su Node.js, database PostgreSQL Neon con Drizzle ORM, autenticazione JWT. Sistema di inviti per aggiungere familiari, task ricorrenti automatici, sincronizzazione real-time tra dispositivi."
+				}
+			}
+		]
+	},
+	"image_captions": ["Dashboard Casussy con gestione task, spesa e menu settimanale della casa"],
+	"tags": ["iOS", "Swift", "SwiftUI", "Hono", "PostgreSQL", "Drizzle", "TypeScript"]
+}

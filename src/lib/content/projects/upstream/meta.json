@@ -1,0 +1,10 @@
+{
+	"id": "upstream",
+	"images": ["images/projects/upstream/featured.png"],
+	"featured_image": "images/projects/upstream/featured.png",
+	"og_image_key": "upstreamFeatured",
+	"published": true,
+	"status": "in-progress",
+	"created_date": "2025-01-10",
+	"updated_date": "2025-01-10"
+}

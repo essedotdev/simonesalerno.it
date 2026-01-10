@@ -2,7 +2,6 @@
 	"id": "doppia-codex",
 	"images": ["images/projects/doppia-codex/featured.png"],
 	"featured_image": "images/projects/doppia-codex/featured.png",
-	"featuredImagePlaceholder": false,
 	"og_image_key": "doppiaCodexFeatured",
 	"link": "https://codex.essedev.it",
 	"published": true,

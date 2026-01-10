@@ -61,8 +61,8 @@ export const filterProjects = (
 		const translation = project.translations[language];
 		if (!translation) return false;
 
-		// Text search in title and description
-		const searchText = `${translation.title} ${translation.description || ''}`;
+		// Text search in title and excerpt
+		const searchText = `${translation.title} ${translation.excerpt || ''}`;
 		if (!matchesQuery(searchText, filters.query)) return false;
 
 		// Tag filtering (case-insensitive)

@@ -1,8 +1,8 @@
 {
 	"slug": "esse-designs",
 	"title": "[esse designs]",
-	"description": "Progettazione di siti web e grafiche per progetti di criptovalute, inclusi loghi, banner e post su social media.",
-	"body": {
+	"excerpt": "Progettazione di siti web e grafiche per progetti di criptovalute, inclusi loghi, banner e post su social media.",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

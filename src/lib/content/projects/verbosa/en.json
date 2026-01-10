@@ -1,8 +1,8 @@
 {
 	"slug": "verbosa",
 	"title": "Verbosa",
-	"description": "Unified platform to interact with different AI language models like OpenAI, Anthropic, Google Gemini and OpenRouter with dynamic model selection",
-	"body": {
+	"excerpt": "Unified platform to interact with different AI language models like OpenAI, Anthropic, Google Gemini and OpenRouter with dynamic model selection",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

@@ -101,7 +101,6 @@ export interface ProjectMeta {
 	id: string;
 	images: string[];
 	featured_image: string;
-	featuredImagePlaceholder?: boolean;
 	og_image_key?: string;
 	link?: string;
 	published: boolean;
@@ -113,7 +112,6 @@ export interface ProjectMeta {
 export interface ArticleMeta {
 	id: string;
 	featured_image: string;
-	featuredImagePlaceholder?: boolean;
 	og_image_key?: string;
 	published: boolean;
 	published_date: string;
@@ -125,8 +123,8 @@ export interface ArticleMeta {
 export interface ProjectTranslation {
 	slug: string;
 	title: string;
-	description: string;
-	body: ContentBlocks;
+	excerpt: string;
+	content: ContentBlocks;
 	image_captions: string[];
 	tags: string[];
 }
@@ -196,9 +194,8 @@ export interface LanguageSelectorProps {
 // Card Component Props
 export interface ProjectCardProps {
 	title: string;
-	description: string;
+	excerpt: string;
 	featuredImage?: string;
-	featuredImagePlaceholder?: boolean;
 	link: string;
 	tags?: string[];
 }
@@ -207,7 +204,6 @@ export interface ArticleCardProps {
 	title: string;
 	excerpt: string;
 	featuredImage?: string;
-	featuredImagePlaceholder?: boolean;
 	link: string;
 	publishedDate: string;
 	tags: string[];

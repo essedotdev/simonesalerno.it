@@ -1,0 +1,23 @@
+{
+	"slug": "cosmoscope",
+	"title": "Cosmoscope",
+	"excerpt": "AI-powered knowledge exploration tool that transforms questions into interactive visual knowledge maps",
+	"content": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Cosmoscope is a research assistant that takes any question and builds a visual knowledge graph around it. It searches the web for reliable sources, synthesizes information using AI and presents concepts as an interactive, explorable map. Example: asking \"What is quantum entanglement?\" creates a visual map showing the main concept connected to related topics like superposition, Bell's theorem and quantum computing."
+				}
+			},
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Features: AI-powered research with Grok 4 Fast, smart source selection (priority to .edu, .gov, authoritative sources), n8n-style interactive knowledge maps with React Flow, source attribution with reliability scores, automatic relationship detection between concepts. Stack: React + TypeScript + Vite, Tailwind CSS + shadcn/ui, Supabase (PostgreSQL + Edge Functions), Brave Search API."
+				}
+			}
+		]
+	},
+	"image_captions": ["Cosmoscope interface with visual knowledge map and concept connections"],
+	"tags": ["React", "TypeScript", "Vite", "Supabase", "AI", "React Flow", "Grok"]
+}

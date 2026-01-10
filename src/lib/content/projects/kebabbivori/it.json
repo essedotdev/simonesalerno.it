@@ -1,8 +1,8 @@
 {
 	"slug": "kebabbivori",
 	"title": "Kebabbivori",
-	"description": "Piattaforma definitiva per le recensioni professionali dei kebab shops nella provincia di Varese con sistema di valutazione avanzato",
-	"body": {
+	"excerpt": "Piattaforma definitiva per le recensioni professionali dei kebab shops nella provincia di Varese con sistema di valutazione avanzato",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

@@ -2,7 +2,6 @@
 	"id": "s-mail",
 	"images": ["images/projects/s-mail/featured.png"],
 	"featured_image": "images/projects/s-mail/featured.png",
-	"featuredImagePlaceholder": false,
 	"og_image_key": "sMailFeatured",
 	"link": "https://smail.essedev.it",
 	"published": true,

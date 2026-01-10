@@ -1,8 +1,8 @@
 {
 	"slug": "budokan",
 	"title": "Budokan Polisportiva",
-	"description": "Sito web completo per palestra con gestione contenuti dinamici, sistema di prenotazione prove gratuite, sezione corsi e istruttori",
-	"body": {
+	"excerpt": "Sito web completo per palestra con gestione contenuti dinamici, sistema di prenotazione prove gratuite, sezione corsi e istruttori",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

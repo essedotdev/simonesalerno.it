@@ -1,8 +1,8 @@
 {
 	"slug": "plannerinator",
 	"title": "Plannerinator",
-	"description": "Sistema di gestione informazioni personali per organizzare task, progetti, note, eventi e collezioni in un'unica piattaforma",
-	"body": {
+	"excerpt": "Sistema di gestione informazioni personali per organizzare task, progetti, note, eventi e collezioni in un'unica piattaforma",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

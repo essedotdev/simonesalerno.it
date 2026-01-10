@@ -59,9 +59,9 @@
 					{currentTranslation.title}
 				</h2>
 
-				{#if currentTranslation.description}
+				{#if currentTranslation.excerpt}
 					<div class="text-2xl italic">
-						<p>{currentTranslation.description}</p>
+						<p>{currentTranslation.excerpt}</p>
 					</div>
 				{/if}
 
@@ -86,8 +86,8 @@
 					</div>
 				{/if}
 
-				{#if currentTranslation.body}
-					<ContentRenderer content={currentTranslation.body} className="flex flex-col gap-y-4" />
+				{#if currentTranslation.content}
+					<ContentRenderer content={currentTranslation.content} className="flex flex-col gap-y-4" />
 				{/if}
 			</div>
 		</div>

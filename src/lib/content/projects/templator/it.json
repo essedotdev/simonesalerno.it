@@ -1,0 +1,17 @@
+{
+	"slug": "templator",
+	"title": "Templator",
+	"excerpt": "Template Next.js AI-first per sviluppo rapido con autenticazione, database e deploy su Cloudflare Workers",
+	"content": {
+		"blocks": [
+			{
+				"type": "paragraph",
+				"data": {
+					"text": "Templator è un template Next.js 15 ottimizzato per lo sviluppo assistito da AI. Include autenticazione completa con Better Auth (email/password, verifica email, reset password), sistema RBAC a 3 livelli (user/editor/admin), ORM Drizzle con PostgreSQL Neon, deploy su Cloudflare Workers con zero cold start. Stack completo con React 19, TypeScript strict, Tailwind CSS 4, shadcn/ui, sistema email con React Email, blog integrato, form contatti e newsletter."
+				}
+			}
+		]
+	},
+	"image_captions": ["Dashboard di Templator con sistema di autenticazione e gestione contenuti"],
+	"tags": ["Next.js", "TypeScript", "Cloudflare", "PostgreSQL", "Auth", "Template", "Drizzle"]
+}

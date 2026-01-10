@@ -2,7 +2,6 @@
 	"id": "creativium",
 	"images": ["images/projects/creativium/featured.png"],
 	"featured_image": "images/projects/creativium/featured.png",
-	"featuredImagePlaceholder": false,
 	"og_image_key": "creativiumFeatured",
 	"published": true,
 	"status": "archived",

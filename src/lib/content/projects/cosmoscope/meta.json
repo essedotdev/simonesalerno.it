@@ -1,0 +1,10 @@
+{
+	"id": "cosmoscope",
+	"images": ["images/projects/cosmoscope/featured.png"],
+	"featured_image": "images/projects/cosmoscope/featured.png",
+	"og_image_key": "cosmoscopeFeatured",
+	"published": true,
+	"status": "in-progress",
+	"created_date": "2025-01-10",
+	"updated_date": "2025-01-10"
+}

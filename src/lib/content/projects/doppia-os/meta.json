@@ -2,7 +2,6 @@
 	"id": "doppia-os",
 	"images": ["images/projects/doppia-os/featured.jpg"],
 	"featured_image": "images/projects/doppia-os/featured.jpg",
-	"featuredImagePlaceholder": false,
 	"og_image_key": "doppiaOsFeatured",
 	"link": "https://doppia-os.pages.dev/",
 	"published": true,

@@ -1,8 +1,8 @@
 {
 	"slug": "s-mail",
 	"title": "S-Mail",
-	"description": "Piattaforma web per la gestione e invio di email con supporto per template e pannello di amministrazione",
-	"body": {
+	"excerpt": "Piattaforma web per la gestione e invio di email con supporto per template e pannello di amministrazione",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

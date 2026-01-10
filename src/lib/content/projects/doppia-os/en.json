@@ -1,8 +1,8 @@
 {
 	"slug": "doppia-os",
 	"title": "doppia.os",
-	"description": "Experimental web app aiming to recreate a desktop-like experience right in your browser.",
-	"body": {
+	"excerpt": "Experimental web app aiming to recreate a desktop-like experience right in your browser.",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

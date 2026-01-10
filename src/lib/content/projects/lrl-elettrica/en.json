@@ -1,8 +1,8 @@
 {
 	"slug": "lrl-elettrica",
 	"title": "L.R.L. Elettrica",
-	"description": "Website and assistance for the company L.R.L. Elettrica, specialized in electrical systems and other home solutions.",
-	"body": {
+	"excerpt": "Website and assistance for the company L.R.L. Elettrica, specialized in electrical systems and other home solutions.",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

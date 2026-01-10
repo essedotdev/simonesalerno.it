@@ -106,7 +106,6 @@ export const ProjectMetaSchema = z.object({
 	id: z.string().min(1),
 	images: z.array(z.string()),
 	featured_image: z.string().min(1),
-	featuredImagePlaceholder: z.boolean().optional(),
 	og_image_key: z.string().optional(),
 	link: z.string().url().optional(),
 	published: z.boolean(),
@@ -118,7 +117,6 @@ export const ProjectMetaSchema = z.object({
 export const ArticleMetaSchema = z.object({
 	id: z.string().min(1),
 	featured_image: z.string().min(1),
-	featuredImagePlaceholder: z.boolean().optional(),
 	og_image_key: z.string().optional(),
 	published: z.boolean(),
 	published_date: DateStringSchema,
@@ -130,8 +128,8 @@ export const ArticleMetaSchema = z.object({
 export const ProjectTranslationSchema = z.object({
 	slug: z.string().min(1),
 	title: z.string().min(1),
-	description: z.string().min(1),
-	body: ContentBlocksSchema,
+	excerpt: z.string().min(1),
+	content: ContentBlocksSchema,
 	image_captions: z.array(z.string()),
 	tags: z.array(z.string())
 });

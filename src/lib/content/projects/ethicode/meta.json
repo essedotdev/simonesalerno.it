@@ -2,7 +2,6 @@
 	"id": "ethicode",
 	"images": ["images/projects/ethicode/featured.jpg"],
 	"featured_image": "images/projects/ethicode/featured.jpg",
-	"featuredImagePlaceholder": false,
 	"og_image_key": "ethicodeFeatured",
 	"link": "https://ethicode.eu/",
 	"published": true,

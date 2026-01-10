@@ -1,8 +1,8 @@
 {
 	"slug": "doppia-os",
 	"title": "doppia.os",
-	"description": "Applicazione web sperimentale che mira a ricreare un'esperienza simile a un desktop, direttamente nel browser.",
-	"body": {
+	"excerpt": "Applicazione web sperimentale che mira a ricreare un'esperienza simile a un desktop, direttamente nel browser.",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

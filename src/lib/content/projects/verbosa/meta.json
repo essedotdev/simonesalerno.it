@@ -2,7 +2,6 @@
 	"id": "verbosa",
 	"images": ["images/projects/verbosa/featured.png"],
 	"featured_image": "images/projects/verbosa/featured.png",
-	"featuredImagePlaceholder": false,
 	"og_image_key": "verbosaFeatured",
 	"link": "https://verbosa.it",
 	"published": true,

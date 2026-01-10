@@ -121,7 +121,7 @@
 			{#each currentProjects as project (project.meta.id)}
 				<ProjectCard
 					title={project.translations[selectedLanguage].title}
-					description={project.translations[selectedLanguage].description}
+					excerpt={project.translations[selectedLanguage].excerpt}
 					featuredImage={project.meta.featured_image}
 					featuredImagePlaceholder={project.meta.featuredImagePlaceholder}
 					tags={translateTags(global, project.translations[selectedLanguage].tags)}

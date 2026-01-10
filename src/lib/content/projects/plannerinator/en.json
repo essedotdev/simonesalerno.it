@@ -1,8 +1,8 @@
 {
 	"slug": "plannerinator",
 	"title": "Plannerinator",
-	"description": "Personal information management system to organize tasks, projects, notes, events and collections in a single platform",
-	"body": {
+	"excerpt": "Personal information management system to organize tasks, projects, notes, events and collections in a single platform",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

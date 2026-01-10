@@ -150,7 +150,7 @@ interface ValidationError {
 
 const validationErrors: ValidationError[] = [];
 
-function validateFile(filePath: string, schema: z.ZodSchema, label: string): void {
+function validateFile(filePath: string, schema: z.ZodSchema): void {
 	const relativePath = filePath.replace(process.cwd() + '/', '');
 
 	try {
@@ -179,22 +179,6 @@ function validateFile(filePath: string, schema: z.ZodSchema, label: string): voi
 	}
 }
 
-function validateDirectory(dir: string, schema: z.ZodSchema, pattern: RegExp, label: string): void {
-	if (!existsSync(dir)) return;
-
-	const entries = readdirSync(dir, { withFileTypes: true });
-
-	for (const entry of entries) {
-		const fullPath = join(dir, entry.name);
-
-		if (entry.isDirectory()) {
-			validateDirectory(fullPath, schema, pattern, label);
-		} else if (entry.isFile() && pattern.test(entry.name)) {
-			validateFile(fullPath, schema, label);
-		}
-	}
-}
-
 // ==================================================
 // MAIN
 // ==================================================
@@ -202,19 +186,15 @@ function validateDirectory(dir: string, schema: z.ZodSchema, pattern: RegExp, la
 console.log('🔍 Validating content files...\n');
 
 // Config files
-validateFile(join(CONTENT_DIR, 'config/languages.json'), LanguagesConfigSchema, 'languages config');
-validateFile(
-	join(CONTENT_DIR, 'config/navigation.json'),
-	NavigationConfigSchema,
-	'navigation config'
-);
+validateFile(join(CONTENT_DIR, 'config/languages.json'), LanguagesConfigSchema);
+validateFile(join(CONTENT_DIR, 'config/navigation.json'), NavigationConfigSchema);
 
 // Global content
 const globalDir = join(CONTENT_DIR, 'global');
 if (existsSync(globalDir)) {
 	for (const file of readdirSync(globalDir)) {
 		if (file.endsWith('.json')) {
-			validateFile(join(globalDir, file), GlobalContentSchema, 'global content');
+			validateFile(join(globalDir, file), GlobalContentSchema);
 		}
 	}
 }
@@ -236,7 +216,7 @@ if (existsSync(pagesDir)) {
 			const pagePath = join(pagesDir, pageDir);
 			for (const file of readdirSync(pagePath)) {
 				if (file.endsWith('.json')) {
-					validateFile(join(pagePath, file), schema, `page/${pageDir}`);
+					validateFile(join(pagePath, file), schema);
 				}
 			}
 		}
@@ -253,13 +233,13 @@ if (existsSync(projectsDir)) {
 			// meta.json
 			const metaPath = join(projectPath, 'meta.json');
 			if (existsSync(metaPath)) {
-				validateFile(metaPath, ProjectMetaSchema, 'project meta');
+				validateFile(metaPath, ProjectMetaSchema);
 			}
 
 			// translation files (en.json, it.json, etc.)
 			for (const file of readdirSync(projectPath)) {
 				if (file.endsWith('.json') && file !== 'meta.json') {
-					validateFile(join(projectPath, file), ProjectTranslationSchema, 'project translation');
+					validateFile(join(projectPath, file), ProjectTranslationSchema);
 				}
 			}
 		}
@@ -276,13 +256,13 @@ if (existsSync(articlesDir)) {
 			// meta.json
 			const metaPath = join(articlePath, 'meta.json');
 			if (existsSync(metaPath)) {
-				validateFile(metaPath, ArticleMetaSchema, 'article meta');
+				validateFile(metaPath, ArticleMetaSchema);
 			}
 
 			// translation files
 			for (const file of readdirSync(articlePath)) {
 				if (file.endsWith('.json') && file !== 'meta.json') {
-					validateFile(join(articlePath, file), ArticleTranslationSchema, 'article translation');
+					validateFile(join(articlePath, file), ArticleTranslationSchema);
 				}
 			}
 		}

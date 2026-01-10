@@ -1,8 +1,8 @@
 {
 	"slug": "budokan",
 	"title": "Budokan Sports Center",
-	"description": "Complete website for gym with dynamic content management, free trial booking system, courses and instructors sections",
-	"body": {
+	"excerpt": "Complete website for gym with dynamic content management, free trial booking system, courses and instructors sections",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

@@ -74,8 +74,8 @@ async function generateSiteUrls() {
 							title: translation.title || 'Untitled Project'
 						});
 
-						if (translation.description) {
-							params.set('excerpt', translation.description);
+						if (translation.excerpt) {
+							params.set('excerpt', translation.excerpt);
 						}
 
 						if (project.meta.og_image_key) {
@@ -90,7 +90,7 @@ async function generateSiteUrls() {
 							section: 'projects',
 							lang: langCode,
 							contentTitle: translation.title,
-							excerpt: translation.description,
+							excerpt: translation.excerpt,
 							imageKey: project.meta.og_image_key
 						});
 					}

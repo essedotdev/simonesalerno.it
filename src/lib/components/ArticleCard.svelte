@@ -7,7 +7,6 @@
 		title,
 		excerpt,
 		featuredImage,
-		featuredImagePlaceholder,
 		link,
 		publishedDate,
 		tags,
@@ -35,7 +34,6 @@
 			src={featuredImage}
 			alt={title}
 			className="aspect-video rounded-t-3xl saturate-[0.8] hover:saturate-100 transition-all duration-300 ease-in-out"
-			showPlaceholder={featuredImagePlaceholder}
 			sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
 		/>
 	</a>

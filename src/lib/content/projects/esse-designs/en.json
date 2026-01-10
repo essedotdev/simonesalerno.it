@@ -1,8 +1,8 @@
 {
 	"slug": "esse-designs",
 	"title": "[esse designs]",
-	"description": "Website and graphics designs for cryptocurrency projects, including logos, banners and social media posts.",
-	"body": {
+	"excerpt": "Website and graphics designs for cryptocurrency projects, including logos, banners and social media posts.",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

@@ -1,8 +1,8 @@
 {
 	"slug": "kebabbivori",
 	"title": "Kebabbivori",
-	"description": "Ultimate platform for professional kebab shop reviews in Varese province with advanced rating system",
-	"body": {
+	"excerpt": "Ultimate platform for professional kebab shop reviews in Varese province with advanced rating system",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

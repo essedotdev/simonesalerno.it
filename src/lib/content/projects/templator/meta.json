@@ -1,0 +1,11 @@
+{
+	"id": "templator",
+	"images": ["images/projects/templator/featured.png"],
+	"featured_image": "images/projects/templator/featured.png",
+	"og_image_key": "templatorFeatured",
+	"link": "https://github.com/essedev/templator",
+	"published": true,
+	"status": "completed",
+	"created_date": "2025-01-10",
+	"updated_date": "2025-01-10"
+}

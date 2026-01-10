@@ -123,7 +123,7 @@
 
 <div class="relative overflow-hidden {className}">
 	{#if showPlaceholder || imageNotFound}
-		<div class="flex h-full w-full items-center justify-center bg-white/10 backdrop-blur-md">
+		<div class="absolute inset-0 flex items-center justify-center bg-white/10 backdrop-blur-md">
 			<img
 				src={placeholderIcon}
 				alt="Placeholder"
@@ -132,7 +132,7 @@
 			/>
 		</div>
 	{:else if isLoading}
-		<div class="flex h-full w-full items-center justify-center bg-white/10 backdrop-blur-md">
+		<div class="absolute inset-0 flex items-center justify-center bg-white/10 backdrop-blur-md">
 			<div
 				class="h-6 w-6 animate-spin rounded-full border-2 border-white/20 border-t-white/60"
 			></div>
@@ -167,7 +167,7 @@
 			{...restProps}
 		/>
 	{:else}
-		<div class="flex h-full w-full items-center justify-center bg-white/10 backdrop-blur-md">
+		<div class="absolute inset-0 flex items-center justify-center bg-white/10 backdrop-blur-md">
 			<img
 				src={placeholderIcon}
 				alt=""

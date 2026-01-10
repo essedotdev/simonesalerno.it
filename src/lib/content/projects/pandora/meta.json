@@ -1,0 +1,10 @@
+{
+	"id": "pandora",
+	"images": ["images/projects/pandora/featured.png"],
+	"featured_image": "images/projects/pandora/featured.png",
+	"og_image_key": "pandoraFeatured",
+	"published": true,
+	"status": "in-progress",
+	"created_date": "2025-01-10",
+	"updated_date": "2025-01-10"
+}

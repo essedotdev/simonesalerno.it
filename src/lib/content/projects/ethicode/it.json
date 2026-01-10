@@ -1,8 +1,8 @@
 {
 	"slug": "ethicode",
 	"title": "Ethicode",
-	"description": "Piattaforma di e-learning per imparare a programmare in modo semplice e divertente. Precedentemente chiamato Let's Code Italia.",
-	"body": {
+	"excerpt": "Piattaforma di e-learning per imparare a programmare in modo semplice e divertente. Precedentemente chiamato Let's Code Italia.",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

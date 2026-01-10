@@ -184,12 +184,12 @@
 						: group.layout === 'right'
 							? 'md:float-right md:ml-6 lg:ml-8'
 							: ''}"
-					style="width: {dimensions.width}; height: {dimensions.height}; max-width: min({dimensions.width}, 100vw - 2rem);"
+					style="width: {dimensions.width}; height: {dimensions.height}; min-height: 200px; max-width: min({dimensions.width}, 100vw - 2rem);"
 				>
 					<OptimizedImage
 						src={group.image.data.src}
 						alt={group.image.data.alt || ''}
-						className="h-full w-full rounded-xl"
+						className="h-full min-h-[200px] w-full rounded-xl"
 						loading="lazy"
 					/>
 
@@ -285,7 +285,7 @@
 					<OptimizedImage
 						src={block.data.src || ''}
 						alt={block.data.alt || ''}
-						className={classes.image}
+						className="{classes.image} min-h-[300px]"
 						loading="lazy"
 					/>
 					{#if block.data.alt}

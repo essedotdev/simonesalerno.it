@@ -1,8 +1,8 @@
 {
 	"slug": "creativium",
 	"title": "Creativium",
-	"description": "Piattaforma web per condividere idee creative e trovare collaboratori per realizzarle",
-	"body": {
+	"excerpt": "Piattaforma web per condividere idee creative e trovare collaboratori per realizzarle",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

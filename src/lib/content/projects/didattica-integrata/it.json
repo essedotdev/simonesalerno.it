@@ -1,8 +1,8 @@
 {
 	"slug": "didattica-integrata",
 	"title": "Didattica Integrata",
-	"description": "Piattaforma pensata per facilitare la valutazione delle proprie esperienze di stage scolastici tramite la compilazione di moduli.",
-	"body": {
+	"excerpt": "Piattaforma pensata per facilitare la valutazione delle proprie esperienze di stage scolastici tramite la compilazione di moduli.",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

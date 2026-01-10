@@ -1,8 +1,8 @@
 {
 	"slug": "doppia-codex",
 	"title": "Doppia Codex",
-	"description": "Collezione curata di saggi ed esplorazioni che spaziano tra scienza spaziale, crittografia e design di sistemi, mantenuta da 0xDoppia",
-	"body": {
+	"excerpt": "Collezione curata di saggi ed esplorazioni che spaziano tra scienza spaziale, crittografia e design di sistemi, mantenuta da 0xDoppia",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

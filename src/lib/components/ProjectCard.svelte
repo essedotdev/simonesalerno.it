@@ -3,14 +3,7 @@
 	import type { ProjectCardProps } from '$lib/types';
 	import OptimizedImage from './OptimizedImage.svelte';
 
-	let {
-		title,
-		description,
-		featuredImage,
-		featuredImagePlaceholder,
-		link,
-		tags
-	}: ProjectCardProps = $props();
+	let { title, excerpt, featuredImage, link, tags }: ProjectCardProps = $props();
 </script>
 
 <div
@@ -21,7 +14,6 @@
 			src={featuredImage}
 			alt={title}
 			className="aspect-video rounded-t-3xl saturate-[0.8] hover:saturate-100 transition-all duration-300 ease-in-out"
-			showPlaceholder={featuredImagePlaceholder}
 			sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
 		/>
 	</a>
@@ -33,7 +25,7 @@
 		</a>
 
 		<p class="mb-3 text-base text-gray-300 lg:text-xl">
-			{description}
+			{excerpt}
 		</p>
 
 		{#if tags && tags.length > 0}

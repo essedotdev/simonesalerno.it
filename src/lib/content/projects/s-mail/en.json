@@ -1,8 +1,8 @@
 {
 	"slug": "s-mail",
 	"title": "S-Mail",
-	"description": "Web platform for email management and sending with template support and administration panel",
-	"body": {
+	"excerpt": "Web platform for email management and sending with template support and administration panel",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

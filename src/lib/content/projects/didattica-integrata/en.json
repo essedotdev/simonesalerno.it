@@ -1,8 +1,8 @@
 {
 	"slug": "didattica-integrata",
 	"title": "Didattica Integrata",
-	"description": "Web application designed to facilitate the evaluation of one's school internship experiences by filling out forms.",
-	"body": {
+	"excerpt": "Web application designed to facilitate the evaluation of one's school internship experiences by filling out forms.",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",

@@ -1,8 +1,8 @@
 {
 	"slug": "doppia-codex",
 	"title": "Doppia Codex",
-	"description": "Curated collection of essays and explorations spanning space science, cryptography and system design, maintained by 0xDoppia",
-	"body": {
+	"excerpt": "Curated collection of essays and explorations spanning space science, cryptography and system design, maintained by 0xDoppia",
+	"content": {
 		"blocks": [
 			{
 				"type": "paragraph",
