@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
 import { basename, dirname, extname, join, relative } from 'path';
 import sharp from 'sharp';
 import { fileURLToPath } from 'url';
@@ -152,6 +152,14 @@ function imageToBase64Fallback(filePath: string): string {
  */
 async function main(): Promise<void> {
 	console.log('🔍 Scanning for images...');
+	if (!existsSync(assetsDir)) {
+		console.log('📂 No images directory found, generating empty assets file.');
+		writeFileSync(
+			outputFile,
+			`// Auto-generated image assets (empty - no images directory found)\nexport const imageAssets: Record<string, string> = {};\nexport function getImageAsset(key: string): string | null { return imageAssets[key] || null; }\nexport const availableImages: string[] = [];\nexport const imageStats = { totalImages: 0, totalSizeKB: 0, generatedAt: '${new Date().toISOString()}' };\n`
+		);
+		return;
+	}
 	const imageFiles = findImageFiles(assetsDir);
 
 	console.log(`📷 Found ${imageFiles.length} images`);

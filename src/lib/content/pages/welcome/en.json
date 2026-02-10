@@ -1,18 +1,17 @@
 {
-	"title": "Hi, I'm Simone",
-	"typewriter": ["Full-Stack Developer", "Tech enthusiast", "Perpetually curious"],
+	"title": "Hi, I'm Simone.",
 	"description": {
 		"blocks": [
 			{
 				"type": "paragraph",
 				"data": {
-					"text": "Full-Stack developer who loves diving into innovative projects and solving problems."
+					"text": "AI-focused Developer. I build AI-native software with a clear philosophy: humans decide the architecture, AI speeds up execution, humans validate."
 				}
 			},
 			{
 				"type": "paragraph",
 				"data": {
-					"text": "Following the latest industry trends, I aim to design intuitive, efficient and scalable solutions that truly make a difference."
+					"text": "Concrete workflow: design and boundaries before code, targeted co-pilot for boilerplate and tests, review and hardening on every line. AI doesn't make decisions alone."
 				}
 			}
 		]

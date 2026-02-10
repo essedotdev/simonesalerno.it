@@ -73,7 +73,6 @@ export const GlobalContentSchema = z.object({
 // Page Content
 export const WelcomeContentSchema = z.object({
 	title: z.string().min(1),
-	typewriter: z.array(z.string()).min(1),
 	description: ContentBlocksSchema
 });
 

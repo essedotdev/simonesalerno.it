@@ -1,18 +1,17 @@
 {
-	"title": "Ciao, sono Simone",
-	"typewriter": ["Sviluppatore Full-Stack", "Amante della tecnologia", "Sempre curioso"],
+	"title": "Ciao, sono Simone.",
 	"description": {
 		"blocks": [
 			{
 				"type": "paragraph",
 				"data": {
-					"text": "Sviluppatore full-stack che ama immergersi in progetti innovativi e risolvere problemi."
+					"text": "AI-focused Developer. Costruisco software AI-native con una filosofia chiara: l'architettura la decide l'umano, l'AI velocizza, l'umano valida."
 				}
 			},
 			{
 				"type": "paragraph",
 				"data": {
-					"text": "Seguendo le ultime tendenze del settore, miro a creare soluzioni intuitive, efficienti e scalabili che fanno davvero la differenza."
+					"text": "Workflow concreto: design e boundary prima del codice, co-pilot mirato per boilerplate e test, review e hardening su ogni riga. L'AI non prende decisioni da sola."
 				}
 			}
 		]
