@@ -7,6 +7,16 @@
 	import BackToTop from '$lib/components/ui/BackToTop.svelte';
 	import '$lib/styles/globals.css';
 	import { initializeAnalytics, isAnalyticsReady, trackPageView } from '$lib/utils/analytics';
+	import {
+		blogPostingJsonLd,
+		buildAlternates,
+		buildCanonical,
+		creativeWorkJsonLd,
+		personJsonLd,
+		serializeJsonLd,
+		socialLinks,
+		websiteJsonLd
+	} from '$lib/utils/seo';
 
 	let { children, data } = $props();
 
@@ -173,6 +183,75 @@
 
 		return `${baseUrl}/og/${file}.png?v=${__BUILD_TIMESTAMP__}`;
 	});
+
+	// URL canonico e link alternate hreflang per ogni lingua (+ x-default)
+	let canonicalUrl = $derived(buildCanonical(page.url.origin, page.url.pathname));
+	let alternateLinks = $derived(
+		buildAlternates({
+			origin: page.url.origin,
+			pathname: page.url.pathname,
+			navigation: data.navigation,
+			slugMap: data.slugMap,
+			languages: data.languages
+		})
+	);
+
+	// Testo skip-link localizzato
+	let skipLabel = $derived(currentLocale === 'en' ? 'Skip to content' : 'Salta al contenuto');
+
+	// JSON-LD: WebSite + Person in home, BlogPosting/CreativeWork sui dettagli
+	let jsonLd = $derived.by(() => {
+		if (isPageError) return null;
+		const origin = page.url.origin;
+		const lang = currentLocale;
+		const currentRoute = page.route.id;
+
+		if (currentRoute === '/[page=lang]/[route=route]/[sub]') {
+			const pageData = page.data;
+			const content = pageData?.content;
+			const translation = content?.translations?.[lang];
+			if (!content || !translation) return null;
+
+			if (pageData.type === 'article') {
+				return [
+					blogPostingJsonLd({
+						canonical: canonicalUrl,
+						title: translation.title,
+						description: translation.meta_description || translation.excerpt || '',
+						image: ogImageUrl,
+						datePublished: content.meta.published_date,
+						dateModified: content.meta.updated_date || content.meta.published_date,
+						lang
+					})
+				];
+			}
+
+			if (pageData.type === 'project') {
+				return [
+					creativeWorkJsonLd({
+						canonical: canonicalUrl,
+						title: translation.title,
+						description: translation.excerpt || '',
+						image: ogImageUrl,
+						dateCreated: content.meta.created_date,
+						dateModified: content.meta.updated_date || content.meta.created_date,
+						lang
+					})
+				];
+			}
+		}
+
+		if (currentRoute === '/[page=lang]') {
+			return [
+				websiteJsonLd({ origin, lang, description: data.global?.description || '' }),
+				personJsonLd({ origin, sameAs: socialLinks(data.contact?.links) })
+			];
+		}
+
+		return null;
+	});
+
+	let jsonLdHtml = $derived(jsonLd ? serializeJsonLd(jsonLd) : null);
 </script>
 
 <svelte:head>
@@ -180,6 +259,12 @@
 	<meta name="keywords" content={data.global?.keywords?.join(', ') || ''} />
 	<meta name="author" content="Simone Salerno" />
 	<title>{pageTitle}</title>
+
+	<!-- Canonical + alternate hreflang -->
+	<link rel="canonical" href={canonicalUrl} />
+	{#each alternateLinks as alt (alt.hreflang)}
+		<link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+	{/each}
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
@@ -202,7 +287,16 @@
 	<meta name="twitter:image:alt" content="Simone Salerno" />
 	<meta name="twitter:url" content={page.url.href} />
 	<meta name="twitter:site" content="@essesdev" />
+
+	<!-- Structured data (JSON-LD). L'escape di "</script>" e' richiesto dal parser
+	     Svelte; no-useless-escape e' un falso positivo qui. -->
+	{#if jsonLdHtml}
+		<!-- eslint-disable-next-line no-useless-escape -->
+		{@html `<script type="application/ld+json">${jsonLdHtml}<\/script>`}
+	{/if}
 </svelte:head>
+
+<a href="#main-content" class="skip-link">{skipLabel}</a>
 
 <div
 	class="mx-auto flex min-h-screen w-full max-w-[90vw] flex-col overflow-x-hidden scroll-smooth text-white antialiased selection:bg-white/10"
@@ -214,7 +308,7 @@
 		<FloatingNav {data} bind:menuOpen {scrollY} />
 	{/if}
 
-	<main class="flex-1">
+	<main id="main-content" class="flex-1">
 		{@render children()}
 	</main>
 

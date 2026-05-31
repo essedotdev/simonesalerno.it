@@ -90,3 +90,38 @@ body::before {
 		transform: translateY(0);
 	}
 }
+
+/* Skip-to-content: nascosto fino a focus da tastiera */
+.skip-link {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	margin: 0.5rem;
+	padding: 0.5rem 1rem;
+	border-radius: 0.5rem;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-color: rgba(17, 17, 17, 0.95);
+	color: #fff;
+	font-size: 0.875rem;
+	transform: translateY(-150%);
+	transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+	transform: translateY(0);
+	outline: 2px solid #fff;
+	outline-offset: 2px;
+}
+
+/* Rispetta la preferenza di movimento ridotto: azzera animazioni e transizioni */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}

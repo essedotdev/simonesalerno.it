@@ -1,0 +1,163 @@
+import { describe, expect, it } from 'vitest';
+import {
+	blogPostingJsonLd,
+	buildAlternates,
+	buildCanonical,
+	creativeWorkJsonLd,
+	personJsonLd,
+	serializeJsonLd,
+	socialLinks,
+	websiteJsonLd
+} from '../../src/lib/utils/seo';
+import type { Language, LinkItem, NavigationConfig, SlugMapData } from '../../src/lib/types';
+
+const origin = 'https://simonesalerno.it';
+
+const languages: Language[] = [
+	{ code: 'en', name: 'English' },
+	{ code: 'it', name: 'Italiano' }
+];
+
+const navigation: NavigationConfig = {
+	en: { projects: 'projects', about: 'about', articles: 'blog' },
+	it: { projects: 'progetti', about: 'informazioni', articles: 'blog' }
+};
+
+const slugMap: SlugMapData = {
+	projects: { budokan: { en: 'budokan', it: 'budokan' } },
+	articles: { lab: { en: 'my-new-laboratory', it: 'il-mio-nuovo-laboratorio' } }
+};
+
+describe('buildCanonical', () => {
+	it('builds an absolute canonical from origin + pathname', () => {
+		expect(buildCanonical(origin, '/en/blog')).toBe('https://simonesalerno.it/en/blog');
+	});
+
+	it('returns origin for the root path', () => {
+		expect(buildCanonical(origin, '/')).toBe(origin);
+		expect(buildCanonical(origin, '')).toBe(origin);
+	});
+
+	it('strips a superfluous trailing slash', () => {
+		expect(buildCanonical(origin, '/en/blog/')).toBe('https://simonesalerno.it/en/blog');
+	});
+});
+
+describe('buildAlternates', () => {
+	it('emits one alternate per language plus x-default', () => {
+		const alts = buildAlternates({ origin, pathname: '/en/blog', navigation, slugMap, languages });
+		expect(alts).toEqual([
+			{ hreflang: 'en', href: 'https://simonesalerno.it/en/blog' },
+			{ hreflang: 'it', href: 'https://simonesalerno.it/it/blog' },
+			{ hreflang: 'x-default', href: 'https://simonesalerno.it/en/blog' }
+		]);
+	});
+
+	it('translates route + slug on detail pages', () => {
+		const alts = buildAlternates({
+			origin,
+			pathname: '/en/blog/my-new-laboratory',
+			navigation,
+			slugMap,
+			languages
+		});
+		expect(alts.find((a) => a.hreflang === 'it')?.href).toBe(
+			'https://simonesalerno.it/it/blog/il-mio-nuovo-laboratorio'
+		);
+	});
+
+	it('points x-default to the chosen default language', () => {
+		const alts = buildAlternates({
+			origin,
+			pathname: '/it/progetti',
+			navigation,
+			slugMap,
+			languages,
+			defaultLang: 'it'
+		});
+		const xDefault = alts.find((a) => a.hreflang === 'x-default');
+		const it = alts.find((a) => a.hreflang === 'it');
+		expect(xDefault?.href).toBe(it?.href);
+	});
+});
+
+describe('socialLinks', () => {
+	const links: LinkItem[] = [
+		{ name: 'Email', link: 'mailto:contact@simonesalerno.it' },
+		{ name: 'LinkedIn', link: 'https://www.linkedin.com/in/simone-salerno' },
+		{ name: 'GitHub', link: 'https://github.com/essedev/' }
+	];
+
+	it('keeps only http(s) profiles, dropping mailto', () => {
+		expect(socialLinks(links)).toEqual([
+			'https://www.linkedin.com/in/simone-salerno',
+			'https://github.com/essedev/'
+		]);
+	});
+
+	it('returns an empty array when links are missing', () => {
+		expect(socialLinks(undefined)).toEqual([]);
+	});
+});
+
+describe('JSON-LD builders', () => {
+	it('websiteJsonLd carries name, url and language', () => {
+		const ld = websiteJsonLd({ origin, lang: 'en', description: 'Portfolio' });
+		expect(ld['@type']).toBe('WebSite');
+		expect(ld.url).toBe('https://simonesalerno.it/en');
+		expect(ld.inLanguage).toBe('en');
+	});
+
+	it('personJsonLd omits sameAs when there are no socials', () => {
+		expect(personJsonLd({ origin, sameAs: [] })).not.toHaveProperty('sameAs');
+		expect(personJsonLd({ origin, sameAs: ['https://x.com/essesdev/'] }).sameAs).toEqual([
+			'https://x.com/essesdev/'
+		]);
+	});
+
+	it('blogPostingJsonLd maps article fields', () => {
+		const ld = blogPostingJsonLd({
+			canonical: `${origin}/en/blog/lab`,
+			title: 'My Lab',
+			description: 'desc',
+			image: `${origin}/og/x.png`,
+			datePublished: '2025-01-01',
+			dateModified: '2025-02-01',
+			lang: 'en'
+		});
+		expect(ld['@type']).toBe('BlogPosting');
+		expect(ld.headline).toBe('My Lab');
+		expect(ld.datePublished).toBe('2025-01-01');
+		expect((ld.mainEntityOfPage as Record<string, unknown>)['@id']).toBe(
+			'https://simonesalerno.it/en/blog/lab'
+		);
+	});
+
+	it('creativeWorkJsonLd maps project fields', () => {
+		const ld = creativeWorkJsonLd({
+			canonical: `${origin}/en/projects/budokan`,
+			title: 'Budokan',
+			description: 'desc',
+			image: `${origin}/og/x.png`,
+			dateCreated: '2024-01-01',
+			dateModified: '2024-06-01',
+			lang: 'en'
+		});
+		expect(ld['@type']).toBe('CreativeWork');
+		expect(ld.name).toBe('Budokan');
+		expect(ld.dateCreated).toBe('2024-01-01');
+	});
+});
+
+describe('serializeJsonLd', () => {
+	it('escapes "<" to prevent premature </script> closure', () => {
+		const out = serializeJsonLd({ '@type': 'Thing', name: 'a</script>b' });
+		expect(out).not.toContain('</script>');
+		expect(out).toContain('\\u003c/script>');
+	});
+
+	it('serializes arrays of objects', () => {
+		const out = serializeJsonLd([{ '@type': 'WebSite' }, { '@type': 'Person' }]);
+		expect(JSON.parse(out)).toHaveLength(2);
+	});
+});
