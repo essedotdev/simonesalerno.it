@@ -17,6 +17,8 @@ import type {
 	WelcomeContent
 } from '../types';
 
+import type { z } from 'zod';
+
 import {
 	LanguagesConfigSchema,
 	NavigationConfigSchema,
@@ -29,6 +31,22 @@ import {
 	validateContent,
 	type PageSchemaKey
 } from '../schemas/content';
+
+// Opzioni per il caricamento generico di una collezione (projects/articles).
+// Glob e import delle traduzioni restano literal per collezione (richiesto da
+// Vite per la static analysis); il resto della logica e' condiviso.
+interface LoadCollectionOptions<TMeta> {
+	cacheKeyBase: 'projects' | 'articles';
+	pathBase: string;
+	metaFiles: Record<string, () => Promise<unknown>>;
+	importTranslation: (id: string, langCode: string) => Promise<{ default: unknown }>;
+	metaSchema: z.ZodTypeAny;
+	translationSchema: z.ZodTypeAny;
+	metaLabel: string;
+	translationLabel: string;
+	sortKey: (meta: TMeta) => string;
+	lang?: string;
+}
 
 export class ContentLoader {
 	private cache: Map<CacheKey, unknown> = new Map();
@@ -109,154 +127,100 @@ export class ContentLoader {
 		}
 	}
 
-	async loadProjects(lang?: string): Promise<ProjectItem[]> {
-		const cacheKey: CacheKey = lang ? `projects-${lang}` : 'projects-all';
+	/**
+	 * Caricamento generico di una collezione di contenuti (projects/articles):
+	 * legge i meta.json via glob, valida meta + traduzioni, filtra i non
+	 * pubblicati e ordina. La duplicazione tra progetti e articoli vive solo nei
+	 * due wrapper sotto (glob, schemi, chiave di ordinamento).
+	 */
+	private async loadCollection<TMeta extends { published: boolean }, TTranslation>(
+		opts: LoadCollectionOptions<TMeta>
+	): Promise<Array<{ translations: Record<string, TTranslation>; meta: TMeta }>> {
+		const cacheKey: CacheKey = opts.lang
+			? `${opts.cacheKeyBase}-${opts.lang}`
+			: `${opts.cacheKeyBase}-all`;
 		if (this.cache.has(cacheKey)) {
-			return this.cache.get(cacheKey) as ProjectItem[];
+			return this.cache.get(cacheKey) as Array<{
+				translations: Record<string, TTranslation>;
+				meta: TMeta;
+			}>;
 		}
 
-		// Carica tutti i meta.json dei progetti
-		const metaFiles = import.meta.glob('../content/projects/*/meta.json');
-		const projects: ProjectItem[] = [];
+		const items: Array<{ translations: Record<string, TTranslation>; meta: TMeta }> = [];
 
-		for (const [path, moduleLoader] of Object.entries(metaFiles)) {
-			const projectId = path.split('/').slice(-2, -1)[0];
+		// Lingue da caricare: solo quella richiesta, oppure tutte le disponibili
+		const langCodes = opts.lang
+			? [opts.lang]
+			: (await this.loadConfig('languages')).map((l) => l.code);
+
+		for (const [path, moduleLoader] of Object.entries(opts.metaFiles)) {
+			const id = path.split('/').slice(-2, -1)[0];
 			const module = await moduleLoader();
 
-			// Valida meta.json
 			const meta = validateContent(
-				ProjectMetaSchema,
+				opts.metaSchema,
 				(module as { default: unknown }).default,
-				'project meta',
-				`projects/${projectId}/meta.json`
-			) as ProjectMeta;
+				opts.metaLabel,
+				`${opts.pathBase}/${id}/meta.json`
+			) as TMeta;
 
-			// Carica le traduzioni
-			const translations: Record<string, ProjectTranslation> = {};
-
-			if (lang) {
-				// Carica solo la lingua richiesta
+			const translations: Record<string, TTranslation> = {};
+			for (const code of langCodes) {
 				try {
-					const translationModule = await import(`../content/projects/${projectId}/${lang}.json`);
-					const validated = validateContent(
-						ProjectTranslationSchema,
+					const translationModule = await opts.importTranslation(id, code);
+					translations[code] = validateContent(
+						opts.translationSchema,
 						translationModule.default,
-						'project translation',
-						`projects/${projectId}/${lang}.json`
-					);
-					translations[lang] = validated as ProjectTranslation;
+						opts.translationLabel,
+						`${opts.pathBase}/${id}/${code}.json`
+					) as TTranslation;
 				} catch {
-					// Traduzione non disponibile per questa lingua
-					continue;
-				}
-			} else {
-				// Carica tutte le lingue disponibili
-				const languages = await this.loadConfig('languages');
-				for (const language of languages) {
-					try {
-						const translationModule = await import(
-							`../content/projects/${projectId}/${language.code}.json`
-						);
-						const validated = validateContent(
-							ProjectTranslationSchema,
-							translationModule.default,
-							'project translation',
-							`projects/${projectId}/${language.code}.json`
-						);
-						translations[language.code] = validated as ProjectTranslation;
-					} catch {
-						// Traduzione non disponibile per questa lingua
-						continue;
-					}
+					// Traduzione non disponibile per questa lingua: la salta.
 				}
 			}
 
 			if (Object.keys(translations).length > 0 && meta.published) {
-				projects.push({ translations, meta });
+				items.push({ translations, meta });
 			}
 		}
 
-		// Ordina per data di creazione, dal più recente al più vecchio. Le date sono
-		// ISO 8601: il confronto lessicografico tra stringhe coincide con quello
-		// cronologico ed evita di costruire oggetti Date.
-		projects.sort((a, b) => b.meta.created_date.localeCompare(a.meta.created_date));
+		// Ordina per data, dal più recente al più vecchio. Le date sono ISO 8601:
+		// il confronto lessicografico tra stringhe coincide con quello cronologico
+		// ed evita di costruire oggetti Date.
+		items.sort((a, b) => opts.sortKey(b.meta).localeCompare(opts.sortKey(a.meta)));
 
-		this.cache.set(cacheKey, projects);
-		return projects;
+		this.cache.set(cacheKey, items);
+		return items;
+	}
+
+	async loadProjects(lang?: string): Promise<ProjectItem[]> {
+		return this.loadCollection<ProjectMeta, ProjectTranslation>({
+			cacheKeyBase: 'projects',
+			pathBase: 'projects',
+			metaFiles: import.meta.glob('../content/projects/*/meta.json'),
+			importTranslation: (id, code) => import(`../content/projects/${id}/${code}.json`),
+			metaSchema: ProjectMetaSchema,
+			translationSchema: ProjectTranslationSchema,
+			metaLabel: 'project meta',
+			translationLabel: 'project translation',
+			sortKey: (meta) => meta.created_date,
+			lang
+		});
 	}
 
 	async loadArticles(lang?: string): Promise<ArticleItem[]> {
-		const cacheKey: CacheKey = lang ? `articles-${lang}` : 'articles-all';
-		if (this.cache.has(cacheKey)) {
-			return this.cache.get(cacheKey) as ArticleItem[];
-		}
-
-		// Carica tutti i meta.json degli articoli
-		const metaFiles = import.meta.glob('../content/articles/*/meta.json');
-		const articles: ArticleItem[] = [];
-
-		for (const [path, moduleLoader] of Object.entries(metaFiles)) {
-			const articleId = path.split('/').slice(-2, -1)[0];
-			const module = await moduleLoader();
-
-			// Valida meta.json
-			const meta = validateContent(
-				ArticleMetaSchema,
-				(module as { default: unknown }).default,
-				'article meta',
-				`articles/${articleId}/meta.json`
-			) as ArticleMeta;
-
-			// Carica le traduzioni
-			const translations: Record<string, ArticleTranslation> = {};
-
-			if (lang) {
-				// Carica solo la lingua richiesta
-				try {
-					const translationModule = await import(`../content/articles/${articleId}/${lang}.json`);
-					const validated = validateContent(
-						ArticleTranslationSchema,
-						translationModule.default,
-						'article translation',
-						`articles/${articleId}/${lang}.json`
-					);
-					translations[lang] = validated as ArticleTranslation;
-				} catch {
-					// Traduzione non disponibile per questa lingua
-					continue;
-				}
-			} else {
-				// Carica tutte le lingue disponibili
-				const languages = await this.loadConfig('languages');
-				for (const language of languages) {
-					try {
-						const translationModule = await import(
-							`../content/articles/${articleId}/${language.code}.json`
-						);
-						const validated = validateContent(
-							ArticleTranslationSchema,
-							translationModule.default,
-							'article translation',
-							`articles/${articleId}/${language.code}.json`
-						);
-						translations[language.code] = validated as ArticleTranslation;
-					} catch {
-						// Traduzione non disponibile per questa lingua
-						continue;
-					}
-				}
-			}
-
-			if (Object.keys(translations).length > 0 && meta.published) {
-				articles.push({ translations, meta });
-			}
-		}
-
-		// Ordina per data di pubblicazione (ISO 8601, confronto lessicografico).
-		articles.sort((a, b) => b.meta.published_date.localeCompare(a.meta.published_date));
-
-		this.cache.set(cacheKey, articles);
-		return articles;
+		return this.loadCollection<ArticleMeta, ArticleTranslation>({
+			cacheKeyBase: 'articles',
+			pathBase: 'articles',
+			metaFiles: import.meta.glob('../content/articles/*/meta.json'),
+			importTranslation: (id, code) => import(`../content/articles/${id}/${code}.json`),
+			metaSchema: ArticleMetaSchema,
+			translationSchema: ArticleTranslationSchema,
+			metaLabel: 'article meta',
+			translationLabel: 'article translation',
+			sortKey: (meta) => meta.published_date,
+			lang
+		});
 	}
 
 	async loadSlugMap(): Promise<SlugMapData> {
