@@ -89,7 +89,7 @@
 						src={content.meta.featured_image}
 						alt={currentTranslation.title}
 						className="aspect-video rounded-3xl"
-						showPlaceholder={content.meta.featuredImagePlaceholder || false}
+						showPlaceholder={Boolean(content.meta.featuredImagePlaceholder)}
 						sizes="100vw"
 					/>
 				</div>

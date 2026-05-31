@@ -101,6 +101,7 @@ export interface ProjectMeta {
 	id: string;
 	images: string[];
 	featured_image: string;
+	featuredImagePlaceholder?: string;
 	og_image_key?: string;
 	link?: string;
 	published: boolean;
@@ -112,6 +113,7 @@ export interface ProjectMeta {
 export interface ArticleMeta {
 	id: string;
 	featured_image: string;
+	featuredImagePlaceholder?: string;
 	og_image_key?: string;
 	published: boolean;
 	published_date: string;
@@ -202,6 +204,7 @@ export interface ProjectCardProps {
 	title: string;
 	excerpt: string;
 	featuredImage?: string;
+	featuredImagePlaceholder?: string;
 	link: string;
 	tags?: string[];
 }
@@ -210,6 +213,7 @@ export interface ArticleCardProps {
 	title: string;
 	excerpt: string;
 	featuredImage?: string;
+	featuredImagePlaceholder?: string;
 	link: string;
 	publishedDate: string;
 	tags: string[];
