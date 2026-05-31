@@ -1,6 +1,22 @@
 import { ContentLoader } from '$lib/utils/content';
 import type { Handle } from '@sveltejs/kit';
 
+// Header di sicurezza applicati a tutte le risposte di pagina (la CSP e' gestita
+// da SvelteKit via svelte.config.js).
+const SECURITY_HEADERS: Record<string, string> = {
+	'X-Content-Type-Options': 'nosniff',
+	'Referrer-Policy': 'strict-origin-when-cross-origin',
+	'X-Frame-Options': 'SAMEORIGIN',
+	'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), payment=()'
+};
+
+function withSecurityHeaders(response: Response): Response {
+	for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+		response.headers.set(key, value);
+	}
+	return response;
+}
+
 // Trova la sottorotta corretta per una lingua specifica
 function findRouteForLanguage(
 	subRoute: string,
@@ -182,14 +198,18 @@ export const handle: Handle = async ({ event, resolve }) => {
 			}
 		}
 
-		return await resolve(event, {
-			transformPageChunk: ({ html }: { html: string }) => html.replace('%lang%', currentLang)
-		});
+		return withSecurityHeaders(
+			await resolve(event, {
+				transformPageChunk: ({ html }: { html: string }) => html.replace('%lang%', currentLang)
+			})
+		);
 	} catch (error) {
 		console.error('Error in hooks.server.ts:', error);
 		// Fallback di sicurezza con lingua di default
-		return await resolve(event, {
-			transformPageChunk: ({ html }: { html: string }) => html.replace('%lang%', 'en')
-		});
+		return withSecurityHeaders(
+			await resolve(event, {
+				transformPageChunk: ({ html }: { html: string }) => html.replace('%lang%', 'en')
+			})
+		);
 	}
 };
