@@ -72,12 +72,19 @@
 						if (imageModule.default && typeof imageModule.default === 'string') {
 							const srcsetString = imageModule.default;
 
-							// In dev mode, vite-imagetools returns URLs without extensions
-							// We'll assume the order is: avif, webp, jpg (3 formats x 3 sizes = 9 URLs)
-							const srcsets = srcsetString.split(', ');
+							// vite-imagetools restituisce gli URL nell'ordine dei formati
+							// richiesti (avif, webp, jpg), ciascuno con N dimensioni. In dev
+							// gli URL non hanno estensione, quindi raggruppiamo per posizione.
+							// Deriviamo N dal conteggio reale invece di assumerlo: cosi' il
+							// componente si adatta se cambia il numero di larghezze.
+							const srcsets = srcsetString.split(', ').filter(Boolean);
 
-							// Group by format based on position (assuming 3 sizes per format)
-							const sizesPerFormat = 3;
+							const numFormats = 3; // avif, webp, jpg
+							if (srcsets.length === 0) {
+								imageNotFound = true;
+								return;
+							}
+							const sizesPerFormat = Math.max(1, Math.floor(srcsets.length / numFormats));
 							const avifSrcs = srcsets.slice(0, sizesPerFormat);
 							const webpSrcs = srcsets.slice(sizesPerFormat, sizesPerFormat * 2);
 							const jpegSrcs = srcsets.slice(sizesPerFormat * 2, sizesPerFormat * 3);
