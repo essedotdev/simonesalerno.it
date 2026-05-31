@@ -1,0 +1,110 @@
+{
+  "projects": {
+    "budokan": {
+      "en": "budokan",
+      "it": "budokan"
+    },
+    "casussy": {
+      "en": "casussy",
+      "it": "casussy"
+    },
+    "core": {
+      "en": "core",
+      "it": "core"
+    },
+    "cosmoscope": {
+      "en": "cosmoscope",
+      "it": "cosmoscope"
+    },
+    "creativium": {
+      "en": "creativium",
+      "it": "creativium"
+    },
+    "didattica-integrata": {
+      "en": "didattica-integrata",
+      "it": "didattica-integrata"
+    },
+    "doppia-codex": {
+      "en": "doppia-codex",
+      "it": "doppia-codex"
+    },
+    "doppia-os": {
+      "en": "doppia-os",
+      "it": "doppia-os"
+    },
+    "esse-designs": {
+      "en": "esse-designs",
+      "it": "esse-designs"
+    },
+    "ethicode": {
+      "en": "ethicode",
+      "it": "ethicode"
+    },
+    "fitplan": {
+      "en": "fitplan",
+      "it": "fitplan"
+    },
+    "horizon": {
+      "en": "horizon",
+      "it": "horizon"
+    },
+    "kebabbivori": {
+      "en": "kebabbivori",
+      "it": "kebabbivori"
+    },
+    "kols-tracker": {
+      "en": "kols-tracker",
+      "it": "kols-tracker"
+    },
+    "lrl-elettrica": {
+      "en": "lrl-elettrica",
+      "it": "lrl-elettrica"
+    },
+    "pandora": {
+      "en": "pandora",
+      "it": "pandora"
+    },
+    "plannerinator": {
+      "en": "plannerinator",
+      "it": "plannerinator"
+    },
+    "pumpgotchi": {
+      "en": "pumpgotchi",
+      "it": "pumpgotchi"
+    },
+    "s-mail": {
+      "en": "s-mail",
+      "it": "s-mail"
+    },
+    "solplace": {
+      "en": "solplace",
+      "it": "solplace"
+    },
+    "templator": {
+      "en": "templator",
+      "it": "templator"
+    },
+    "upstream": {
+      "en": "upstream",
+      "it": "upstream"
+    },
+    "verbosa": {
+      "en": "verbosa",
+      "it": "verbosa"
+    },
+    "voidscanner": {
+      "en": "voidscanner",
+      "it": "voidscanner"
+    },
+    "witf": {
+      "en": "witf",
+      "it": "witf"
+    }
+  },
+  "articles": {
+    "il-mio-nuovo-laboratorio": {
+      "en": "my-new-laboratory",
+      "it": "il-mio-nuovo-laboratorio"
+    }
+  }
+}

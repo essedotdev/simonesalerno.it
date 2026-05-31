@@ -123,7 +123,7 @@
 		if (focusableElements && ['ArrowDown', 'ArrowUp'].includes(e.key)) {
 			e.preventDefault();
 			const currentIndex = focusableElements.indexOf(document.activeElement as HTMLElement);
-			let nextIndex = currentIndex;
+			let nextIndex: number;
 
 			if (e.key === 'ArrowDown') {
 				nextIndex = currentIndex + 1 >= focusableElements.length ? 0 : currentIndex + 1;
