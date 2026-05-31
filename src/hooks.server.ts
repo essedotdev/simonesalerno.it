@@ -40,15 +40,15 @@ async function findSlugForLanguage(
 		// Determina il tipo di contenuto basato sulla route
 		const isProjects = route === 'projects' || route === 'progetti';
 
-		// Carica tutti i contenuti del tipo specificato
-		const contents = isProjects ? await loader.loadProjects() : await loader.loadArticles();
+		// Usa la slug map leggera invece di caricare tutti i contenuti in tutte le lingue
+		const slugMap = await loader.loadSlugMap();
+		const section = isProjects ? slugMap.projects : slugMap.articles;
 
-		// Trova il contenuto che ha lo slug nella lingua sorgente
-		const content = contents.find((item) => item.translations[sourceLang]?.slug === slug);
+		// Trova l'item il cui slug nella lingua sorgente combacia, poi prendi quello target
+		const entry = Object.values(section).find((langs) => langs[sourceLang] === slug);
 
-		// Se trova il contenuto e ha una traduzione nella lingua target
-		if (content && content.translations[targetLang]?.slug) {
-			return content.translations[targetLang].slug;
+		if (entry && entry[targetLang]) {
+			return entry[targetLang];
 		}
 
 		return null;
