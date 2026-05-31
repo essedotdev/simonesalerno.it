@@ -2,7 +2,7 @@
 
 Stato corrente del progetto. Milestone reali, non wishlist. Aggiornata insieme al codice.
 
-Ultimo aggiornamento: 2026-05-31
+Ultimo aggiornamento: 2026-06-01
 
 ## Contesto
 
@@ -10,9 +10,9 @@ Ultimo aggiornamento: 2026-05-31
 Tailwind 4) su Cloudflare Workers, con contenuti file-based JSON validati con Zod,
 i18n hand-rolled (EN/IT) e immagini OG. È in produzione.
 
-È in corso un overhaul di qualità in 6 fasi, nato da un audit completo
-(sicurezza, correttezza, performance, manutenibilità). Vedi `docs/Cycles.md` per il
-log dettagliato del lavoro svolto.
+L'overhaul di qualità in 6 fasi (nato da un audit completo: sicurezza,
+correttezza, performance, manutenibilità) è completato su tutte le milestone.
+Vedi `docs/Cycles.md` per il log dettagliato del lavoro svolto.
 
 ## Milestone
 
@@ -42,29 +42,43 @@ log dettagliato del lavoro svolto.
   in `static/og/`. Rimossi gli endpoint runtime `/api/og` e `/api/og-preview` e la
   dipendenza `workers-og`. Escape HTML su title/excerpt.
 
-### M4 - SEO / i18n / a11y - ⏳ Da fare
+### M4 - SEO / i18n / a11y - ✅ Completata (2026-06-01)
 
-- `<link rel="canonical">`, `<link rel="alternate" hreflang>`, JSON-LD
-  (`Organization` + `Article`/`BlogPosting`), `robots.txt` rivisto.
-- Skip-to-content link, `prefers-reduced-motion`, focus trap nei Dropdown, audit
-  `alt`/aria.
-- Nota: `<html lang>` è già corretto (via `app.html` + hook), non era un gap.
+- `<link rel="canonical">` + `<link rel="alternate" hreflang>` (en/it + x-default)
+  calcolati per pagina da un util puro (`src/lib/utils/seo.ts`).
+- JSON-LD: `WebSite` + `Person` in home, `BlogPosting` sugli articoli,
+  `CreativeWork` sui progetti. Scelto `Person` invece di `Organization`: il sito è
+  un portfolio personale, quindi `Person` è l'entità schema.org corretta.
+- `robots.txt` ripulito; skip-to-content link localizzato; `prefers-reduced-motion`
+  che azzera animazioni/transizioni.
+- Note: `<html lang>` era già corretto (non un gap); il focus trap nei Dropdown
+  era già implementato (frecce, Escape, ritorno focus); l'audit `alt` non ha
+  trovato immagini senza testo alternativo.
 
-### M5 - Performance / bundle / assets - ⏳ Da fare
+### M5 - Performance / bundle / assets - ✅ Completata (2026-06-01)
 
-- `Promise.all` nei load del layout, sitemap per-lingua, sort per stringa ISO,
-  `Cache-Control` su HTML.
-- Rimozione `noise-original.png` (576KB) + ottimizzazione `noise.png`; logo PNG
-  inutilizzati; parsing srcset di `OptimizedImage` più robusto.
+- `Promise.all` nei load del layout; sort di progetti/articoli per stringa ISO
+  (niente più costruzione di `Date`); `Cache-Control` edge sulle pagine HTML 2xx.
+- `OptimizedImage`: dimensione dei gruppi srcset derivata dal conteggio reale
+  invece che hardcodata.
+- Rimosso `noise-original.png` (576KB, non referenziato).
+- Note: la sitemap era già per-lingua con hreflang; `noise.png` non ri-ottimizzato
+  (texture ad alta entropia, rischio di regressione visiva per pochi KB); i logo
+  PNG risultavano tutti in uso (animazione `Logo` + `FloatingNav`), quindi non
+  rimossi (l'item era un'assunzione errata dell'audit).
 
-### M6 - Code quality / DX / docs - ⏳ Da fare
+### M6 - Code quality / DX / docs - ✅ Completata (2026-06-01)
 
-- `ContentLoader`: estrarre un `loadCollection<T>` generico (elimina la
-  duplicazione projects/articles); consistenza naming.
-- `.editorconfig`, GitHub Actions CI (`lint + check + build + test`).
-- `CLAUDE.md` di progetto + `docs/ARCHITECTURE.md`.
+- `ContentLoader`: estratto `loadCollection<T>` generico, eliminata la
+  duplicazione projects/articles (i due metodi pubblici sono ora wrapper sottili).
+- `.editorconfig` allineato a prettier; GitHub Actions CI (lint + check + build +
+  unit + E2E) su push/PR verso `main`.
+- `CLAUDE.md` di progetto + `docs/ARCHITECTURE.md`; README aggiornato.
+- Nota: nessun rename di massa per "consistenza naming" (churn non giustificato);
+  la consistenza è migliorata dal refactor `loadCollection`.
 
 ## Stato deploy
 
-Le Milestone M1-M3 sono committate su `main` (locali, non ancora pushate al momento
-dell'ultimo aggiornamento). Il deploy avviene via Cloudflare Workers Builds al push.
+Le Milestone M1-M3 sono pushate su `main` (commit fino a `66ff033`). M4-M6 sono
+committate localmente e non ancora pushate (push solo su comando esplicito). Il
+deploy avviene via Cloudflare Workers Builds al push.

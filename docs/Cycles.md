@@ -45,7 +45,7 @@ manutenibilità). Esiti principali, poi affrontati nelle fasi sotto:
 - Falso positivo dell'audit: `<html lang>` risultava mancante ma è già gestito in
   `app.html` + hook.
 
-### Parte C - Fasi 1-3 dell'overhaul (committate, NON ancora pushate)
+### Parte C - Fasi 1-3 dell'overhaul (committate; pushate nel Ciclo 2)
 
 10 commit su `main`, da `731c8db` a `bd09838`:
 
@@ -90,3 +90,61 @@ Fase 3 - OG build-time
   spostate nello `style` per compatibilità satori.
 - `PixelBlast` e le deps `three`/`postprocessing` sono tenute apposta per una futura
   riattivazione dell'hero, anche se attualmente inutilizzate.
+
+---
+
+## Ciclo 2 - Overhaul di qualità, parte 2 (2026-06-01)
+
+### Obiettivo
+
+Completare le Fasi 4-6 dell'overhaul dopo la pausa di fine Ciclo 1, poi
+aggiornamento finale della documentazione.
+
+### Preludio
+
+Pushato il blocco Fasi 1-3 del Ciclo 1 su `main` (fino a `66ff033`).
+
+### Fase 4 - SEO / i18n / a11y
+
+- `82c14a1` feat(seo): canonical, hreflang, JSON-LD + skip-link & reduced-motion
+
+Nuovo util puro `src/lib/utils/seo.ts` (canonical, alternate hreflang en/it +
+x-default, builder JSON-LD WebSite/Person/BlogPosting/CreativeWork, serializzazione
+con escape di `<`), cablato nel `+layout.svelte`. Aggiunti skip-to-content link
+localizzato e `prefers-reduced-motion`. Scoperto che il focus trap dei Dropdown e
+`<html lang>` erano già a posto e l'audit `alt` era pulito. Scelto `Person` (non
+`Organization`) per il JSON-LD: il sito è un portfolio personale.
+
+### Fase 5 - Performance / bundle / assets
+
+- `114fcd2` perf(content): Promise.all nel layout + sort per stringa ISO
+- `0b1cf9c` perf(http): Cache-Control edge sulle pagine HTML 2xx
+- `58ce66e` refactor(image): srcset group size derivata dal conteggio reale
+- `588e2d8` chore(assets): rimosso `noise-original.png` (576KB, non referenziato)
+
+La sitemap era già per-lingua; `noise.png` non ri-ottimizzato (alta entropia,
+rischio visivo per pochi KB); i logo PNG erano tutti in uso (item dell'audit
+errato).
+
+### Fase 6 - Code quality / DX / docs
+
+- `c395154` refactor(content): estratto `loadCollection<T>` generico
+- `93087d0` chore(dx): `.editorconfig` + GitHub Actions CI
+- `8d80331` docs: `CLAUDE.md` di progetto + `ARCHITECTURE.md`, README aggiornato
+
+Eliminata la duplicazione projects/articles in `ContentLoader`; glob e import
+traduzioni restano literal per collezione (richiesto da Vite). Niente rename di
+massa per "consistenza naming" (churn non giustificato).
+
+### Verifiche (a fine ciclo)
+
+- `pnpm check`: 0 errori / 0 warning
+- `pnpm lint`: pulito
+- `pnpm build`: OK end-to-end (rigenera le 57 OG)
+- `pnpm test:ci`: 143 unit verdi (+14 su `seo`), 15 E2E verdi (+5 su SEO/a11y)
+
+### Cosa resta
+
+- Push delle Fasi 4-6 (commit da `82c14a1` a `8d80331`) quando deciso.
+- Overhaul concluso: nessuna fase residua. Eventuali nuovi cicli partiranno da
+  esigenze nuove.
