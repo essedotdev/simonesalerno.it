@@ -35,3 +35,10 @@ vite.config.ts.timestamp-*
 
 # Image assets
 src/lib/assets/image-assets.ts
+
+# Test artifacts
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
+/coverage
