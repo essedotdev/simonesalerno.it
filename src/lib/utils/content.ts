@@ -176,10 +176,10 @@ export class ContentLoader {
 			}
 		}
 
-		// Ordina per data di creazione (dal più recente al più vecchio)
-		projects.sort(
-			(a, b) => new Date(b.meta.created_date).getTime() - new Date(a.meta.created_date).getTime()
-		);
+		// Ordina per data di creazione, dal più recente al più vecchio. Le date sono
+		// ISO 8601: il confronto lessicografico tra stringhe coincide con quello
+		// cronologico ed evita di costruire oggetti Date.
+		projects.sort((a, b) => b.meta.created_date.localeCompare(a.meta.created_date));
 
 		this.cache.set(cacheKey, projects);
 		return projects;
@@ -252,11 +252,8 @@ export class ContentLoader {
 			}
 		}
 
-		// Ordina per data di pubblicazione
-		articles.sort(
-			(a, b) =>
-				new Date(b.meta.published_date).getTime() - new Date(a.meta.published_date).getTime()
-		);
+		// Ordina per data di pubblicazione (ISO 8601, confronto lessicografico).
+		articles.sort((a, b) => b.meta.published_date.localeCompare(a.meta.published_date));
 
 		this.cache.set(cacheKey, articles);
 		return articles;

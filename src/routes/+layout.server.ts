@@ -7,27 +7,34 @@ export const load: LayoutServerLoad = async ({ url }): Promise<LayoutData> => {
 	const pathParts = url.pathname.split('/');
 	const lang = pathParts[1] || 'en';
 
-	// Verifica che la lingua sia valida
+	// Verifica che la lingua sia valida (necessaria prima di caricare il resto)
 	const languages = await loader.loadConfig('languages');
 	const validLang = languages.find((l) => l.code === lang)?.code || 'en';
 
-	// Carica configurazione
-	const navigation = await loader.loadConfig('navigation');
-
-	// Carica contenuti
-	const global = await loader.loadGlobal(validLang);
-	const welcome = (await loader.loadPage('welcome', validLang)) as WelcomeContent;
-	const about = (await loader.loadPage('about', validLang)) as AboutContent;
-	const contact = (await loader.loadPage('contact', validLang)) as ContactContent;
-	const projectsPage = await loader.loadPage('projects', validLang);
-	const blogPage = await loader.loadPage('blog', validLang);
-
-	// Carica collezioni solo per la lingua corrente
-	const projects = await loader.loadProjects(validLang);
-	const articles = await loader.loadArticles(validLang);
-
-	// Carica mappa slug leggera per il language switcher
-	const slugMap = await loader.loadSlugMap();
+	// Il resto dei caricamenti e' indipendente: eseguili in parallelo.
+	const [
+		navigation,
+		global,
+		welcome,
+		about,
+		contact,
+		projectsPage,
+		blogPage,
+		projects,
+		articles,
+		slugMap
+	] = await Promise.all([
+		loader.loadConfig('navigation'),
+		loader.loadGlobal(validLang),
+		loader.loadPage('welcome', validLang) as Promise<WelcomeContent>,
+		loader.loadPage('about', validLang) as Promise<AboutContent>,
+		loader.loadPage('contact', validLang) as Promise<ContactContent>,
+		loader.loadPage('projects', validLang),
+		loader.loadPage('blog', validLang),
+		loader.loadProjects(validLang),
+		loader.loadArticles(validLang),
+		loader.loadSlugMap()
+	]);
 
 	return {
 		selectedLanguage: validLang,
