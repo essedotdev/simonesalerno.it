@@ -7,7 +7,6 @@
 	import BackToTop from '$lib/components/ui/BackToTop.svelte';
 	import '$lib/styles/globals.css';
 	import { initializeAnalytics, isAnalyticsReady, trackPageView } from '$lib/utils/analytics';
-	import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	let { children, data } = $props();
 
@@ -137,86 +136,42 @@
 	// Dynamic locale for meta tags
 	let currentLocale = $derived(page.params.page || 'it');
 
-	// Dynamic OG image URL using /api/og endpoint
+	// OG images are pre-generated at build time as static PNGs in static/og/
+	// (see scripts/generate-og-images.ts). Here we just resolve the deterministic
+	// filename for the current page.
+	const ogSection = (lang: string, route?: string): 'projects' | 'blog' | undefined => {
+		const navRoutes = data.navigation?.[lang];
+		if (!navRoutes) return undefined;
+		if (route === navRoutes.projects) return 'projects';
+		if (route === navRoutes.articles) return 'blog';
+		return undefined;
+	};
+
 	let ogImageUrl = $derived.by(() => {
 		const baseUrl = page.url.origin;
-		const params = new SvelteURLSearchParams();
+		const lang = page.params.page || 'it';
 		const currentRoute = page.route.id;
-		const routeParams = page.params;
-		const lang = routeParams.page || 'it';
 
-		// Set language
-		params.set('lang', lang);
-
-		// Add build timestamp for cache busting
-		params.set('v', __BUILD_TIMESTAMP__);
-
-		// If page is in error state, use home fallback
-		if (isPageError) {
-			params.set('type', 'home');
-			return `${baseUrl}/api/og?${params.toString()}`;
-		}
-
-		// Map routes to OG parameters
-		switch (currentRoute) {
-			case '/[page=lang]':
-				// Home page
-				params.set('type', 'home');
-				break;
-
-			case '/[page=lang]/[route=route]':
-				// Listing pages
-				params.set('type', 'listing');
-
-				// Determine section based on navigation
-				if (data.navigation?.[lang]) {
-					const navRoutes = data.navigation[lang];
-					if (routeParams.route === navRoutes.projects) {
-						params.set('section', 'projects');
-					} else if (routeParams.route === navRoutes.articles) {
-						params.set('section', 'blog');
-					}
+		const file = (() => {
+			if (isPageError) return 'home';
+			switch (currentRoute) {
+				case '/[page=lang]':
+					return 'home';
+				case '/[page=lang]/[route=route]': {
+					const section = ogSection(lang, page.params.route);
+					return section ? `listing-${section}-${lang}` : 'home';
 				}
-				break;
-
-			case '/[page=lang]/[route=route]/[sub]': {
-				// Detail pages
-				params.set('type', 'detail');
-
-				// Add content-specific parameters
-				const pageData = page.data;
-				if (pageData?.content) {
-					const translation = pageData.content.translations?.[lang];
-					if (translation?.title) {
-						params.set('title', translation.title);
-					}
-					if (translation?.excerpt || translation?.description) {
-						params.set('excerpt', translation.excerpt || translation.description);
-					}
-					if (pageData.content.meta?.og_image_key) {
-						params.set('imageKey', pageData.content.meta.og_image_key);
-					}
+				case '/[page=lang]/[route=route]/[sub]': {
+					const section = ogSection(lang, page.params.route);
+					const id = page.data?.content?.meta?.id;
+					return section && id ? `detail-${section}-${id}-${lang}` : 'home';
 				}
-
-				// Determine section based on navigation
-				if (data.navigation?.[lang]) {
-					const navRoutes = data.navigation[lang];
-					if (routeParams.route === navRoutes.projects) {
-						params.set('section', 'projects');
-					} else if (routeParams.route === navRoutes.articles) {
-						params.set('section', 'blog');
-					}
-				}
-				break;
+				default:
+					return 'home';
 			}
+		})();
 
-			default:
-				// Fallback to home
-				params.set('type', 'home');
-				break;
-		}
-
-		return `${baseUrl}/api/og?${params.toString()}`;
+		return `${baseUrl}/og/${file}.png?v=${__BUILD_TIMESTAMP__}`;
 	});
 </script>
 

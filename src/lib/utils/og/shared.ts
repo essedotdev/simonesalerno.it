@@ -1,4 +1,5 @@
 import { getImageAsset } from '$lib/assets/image-assets.js';
+import { escapeHtml } from './escape.js';
 
 /**
  * Parse URL search parameters for OG image generation
@@ -43,7 +44,7 @@ export function createPlaceholder(title: string, section: 'projects' | 'blog'): 
 			<rect width="400" height="300" fill="url(#placeholderGrad)" rx="8"/>
 			<text x="200" y="150" text-anchor="middle" dy="0.3em" 
 				  font-family="system-ui" font-size="72" font-weight="bold" fill="white">
-				${initials}
+				${escapeHtml(initials)}
 			</text>
 		</svg>
 	`;

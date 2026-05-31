@@ -1,4 +1,5 @@
 import { logoBase64 } from '$lib/assets/logo-base64.js';
+import { escapeHtml } from './escape.js';
 import { OG_CONSTANTS, getCommonBackgroundElements, type LayoutConfig } from './layouts.js';
 
 /**
@@ -44,7 +45,7 @@ export function createHomeHtml(): string {
 			position: relative;
 			z-index: 1;
 		">
-			<img src="${logoBase64}" width="180" height="180" style="display: block;" />
+			<img src="${logoBase64}" style="width: 180px; height: 180px; display: block;" />
 			<div style="
 				display: flex;
 				flex-direction: column;
@@ -100,7 +101,7 @@ export function createListingHtml(title: string, subtitle?: string): string {
 	  align-items: flex-end;
 	  gap: 6px;
 	">
-	  <img src="${logoBase64}" width="80" height="80" />
+	  <img src="${logoBase64}" style="width: 80px; height: 80px;" />
 	  <div style="
 		display: flex;
 		flex-direction: column;
@@ -139,7 +140,7 @@ export function createListingHtml(title: string, subtitle?: string): string {
 		color: ${OG_CONSTANTS.COLORS.TEXT.PRIMARY};
 		margin: 0;
 		line-height: 1.1;
-	  ">${title}</h1>
+	  ">${escapeHtml(title)}</h1>
 	  ${
 			subtitle
 				? `
@@ -148,7 +149,7 @@ export function createListingHtml(title: string, subtitle?: string): string {
 		color: ${OG_CONSTANTS.COLORS.TEXT.MUTED};
 		margin: 16px 0 0 0;
 		line-height: 1.2;
-	  ">${subtitle}</p>
+	  ">${escapeHtml(subtitle)}</p>
 	`
 				: ''
 		}
@@ -179,7 +180,7 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		  align-items: flex-end;
 		  gap: 6px;
 		">
-		  <img src="${logoBase64}" width="80" height="80" />
+		  <img src="${logoBase64}" style="width: 80px; height: 80px;" />
 		  <div style="display: flex; flex-direction: column; margin-bottom: -1px;">
 		    <span style="font-size: 32px; font-weight:500; color: ${OG_CONSTANTS.COLORS.TEXT.PRIMARY}; line-height:1;">esse</span>
 		    <span style="font-size: 24px; color: ${OG_CONSTANTS.COLORS.TEXT.SECONDARY}; line-height:0.8; margin-top:0px;">dev</span>
@@ -201,7 +202,7 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		    color: ${OG_CONSTANTS.COLORS.TEXT.PRIMARY};
 		    margin: 0 0 24px 0;
 		    line-height: 1.1;
-		  ">${title}</h1>
+		  ">${escapeHtml(title)}</h1>
 		  ${
 				excerpt
 					? `
@@ -210,7 +211,7 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		    color: ${OG_CONSTANTS.COLORS.TEXT.MUTED};
 		    margin: 0;
 		    line-height: 1.4;
-		  ">${excerpt.length > 150 ? excerpt.slice(0, 150) + '...' : excerpt}</p>
+		  ">${escapeHtml(excerpt.length > 150 ? excerpt.slice(0, 150) + '...' : excerpt)}</p>
 		`
 					: ''
 			}
@@ -225,7 +226,7 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		  position: relative;
 		  z-index: 1;
 		">
-		  <img src="${coverImage}" width="400" height="300" style="
+		  <img src="${coverImage}" style="width: 400px; height: 300px;
 		    border-radius: 12px;
 		    object-fit: cover;
 		  " />
@@ -246,7 +247,7 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		  align-items: flex-end;
 		  gap: 6px;
 		">
-		  <img src="${logoBase64}" width="80" height="80" />
+		  <img src="${logoBase64}" style="width: 80px; height: 80px;" />
 		  <div style="display: flex; flex-direction: column; margin-bottom: -1px;">
 		    <span style="font-size: 32px; font-weight:500; color: ${OG_CONSTANTS.COLORS.TEXT.PRIMARY}; line-height:1;">esse</span>
 		    <span style="font-size: 24px; color: ${OG_CONSTANTS.COLORS.TEXT.SECONDARY}; line-height:0.8; margin-top:0px;">dev</span>
@@ -270,7 +271,7 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		      color: ${OG_CONSTANTS.COLORS.TEXT.PRIMARY};
 		      margin: 0 0 24px 0;
 		      line-height: 1.1;
-		    ">${title}</h1>
+		    ">${escapeHtml(title)}</h1>
 		    ${
 					excerpt
 						? `
@@ -279,7 +280,7 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		      color: ${OG_CONSTANTS.COLORS.TEXT.MUTED};
 		      margin: 0;
 		      line-height: 1.4;
-		    ">${excerpt.length > 150 ? excerpt.slice(0, 150) + '...' : excerpt}</p>
+		    ">${escapeHtml(excerpt.length > 150 ? excerpt.slice(0, 150) + '...' : excerpt)}</p>
 		  `
 						: ''
 				}
