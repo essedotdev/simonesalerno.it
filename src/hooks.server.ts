@@ -17,6 +17,20 @@ function withSecurityHeaders(response: Response): Response {
 	return response;
 }
 
+// Cache-Control per le pagine HTML servite con successo. Le pagine sono
+// deterministiche per path (la lingua e' nell'URL), quindi possono essere
+// cacheate al CDN; il browser rivalida sempre (max-age=0) cosi' un nuovo deploy
+// e' visibile subito. Non applicato a redirect (escono prima) ne' a errori.
+function withPageCache(response: Response): Response {
+	if (response.status >= 200 && response.status < 300) {
+		response.headers.set(
+			'Cache-Control',
+			'public, max-age=0, s-maxage=300, stale-while-revalidate=86400'
+		);
+	}
+	return response;
+}
+
 // Trova la sottorotta corretta per una lingua specifica
 function findRouteForLanguage(
 	subRoute: string,
@@ -198,10 +212,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 			}
 		}
 
-		return withSecurityHeaders(
-			await resolve(event, {
-				transformPageChunk: ({ html }: { html: string }) => html.replace('%lang%', currentLang)
-			})
+		return withPageCache(
+			withSecurityHeaders(
+				await resolve(event, {
+					transformPageChunk: ({ html }: { html: string }) => html.replace('%lang%', currentLang)
+				})
+			)
 		);
 	} catch (error) {
 		console.error('Error in hooks.server.ts:', error);
