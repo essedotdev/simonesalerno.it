@@ -22,9 +22,12 @@ export const load: LayoutServerLoad = async ({ url }): Promise<LayoutData> => {
 	const projectsPage = await loader.loadPage('projects', validLang);
 	const blogPage = await loader.loadPage('blog', validLang);
 
-	// Carica collezioni con tutte le traduzioni per il language switcher
-	const projects = await loader.loadProjects(); // Tutte le lingue
-	const articles = await loader.loadArticles(); // Tutte le lingue
+	// Carica collezioni solo per la lingua corrente
+	const projects = await loader.loadProjects(validLang);
+	const articles = await loader.loadArticles(validLang);
+
+	// Carica mappa slug leggera per il language switcher
+	const slugMap = await loader.loadSlugMap();
 
 	return {
 		selectedLanguage: validLang,
@@ -37,6 +40,7 @@ export const load: LayoutServerLoad = async ({ url }): Promise<LayoutData> => {
 		projectsPage,
 		blogPage,
 		projects,
-		articles
+		articles,
+		slugMap
 	};
 };

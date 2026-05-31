@@ -13,8 +13,7 @@
 		languages = [],
 		selectedLanguage = 'en',
 		navigation = {},
-		projects = [],
-		articles = [],
+		slugMap = { projects: {}, articles: {} },
 		isFloatingNav = false
 	}: LanguageSelectorProps & { isFloatingNav?: boolean } = $props();
 
@@ -64,18 +63,18 @@
 			return `/${targetLang}/${targetRoute}${searchParams}`;
 		}
 
-		// Trova il contenuto con lo slug corrente
-		const collections = currentRouteKey === 'projects' ? projects : articles;
-		const content = collections.find((item) => item.translations[currentLang]?.slug === slug);
+		// Trova lo slug target nella lingua scelta tramite slugMap
+		const map = slugMap[currentRouteKey === 'projects' ? 'projects' : 'articles'];
+		const slugEntry = Object.entries(map).find(([, langs]) => langs[currentLang] === slug);
 
-		if (!content || !content.translations[targetLang]) {
+		if (!slugEntry || !slugEntry[1][targetLang]) {
 			// Contenuto non disponibile nella lingua target
 			// Vai alla sezione principale (es. /en/projects)
 			return `/${targetLang}/${targetRoute}${searchParams}`;
 		}
 
 		// Contenuto disponibile, vai alla pagina specifica
-		const targetSlug = content.translations[targetLang].slug;
+		const targetSlug = slugEntry[1][targetLang];
 		return `/${targetLang}/${targetRoute}/${targetSlug}${searchParams}`;
 	}
 

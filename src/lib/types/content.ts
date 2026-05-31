@@ -150,8 +150,14 @@ export interface ArticleItem {
 }
 
 // ==================================================
-// LAYOUT DATA TYPE
+// SLUG MAP TYPE
 // ==================================================
+
+export type SlugMap = Record<string, Record<string, string>>;
+export interface SlugMapData {
+	projects: SlugMap;
+	articles: SlugMap;
+}
 
 export interface LayoutData {
 	selectedLanguage: string;
@@ -165,6 +171,7 @@ export interface LayoutData {
 	blogPage: BlogPageContent;
 	projects: ProjectItem[];
 	articles: ArticleItem[];
+	slugMap: SlugMapData;
 }
 
 // ==================================================
@@ -187,8 +194,7 @@ export interface LanguageSelectorProps {
 	languages: Language[];
 	selectedLanguage: string;
 	navigation: NavigationConfig;
-	projects: ProjectItem[];
-	articles: ArticleItem[];
+	slugMap: SlugMapData;
 }
 
 // Card Component Props
@@ -285,7 +291,8 @@ export type CacheKey =
 	| `projects-${string}`
 	| 'projects-all'
 	| `articles-${string}`
-	| 'articles-all';
+	| 'articles-all'
+	| 'slug-map';
 
 // Return types for ContentLoader methods
 export interface LoadConfigReturn {

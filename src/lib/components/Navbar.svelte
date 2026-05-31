@@ -50,8 +50,7 @@
 					languages={data.languages}
 					selectedLanguage={data.selectedLanguage}
 					navigation={data.navigation}
-					projects={data.projects}
-					articles={data.articles}
+					slugMap={data.slugMap}
 				/>
 			</div>
 		</div>
@@ -63,8 +62,7 @@
 						languages={data.languages}
 						selectedLanguage={data.selectedLanguage}
 						navigation={data.navigation}
-						projects={data.projects}
-						articles={data.articles}
+						slugMap={data.slugMap}
 					/>
 				</div>
 

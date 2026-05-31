@@ -13,6 +13,7 @@ import type {
 	ProjectItem,
 	ProjectMeta,
 	ProjectTranslation,
+	SlugMapData,
 	WelcomeContent
 } from '../types';
 
@@ -261,6 +262,19 @@ export class ContentLoader {
 		return articles;
 	}
 
+	async loadSlugMap(): Promise<SlugMapData> {
+		const cacheKey: CacheKey = 'slug-map';
+		if (this.cache.has(cacheKey)) {
+			return this.cache.get(cacheKey) as SlugMapData;
+		}
+
+		const module = await import('../content/slug-map.json');
+		const data = module.default as SlugMapData;
+
+		this.cache.set(cacheKey, data);
+		return data;
+	}
+
 	async getAvailableLanguages(contentType: ContentType, id: string): Promise<string[]> {
 		try {
 			const languages = await this.loadConfig('languages');
@@ -287,7 +301,8 @@ export class ContentLoader {
 		lang: string,
 		type: ContentType
 	): Promise<ProjectItem | ArticleItem | undefined> {
-		const collection = type === 'project' ? await this.loadProjects() : await this.loadArticles();
+		const collection =
+			type === 'project' ? await this.loadProjects(lang) : await this.loadArticles(lang);
 
 		// CORREZIONE CRITICA: Cerca nella lingua corrente, non in translations[0]
 		return collection.find((item) => item.translations[lang]?.slug === slug);
