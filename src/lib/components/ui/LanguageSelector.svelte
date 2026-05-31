@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	// Import goto
 	import type { LanguageSelectorProps } from '$lib/types';
+	import { getLanguageUrl } from '$lib/utils/language-url';
 	import { ChevronDown } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -31,51 +32,13 @@
 	}
 
 	function buildLanguageUrl(targetLang: string): string {
-		const currentPath = page.url.pathname.split('/');
-		const currentLang = currentPath[1];
-		const route = currentPath[2];
-		const slug = currentPath[3];
-		const searchParams = page.url.search;
-
-		// Se non c'è una route (homepage)
-		if (!route) {
-			return `/${targetLang}${searchParams}`;
-		}
-
-		// Trova il tipo di route corrente
-		const currentRouteKey = Object.keys(navigation[currentLang] || {}).find(
-			(key) => navigation[currentLang][key] === route
-		);
-
-		if (!currentRouteKey) {
-			// Route non riconosciuta, vai alla homepage
-			return `/${targetLang}${searchParams}`;
-		}
-
-		const targetRoute = navigation[targetLang]?.[currentRouteKey];
-		if (!targetRoute) {
-			// Route non disponibile nella lingua target
-			return `/${targetLang}${searchParams}`;
-		}
-
-		// Se non c'è slug (pagina di sezione come /en/blog)
-		if (!slug) {
-			return `/${targetLang}/${targetRoute}${searchParams}`;
-		}
-
-		// Trova lo slug target nella lingua scelta tramite slugMap
-		const map = slugMap[currentRouteKey === 'projects' ? 'projects' : 'articles'];
-		const slugEntry = Object.entries(map).find(([, langs]) => langs[currentLang] === slug);
-
-		if (!slugEntry || !slugEntry[1][targetLang]) {
-			// Contenuto non disponibile nella lingua target
-			// Vai alla sezione principale (es. /en/projects)
-			return `/${targetLang}/${targetRoute}${searchParams}`;
-		}
-
-		// Contenuto disponibile, vai alla pagina specifica
-		const targetSlug = slugEntry[1][targetLang];
-		return `/${targetLang}/${targetRoute}/${targetSlug}${searchParams}`;
+		return getLanguageUrl({
+			pathname: page.url.pathname,
+			search: page.url.search,
+			navigation,
+			slugMap,
+			targetLang
+		});
 	}
 
 	onMount(() => {
