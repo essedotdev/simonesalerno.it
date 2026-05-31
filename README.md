@@ -17,7 +17,7 @@ Personal portfolio website built with SvelteKit and deployed on Cloudflare Worke
 - **Articles/Blog** - Content publishing system
 - **Contact form** - Get in touch functionality
 - **Optimized images** - Automatic image optimization with vite-imagetools
-- **OG images** - Dynamic Open Graph image generation
+- **OG images** - Open Graph images pre-generated at build time (static PNGs)
 - **Responsive design** - Mobile-first approach
 
 ## Development
@@ -48,7 +48,17 @@ pnpm preview          # Preview production build locally
 pnpm check            # TypeScript type checking
 pnpm lint             # Check code style
 pnpm format           # Format code with Prettier
+pnpm test:unit        # Unit tests (Vitest)
+pnpm test:e2e         # End-to-end tests (Playwright)
+pnpm test:ci          # Unit + E2E
 ```
+
+## Documentation
+
+- [`CLAUDE.md`](CLAUDE.md) - conventions, commands and gotchas (for the coding agent)
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) - design decisions and tradeoffs
+- [`docs/Roadmap.md`](docs/Roadmap.md) - current milestones
+- [`docs/Cycles.md`](docs/Cycles.md) - work-cycle log
 
 ## Deployment
 
