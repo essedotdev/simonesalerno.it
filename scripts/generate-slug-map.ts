@@ -1,5 +1,6 @@
-import { readFileSync, readdirSync, existsSync, writeFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { fileURLToPath } from 'url';
 
 const CONTENT_DIR = join(import.meta.dirname, '..', 'src/lib/content');
 const OUTPUT_FILE = join(CONTENT_DIR, 'slug-map.json');
@@ -13,7 +14,9 @@ function readJsonFile(filePath: string): Record<string, unknown> {
 	return JSON.parse(content) as Record<string, unknown>;
 }
 
-function buildSection(type: 'projects' | 'articles'): Record<string, Record<string, string>> {
+export function buildSection(
+	type: 'projects' | 'articles'
+): Record<string, Record<string, string>> {
 	const dir = join(CONTENT_DIR, type);
 	if (!existsSync(dir)) return {};
 
@@ -48,13 +51,17 @@ function buildSection(type: 'projects' | 'articles'): Record<string, Record<stri
 	return section;
 }
 
-function generate(): void {
-	console.log('Generating slug map...');
-
-	const slugMap = {
+export function buildSlugMap() {
+	return {
 		projects: buildSection('projects'),
 		articles: buildSection('articles')
 	};
+}
+
+export function generate(): void {
+	console.log('Generating slug map...');
+
+	const slugMap = buildSlugMap();
 
 	writeFileSync(OUTPUT_FILE, JSON.stringify(slugMap, null, 2) + '\n');
 
@@ -72,4 +79,7 @@ function generate(): void {
 	);
 }
 
-generate();
+// Esegui solo quando lanciato come script (non quando importato dai test)
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+	generate();
+}

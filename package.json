@@ -16,11 +16,17 @@
 		"deploy": "pnpm run build && wrangler deploy",
 		"cf-typegen": "wrangler types ./src/worker-configuration.d.ts",
 		"generate-images": "tsx scripts/generate-image-assets.ts",
-		"generate-slug-map": "tsx scripts/generate-slug-map.ts"
+		"generate-slug-map": "tsx scripts/generate-slug-map.ts",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:unit": "vitest run",
+		"test:e2e": "playwright test",
+		"test:ci": "vitest run && playwright test"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.1.0",
 		"@eslint/js": "^10.0.1",
+		"@playwright/test": "^1.60.0",
 		"@sveltejs/adapter-auto": "^7.0.1",
 		"@sveltejs/adapter-cloudflare": "^7.2.8",
 		"@sveltejs/kit": "^2.60.1",
@@ -28,6 +34,7 @@
 		"@tailwindcss/vite": "^4.3.0",
 		"@types/node": "^25.9.1",
 		"@types/three": "^0.184.1",
+		"@vitest/coverage-v8": "^4.1.7",
 		"eslint": "^10.4.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.17.1",
@@ -44,6 +51,7 @@
 		"typescript-eslint": "^8.59.4",
 		"vite": "^8.0.14",
 		"vite-imagetools": "^10.0.0",
+		"vitest": "^4.1.7",
 		"workers-og": "^0.0.27",
 		"wrangler": "^4.94.0"
 	},
