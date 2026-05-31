@@ -45,14 +45,6 @@
 		</h1>
 	</div>
 
-	<!-- <div class="flex text-3xl lg:text-5xl italic">
-		{#await import('$lib/components/Typewriter.svelte')}
-			<span>Loading...</span>
-		{:then c}
-			<svelte:component this={c.default} text={welcome.typewriter} />
-		{/await}
-	</div> -->
-
 	<ContentRenderer
 		content={welcome.description}
 		className="flex flex-col gap-y-4 text-center"

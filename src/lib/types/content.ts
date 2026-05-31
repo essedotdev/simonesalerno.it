@@ -73,7 +73,6 @@ export interface GlobalContent {
 // Page Content (Welcome, About, Contact, Projects, Blog)
 export interface WelcomeContent {
 	title: string;
-	typewriter: string[];
 	description: ContentBlocks;
 }
 
@@ -101,7 +100,7 @@ export interface ProjectMeta {
 	id: string;
 	images: string[];
 	featured_image: string;
-	featuredImagePlaceholder?: string;
+	featuredImagePlaceholder?: boolean;
 	og_image_key?: string;
 	link?: string;
 	published: boolean;
@@ -113,7 +112,7 @@ export interface ProjectMeta {
 export interface ArticleMeta {
 	id: string;
 	featured_image: string;
-	featuredImagePlaceholder?: string;
+	featuredImagePlaceholder?: boolean;
 	og_image_key?: string;
 	published: boolean;
 	published_date: string;
@@ -204,7 +203,7 @@ export interface ProjectCardProps {
 	title: string;
 	excerpt: string;
 	featuredImage?: string;
-	featuredImagePlaceholder?: string;
+	featuredImagePlaceholder?: boolean;
 	link: string;
 	tags?: string[];
 }
@@ -213,7 +212,7 @@ export interface ArticleCardProps {
 	title: string;
 	excerpt: string;
 	featuredImage?: string;
-	featuredImagePlaceholder?: string;
+	featuredImagePlaceholder?: boolean;
 	link: string;
 	publishedDate: string;
 	tags: string[];
