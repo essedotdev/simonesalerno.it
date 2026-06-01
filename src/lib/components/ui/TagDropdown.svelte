@@ -105,7 +105,7 @@
 			{#each filteredTags as tag (tag)}
 				<button
 					onclick={() => handleTagSelect(tag)}
-					class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-white/80 transition-colors {isTagSelected(
+					class="flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-left text-white/80 transition-colors {isTagSelected(
 						tag
 					)
 						? 'bg-white/15'
@@ -130,7 +130,7 @@
 			<div class="border-t border-white/5 p-2">
 				<button
 					onclick={onClearTags}
-					class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10"
+					class="w-full cursor-pointer rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10"
 				>
 					{t.clearTags}
 				</button>

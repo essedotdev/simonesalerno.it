@@ -143,7 +143,7 @@
 								: t.sortTitleZA}
 				<button
 					onclick={() => handleSortSelect(option.value)}
-					class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors
+					class="flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors
 						{currentSort === option.value ? 'bg-white/10' : 'hover:bg-white/5 active:bg-white/10'} w-full"
 				>
 					<div

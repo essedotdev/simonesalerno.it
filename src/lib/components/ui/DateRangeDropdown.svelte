@@ -113,7 +113,7 @@
 				<div class="border-t border-white/5 pt-3">
 					<button
 						onclick={onClearDates}
-						class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10"
+						class="w-full cursor-pointer rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10"
 					>
 						{t.clearDates}
 					</button>

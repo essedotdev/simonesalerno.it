@@ -97,7 +97,7 @@
 			{#each availableStatuses as status (status)}
 				<button
 					onclick={() => handleStatusSelect(status)}
-					class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-white/80 transition-colors {selectedStatuses.includes(
+					class="flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-left text-white/80 transition-colors {selectedStatuses.includes(
 						status
 					)
 						? 'bg-white/15'
@@ -122,7 +122,7 @@
 			<div class="border-t border-white/5 p-2">
 				<button
 					onclick={onClearStatuses}
-					class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10"
+					class="w-full cursor-pointer rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10"
 				>
 					{t.clearStatuses}
 				</button>
