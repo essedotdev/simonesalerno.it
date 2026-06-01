@@ -61,6 +61,64 @@ test.describe('i18n routing & redirects', () => {
 		expect(res?.status()).toBe(200);
 		await expect(page.locator('h1, h2').first()).toBeVisible();
 	});
+
+	test('invalid language with a valid route redirects to the canonical language', async ({
+		request
+	}) => {
+		// /xx/projects -> /en/projects (la route 'projects' appartiene a en)
+		const res = await request.get('/xx/projects', { maxRedirects: 0 });
+		expect(res.status()).toBe(302);
+		expect(res.headers()['location']).toMatch(/\/en\/projects$/);
+	});
+
+	test('invalid language carries the slug to the canonical language', async ({ request }) => {
+		const res = await request.get('/xx/projects/budokan', { maxRedirects: 0 });
+		expect(res.status()).toBe(302);
+		expect(res.headers()['location']).toMatch(/\/en\/projects\/budokan$/);
+	});
+
+	test('wrong-language route with a slug translates the route and keeps the slug', async ({
+		request
+	}) => {
+		// /en/progetti/budokan -> /en/projects/budokan (slug condiviso tra le lingue)
+		const res = await request.get('/en/progetti/budokan', { maxRedirects: 0 });
+		expect(res.status()).toBe(302);
+		expect(res.headers()['location']).toMatch(/\/en\/projects\/budokan$/);
+	});
+
+	test('a canonical detail URL does not redirect (no loop)', async ({ request }) => {
+		const res = await request.get('/en/projects/budokan', { maxRedirects: 0 });
+		expect(res.status()).toBe(200);
+	});
+});
+
+test.describe('article slug translation (cross-language)', () => {
+	// L'unico contenuto con slug diversi tra le lingue (en: my-new-laboratory,
+	// it: il-mio-nuovo-laboratorio): esercita la traduzione slug del hook, che sui
+	// progetti non scatta mai perche' i loro slug coincidono tra en e it.
+	test('italian article slug under /en redirects to the english slug', async ({ request }) => {
+		const res = await request.get('/en/blog/il-mio-nuovo-laboratorio', { maxRedirects: 0 });
+		expect(res.status()).toBe(302);
+		expect(res.headers()['location']).toMatch(/\/en\/blog\/my-new-laboratory$/);
+	});
+
+	test('english article slug under /it redirects to the italian slug', async ({ request }) => {
+		const res = await request.get('/it/blog/my-new-laboratory', { maxRedirects: 0 });
+		expect(res.status()).toBe(302);
+		expect(res.headers()['location']).toMatch(/\/it\/blog\/il-mio-nuovo-laboratorio$/);
+	});
+
+	test('the english article detail renders at its canonical slug', async ({ page }) => {
+		const res = await page.goto('/en/blog/my-new-laboratory');
+		expect(res?.status()).toBe(200);
+		await expect(page.locator('h1').first()).toBeVisible();
+	});
+
+	test('the italian article detail renders at its canonical slug', async ({ page }) => {
+		const res = await page.goto('/it/blog/il-mio-nuovo-laboratorio');
+		expect(res?.status()).toBe(200);
+		await expect(page.locator('h1').first()).toBeVisible();
+	});
 });
 
 test.describe('sitemap', () => {
