@@ -56,6 +56,12 @@ export const LanguagesConfigSchema = z.array(LanguageSchema).min(1);
 
 export const NavigationConfigSchema = z.record(z.string(), z.record(z.string(), z.string()));
 
+// Vetrina home: lista ordinata di id progetto, max 6. L'esistenza degli id e
+// verificata a build da validate-content (qui non abbiamo l'elenco progetti).
+export const FeaturedConfigSchema = z.object({
+	projects: z.array(z.string().min(1)).max(6)
+});
+
 // ==================================================
 // CONTENT SCHEMAS
 // ==================================================

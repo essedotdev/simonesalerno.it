@@ -23,6 +23,7 @@ import type { z } from 'zod';
 import {
 	LanguagesConfigSchema,
 	NavigationConfigSchema,
+	FeaturedConfigSchema,
 	GlobalContentSchema,
 	ProjectMetaSchema,
 	ArticleMetaSchema,
@@ -72,6 +73,8 @@ export class ContentLoader {
 			let validated: unknown;
 			if (file === 'languages') {
 				validated = validateContent(LanguagesConfigSchema, data, 'config', `config/${file}.json`);
+			} else if (file === 'featured') {
+				validated = validateContent(FeaturedConfigSchema, data, 'config', `config/${file}.json`);
 			} else {
 				validated = validateContent(NavigationConfigSchema, data, 'config', `config/${file}.json`);
 			}

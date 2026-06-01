@@ -287,7 +287,7 @@ export interface FloatingNavProps {
 // CONTENT LOADER TYPES
 // ==================================================
 
-export type ConfigFileNames = 'languages' | 'navigation';
+export type ConfigFileNames = 'languages' | 'navigation' | 'featured';
 export type PageNames = 'welcome' | 'about' | 'contact' | 'projects' | 'blog';
 export type ContentType = 'project' | 'article';
 
@@ -302,6 +302,12 @@ export type CacheKey =
 	| 'articles-all'
 	| 'slug-map';
 
+// Curatela della vetrina home: id progetto ordinati, max 6. La selezione e
+// l'ordine vivono qui, disaccoppiati dai meta. Solo la home la usa.
+export interface FeaturedConfig {
+	projects: string[];
+}
+
 // Return types for ContentLoader methods
 export interface LoadConfigReturn {
 	languages: Language[];
@@ -312,7 +318,9 @@ export type LoadConfigType<T extends ConfigFileNames> = T extends 'languages'
 	? Language[]
 	: T extends 'navigation'
 		? NavigationConfig
-		: never;
+		: T extends 'featured'
+			? FeaturedConfig
+			: never;
 
 // ==================================================
 // UTILITY TYPES

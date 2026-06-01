@@ -57,6 +57,10 @@ const LanguagesConfigSchema = z.array(LanguageSchema).min(1);
 
 const NavigationConfigSchema = z.record(z.string(), z.record(z.string(), z.string()));
 
+const FeaturedConfigSchema = z.object({
+	projects: z.array(z.string().min(1)).max(6)
+});
+
 const GlobalContentSchema = z.object({
 	title: z.string().min(1),
 	description: z.string().min(1),
@@ -187,6 +191,7 @@ console.log('🔍 Validating content files...\n');
 // Config files
 validateFile(join(CONTENT_DIR, 'config/languages.json'), LanguagesConfigSchema);
 validateFile(join(CONTENT_DIR, 'config/navigation.json'), NavigationConfigSchema);
+validateFile(join(CONTENT_DIR, 'config/featured.json'), FeaturedConfigSchema);
 
 // Global content
 const globalDir = join(CONTENT_DIR, 'global');
@@ -223,6 +228,7 @@ if (existsSync(pagesDir)) {
 }
 
 // Projects
+const projectIds: string[] = [];
 const projectsDir = join(CONTENT_DIR, 'projects');
 if (existsSync(projectsDir)) {
 	for (const projectDir of readdirSync(projectsDir, { withFileTypes: true })) {
@@ -233,6 +239,7 @@ if (existsSync(projectsDir)) {
 			const metaPath = join(projectPath, 'meta.json');
 			if (existsSync(metaPath)) {
 				validateFile(metaPath, ProjectMetaSchema);
+				projectIds.push(projectDir.name);
 			}
 
 			// translation files (en.json, it.json, etc.)
@@ -265,6 +272,26 @@ if (existsSync(articlesDir)) {
 				}
 			}
 		}
+	}
+}
+
+// Featured: gli id devono riferirsi a progetti esistenti (la dir = meta.id).
+const featuredPath = join(CONTENT_DIR, 'config/featured.json');
+if (existsSync(featuredPath)) {
+	try {
+		const featured = JSON.parse(readFileSync(featuredPath, 'utf-8'));
+		const ids: unknown = featured?.projects;
+		if (Array.isArray(ids)) {
+			const missing = ids.filter((id) => !projectIds.includes(id));
+			if (missing.length > 0) {
+				validationErrors.push({
+					file: 'src/lib/content/config/featured.json',
+					errors: missing.map((id) => `id progetto inesistente: "${id}"`)
+				});
+			}
+		}
+	} catch {
+		// l'errore di shape/sintassi e gia segnalato da validateFile sopra
 	}
 }
 
