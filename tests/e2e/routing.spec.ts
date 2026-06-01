@@ -75,5 +75,6 @@ test.describe('sitemap', () => {
 		expect(body).toContain('/en');
 		expect(body).toContain('/it');
 		expect(body).toContain('hreflang');
+		expect(body).toContain('x-default');
 	});
 });
