@@ -78,3 +78,16 @@ test.describe('sitemap', () => {
 		expect(body).toContain('x-default');
 	});
 });
+
+test.describe('rss', () => {
+	test('/en/rss.xml is a valid feed with items', async ({ request }) => {
+		const res = await request.get('/en/rss.xml');
+		expect(res.status()).toBe(200);
+		expect(res.headers()['content-type']).toContain('rss+xml');
+		const body = await res.text();
+		expect(body).toContain('<rss');
+		expect(body).toContain('<channel>');
+		expect(body).toContain('<item>');
+		expect(body).toContain('/en/blog/');
+	});
+});

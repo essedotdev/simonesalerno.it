@@ -239,6 +239,14 @@
 		<link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
 	{/each}
 
+	<!-- RSS feed (lingua corrente) -->
+	<link
+		rel="alternate"
+		type="application/rss+xml"
+		title="Simone Salerno - RSS"
+		href={`${page.url.origin}/${currentLocale}/rss.xml`}
+	/>
+
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={pageTitle} />
