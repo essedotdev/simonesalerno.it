@@ -205,6 +205,8 @@ export interface ProjectCardProps {
 	featuredImagePlaceholder?: boolean;
 	link: string;
 	tags?: string[];
+	status?: 'completed' | 'in-progress' | 'idea' | 'archived';
+	statusLabel?: string;
 }
 
 export interface ArticleCardProps {
