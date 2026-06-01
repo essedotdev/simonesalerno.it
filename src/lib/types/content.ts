@@ -183,6 +183,7 @@ export interface DetailPageData {
 	type: 'project' | 'article';
 	content: ProjectItem | ArticleItem;
 	currentLang: string;
+	related?: ArticleItem[];
 }
 
 // ==================================================
@@ -250,6 +251,8 @@ export interface ArticleSectionProps {
 	content: ArticleItem;
 	currentLang: string;
 	global?: GlobalContent;
+	related?: ArticleItem[];
+	navigation?: NavigationConfig;
 }
 
 export interface WelcomeSectionProps {

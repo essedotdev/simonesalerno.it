@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import ArticleCard from '$lib/components/ArticleCard.svelte';
 	import OptimizedImage from '$lib/components/OptimizedImage.svelte';
 	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 	import type { ArticleSectionProps } from '$lib/types';
@@ -9,7 +10,9 @@
 	import { inview, type Options } from 'svelte-inview';
 
 	// Receive props from parent
-	let { content, currentLang, global }: ArticleSectionProps = $props();
+	let { content, currentLang, global, related, navigation }: ArticleSectionProps = $props();
+
+	let blogRoute = $derived(navigation?.[currentLang]?.articles ?? 'blog');
 
 	// Get translation with type safety
 	let backText = $derived(getTranslation(global, 'back'));
@@ -114,5 +117,30 @@
 				<ContentRenderer content={currentTranslation.content} className="max-w-none" />
 			{/if}
 		</article>
+
+		{#if related && related.length > 0}
+			<section class="mt-12 border-t border-white/10 pt-10">
+				<h2 class="mb-6 text-3xl font-normal text-gray-100">
+					{currentLang === 'en' ? 'Related articles' : 'Articoli correlati'}
+				</h2>
+				<div class="grid grid-cols-1 gap-6 sm:gap-10 md:grid-cols-2 xl:grid-cols-3">
+					{#each related as item (item.meta.id)}
+						{@const t = item.translations[currentLang]}
+						{#if t}
+							<ArticleCard
+								title={t.title}
+								excerpt={t.excerpt}
+								featuredImage={item.meta.featured_image}
+								featuredImagePlaceholder={item.meta.featuredImagePlaceholder}
+								link={`/${currentLang}/${blogRoute}/${t.slug}`}
+								publishedDate={item.meta.published_date}
+								tags={translateTags(global, t.tags)}
+								selectedLanguage={currentLang}
+							/>
+						{/if}
+					{/each}
+				</div>
+			</section>
+		{/if}
 	{/if}
 </div>

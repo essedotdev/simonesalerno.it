@@ -42,10 +42,24 @@ export const load: PageServerLoad = async ({ params, parent }): Promise<DetailPa
 			throw error(404, 'Article not found');
 		}
 
+		// Articoli simili: quelli con più tag in comune (raw), max 3.
+		const currentTags = new Set(article.translations[lang]?.tags ?? []);
+		const related = (await loader.loadArticles(lang))
+			.filter((a) => a.meta.id !== article.meta.id)
+			.map((a) => ({
+				article: a,
+				shared: (a.translations[lang]?.tags ?? []).filter((tag) => currentTags.has(tag)).length
+			}))
+			.filter((entry) => entry.shared > 0)
+			.sort((x, y) => y.shared - x.shared)
+			.slice(0, 3)
+			.map((entry) => entry.article);
+
 		return {
 			type: 'article' as const,
 			content: article,
-			currentLang: lang
+			currentLang: lang,
+			related
 		};
 	}
 

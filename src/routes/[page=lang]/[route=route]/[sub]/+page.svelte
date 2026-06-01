@@ -19,6 +19,8 @@
 			content={data.content as import('$lib/types').ArticleItem}
 			currentLang={data.currentLang}
 			global={data.global}
+			related={data.related}
+			navigation={data.navigation}
 		/>
 	{/if}
 </div>
