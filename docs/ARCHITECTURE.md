@@ -42,8 +42,10 @@ una libreria i18n sovradimensionata. Lo schema:
   contenuti e memoizzata per isolate, così i redirect e il language switcher non
   devono caricare tutti i contenuti in tutte le lingue a ogni richiesta. Gli slug
   vivono solo nelle traduzioni: niente file committato, nessun drift possibile;
-- `getLanguageUrl` e gli helper SEO sono funzioni pure estratte per essere
-  testabili in isolamento.
+- la logica di routing (validazione lingua, route -> chiave logica, traduzione
+  route, sezione) vive in funzioni pure in `src/lib/utils/i18n.ts`, unica fonte
+  usata da layout, hooks e `getLanguageUrl`: niente reimplementazioni inline.
+  `getLanguageUrl` e gli helper SEO sono anch'essi puri e testabili.
 
 ## Open Graph: pre-generazione a build time
 
@@ -83,5 +85,6 @@ script inline propri). Gli header di sicurezza (`X-Content-Type-Options`,
 ## Boundary
 
 Route sottili -> `ContentLoader` (accesso dati) -> schemi Zod (validazione) ->
-sezioni/componenti (UI). La logica pura (i18n url, SEO, escape, slug map) è
-estratta in `src/lib/utils/` per poter essere testata senza montare componenti.
+sezioni/componenti (UI). La logica pura (routing i18n, language url, SEO, escape)
+è estratta in `src/lib/utils/` per poter essere testata senza montare componenti.
+Il `ContentLoader` fa solo data-access: la logica di routing non vive lì.

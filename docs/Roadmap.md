@@ -86,9 +86,19 @@ Vedi `docs/Cycles.md` per il log dettagliato del lavoro svolto.
   drift. Rimossi script, file e step di build relativi. Dettagli in `docs/Cycles.md`
   (Ciclo 3).
 
+### M8 - Routing i18n unificato + dead code (post-overhaul) - ✅ Completata (2026-06-01)
+
+- Logica di routing i18n (validazione lingua, route -> chiave logica, traduzione
+  route, sezione) estratta in funzioni pure condivise (`src/lib/utils/i18n.ts`),
+  unica fonte usata da layout, hooks e `getLanguageUrl`: eliminate le
+  reimplementazioni inline sparse.
+- Rimosso codice morto dal `ContentLoader` (4 metodi mai usati + `getAvailableLanguages`)
+  e il campo `availableLanguages` di `DetailPageData`, che nessun componente leggeva.
+  Dettagli in `docs/Cycles.md` (Ciclo 4).
+
 ## Stato deploy
 
 Le Milestone M1-M3 sono pushate su `main` (fino a `66ff033`). Tutto il lavoro
-successivo (M4-M7, rimozione CI, slug map derivata) è committato localmente e non
-ancora pushato (push solo su comando esplicito). Il deploy avviene via Cloudflare
-Workers Builds al push.
+successivo (M4-M8, rimozione CI, slug map derivata, routing unificato) è committato
+localmente e non ancora pushato (push solo su comando esplicito). Il deploy avviene
+via Cloudflare Workers Builds al push.

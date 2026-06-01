@@ -40,6 +40,10 @@ deploy avviene via Cloudflare Workers Builds al push, il gate di qualità è loc
   In dev, dopo aver cambiato uno slug, riavvia il dev server.
 - URL per lingua: usa `getLanguageUrl` (puro, testato). SEO (canonical/hreflang/
   JSON-LD): helper puri in `src/lib/utils/seo.ts`, cablati nel `+layout.svelte`.
+- Logica di routing (lingua valida, route -> chiave logica, traduzione route,
+  sezione) in `src/lib/utils/i18n.ts`: funzioni pure, unica fonte usata da layout,
+  hooks e `getLanguageUrl`. Non reimplementarla inline. Il `ContentLoader` fa solo
+  data-access, non routing.
 
 ## Open Graph
 
