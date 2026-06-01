@@ -2,6 +2,7 @@
 	import { base } from '$app/paths';
 	import BackLink from '$lib/components/BackLink.svelte';
 	import OptimizedImage from '$lib/components/OptimizedImage.svelte';
+	import StatusBadge from '$lib/components/StatusBadge.svelte';
 	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 	import type { ProjectSectionProps } from '$lib/types';
 	import { getTranslation, translateTags } from '$lib/utils/translations';
@@ -59,6 +60,10 @@
 				{/if}
 			</div>
 			<div class="flex w-full flex-col gap-y-6 xl:w-1/2">
+				{#if content.meta.status}
+					<StatusBadge status={content.meta.status} {global} class="self-start" />
+				{/if}
+
 				<h2 class="text-5xl font-normal sm:text-6xl 2xl:text-7xl">
 					{currentTranslation.title}
 				</h2>

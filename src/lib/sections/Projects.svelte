@@ -78,22 +78,10 @@
 		'noResultsFound',
 		'tryAdjusting',
 		'noProjectsHome',
-		'checkBackLater',
-		'statusCompleted',
-		'statusInProgress',
-		'statusIdea',
-		'statusArchived'
+		'checkBackLater'
 	];
 
 	let t = $derived(getTranslations(global, translationKeys));
-
-	// Mappa stato del progetto -> chiave di traduzione per l'etichetta del badge
-	const STATUS_KEY = {
-		completed: 'statusCompleted',
-		'in-progress': 'statusInProgress',
-		idea: 'statusIdea',
-		archived: 'statusArchived'
-	} as const;
 
 	// Generate link to projects page
 	let projectsPageLink = $derived(
@@ -138,7 +126,7 @@
 					featuredImagePlaceholder={project.meta.featuredImagePlaceholder}
 					tags={translateTags(global, project.translations[selectedLanguage].tags)}
 					status={project.meta.status}
-					statusLabel={t[STATUS_KEY[project.meta.status]]}
+					{global}
 					link={'/' +
 						selectedLanguage +
 						'/' +

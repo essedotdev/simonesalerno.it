@@ -207,7 +207,7 @@ export interface ProjectCardProps {
 	link: string;
 	tags?: string[];
 	status?: 'completed' | 'in-progress' | 'idea' | 'archived';
-	statusLabel?: string;
+	global: GlobalContent | null | undefined;
 }
 
 export interface ArticleCardProps {

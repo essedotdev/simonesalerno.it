@@ -2,6 +2,7 @@
 	import { base } from '$app/paths';
 	import type { ProjectCardProps } from '$lib/types';
 	import OptimizedImage from './OptimizedImage.svelte';
+	import StatusBadge from './StatusBadge.svelte';
 
 	let {
 		title,
@@ -11,16 +12,8 @@
 		link,
 		tags,
 		status,
-		statusLabel
+		global
 	}: ProjectCardProps = $props();
-
-	// Colori del badge di stato (coerenti col tema scuro/glassy)
-	const STATUS_STYLE: Record<NonNullable<ProjectCardProps['status']>, string> = {
-		completed: 'bg-emerald-500/15 text-emerald-200 border-emerald-400/25',
-		'in-progress': 'bg-amber-500/15 text-amber-200 border-amber-400/25',
-		idea: 'bg-violet-500/15 text-violet-200 border-violet-400/25',
-		archived: 'bg-white/10 text-gray-300 border-white/15'
-	};
 </script>
 
 <div
@@ -34,14 +27,8 @@
 			showPlaceholder={Boolean(featuredImagePlaceholder)}
 			sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
 		/>
-		{#if status && statusLabel}
-			<span
-				class="absolute top-3 left-3 rounded-full border px-2.5 py-1 text-xs font-medium backdrop-blur-md {STATUS_STYLE[
-					status
-				]}"
-			>
-				{statusLabel}
-			</span>
+		{#if status}
+			<StatusBadge {status} {global} class="absolute top-3 left-3" />
 		{/if}
 	</a>
 	<div class="px-6 py-5">

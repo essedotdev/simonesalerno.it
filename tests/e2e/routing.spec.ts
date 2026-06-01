@@ -55,6 +55,13 @@ test.describe('i18n routing & redirects', () => {
 		await expect(page.locator('h1, h2').first()).toBeVisible();
 	});
 
+	test('the project detail page shows the status badge', async ({ page }) => {
+		// budokan e' "completed": il badge deve comparire anche nel dettaglio, non
+		// solo sulle card (StatusBadge condiviso)
+		await page.goto('/en/projects/budokan');
+		await expect(page.getByText('Completed', { exact: true })).toBeVisible();
+	});
+
 	test('the italian detail route (language-switch target) renders', async ({ page }) => {
 		// /it/progetti/budokan e' la destinazione dello switch EN->IT (cfr. unit getLanguageUrl)
 		const res = await page.goto('/it/progetti/budokan');
