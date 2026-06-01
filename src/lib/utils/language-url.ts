@@ -1,4 +1,5 @@
 import type { NavigationConfig, SlugMapData } from '../types';
+import { routeKeyOf, translateRoute } from './i18n';
 
 export interface LanguageUrlParams {
 	pathname: string;
@@ -31,15 +32,12 @@ export function getLanguageUrl({
 	}
 
 	// Chiave logica della route corrente (es. 'projects' da 'progetti')
-	const currentRouteKey = Object.keys(navigation[currentLang] || {}).find(
-		(key) => navigation[currentLang][key] === route
-	);
-
+	const currentRouteKey = routeKeyOf(route, currentLang, navigation);
 	if (!currentRouteKey) {
 		return `/${targetLang}${search}`;
 	}
 
-	const targetRoute = navigation[targetLang]?.[currentRouteKey];
+	const targetRoute = translateRoute(currentRouteKey, targetLang, navigation);
 	if (!targetRoute) {
 		return `/${targetLang}${search}`;
 	}

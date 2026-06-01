@@ -17,6 +17,7 @@
 		socialLinks,
 		websiteJsonLd
 	} from '$lib/utils/seo';
+	import { isValidLanguage, isValidRouteForLang, sectionOf } from '$lib/utils/i18n';
 
 	let { children, data } = $props();
 
@@ -24,28 +25,8 @@
 	let menuOpen = $state(false);
 
 	let isLanguageCodeValid = $derived(
-		data.languages.some((l: { code: string }) => l.code === page.url.pathname.split('/')[1])
+		isValidLanguage(page.url.pathname.split('/')[1], data.languages)
 	);
-
-	// Helper functions for route validation
-	function isValidLanguage(lang: string): boolean {
-		const validLanguages = data.languages?.map((l) => l.code) || ['it', 'en'];
-		return validLanguages.includes(lang);
-	}
-
-	function isValidRouteForLang(route: string, lang: string): boolean {
-		if (!data.navigation?.[lang]) return false;
-		const routeMap = data.navigation[lang];
-		return Object.values(routeMap).includes(route);
-	}
-
-	function getRouteType(route: string, lang: string): 'projects' | 'blog' | null {
-		if (!data.navigation?.[lang]) return null;
-		const routeMap = data.navigation[lang];
-		if (route === routeMap.projects) return 'projects';
-		if (route === routeMap.articles) return 'blog';
-		return null;
-	}
 
 	$effect(() => {
 		if (browser) {
@@ -87,7 +68,7 @@
 		const params = page.params;
 
 		// Validate language first
-		if (params.page && !isValidLanguage(params.page)) return true;
+		if (params.page && !isValidLanguage(params.page, data.languages)) return true;
 
 		// For detail pages, check if content exists
 		if (currentRoute === '/[page=lang]/[route=route]/[sub]') {
@@ -98,7 +79,7 @@
 		// For listing pages, validate route against navigation
 		if (currentRoute === '/[page=lang]/[route=route]') {
 			if (!params.page || !params.route) return true;
-			if (!isValidRouteForLang(params.route, params.page)) return true;
+			if (!isValidRouteForLang(params.route, params.page, data.navigation)) return true;
 		}
 
 		return false;
@@ -123,7 +104,7 @@
 
 		// Projects/Articles listing pages
 		if (currentRoute === '/[page=lang]/[route=route]' && params.page && params.route) {
-			const routeType = getRouteType(params.route, params.page);
+			const routeType = sectionOf(params.route, params.page, data.navigation);
 			if (routeType === 'projects') {
 				return `Simone Salerno • ${data.projectsPage?.title || 'Projects'}`;
 			} else if (routeType === 'blog') {
@@ -148,15 +129,7 @@
 
 	// OG images are pre-generated at build time as static PNGs in static/og/
 	// (see scripts/generate-og-images.ts). Here we just resolve the deterministic
-	// filename for the current page.
-	const ogSection = (lang: string, route?: string): 'projects' | 'blog' | undefined => {
-		const navRoutes = data.navigation?.[lang];
-		if (!navRoutes) return undefined;
-		if (route === navRoutes.projects) return 'projects';
-		if (route === navRoutes.articles) return 'blog';
-		return undefined;
-	};
-
+	// filename for the current page, riusando sectionOf per la sezione.
 	let ogImageUrl = $derived.by(() => {
 		const baseUrl = page.url.origin;
 		const lang = page.params.page || 'it';
@@ -168,11 +141,11 @@
 				case '/[page=lang]':
 					return 'home';
 				case '/[page=lang]/[route=route]': {
-					const section = ogSection(lang, page.params.route);
+					const section = sectionOf(page.params.route, lang, data.navigation);
 					return section ? `listing-${section}-${lang}` : 'home';
 				}
 				case '/[page=lang]/[route=route]/[sub]': {
-					const section = ogSection(lang, page.params.route);
+					const section = sectionOf(page.params.route, lang, data.navigation);
 					const id = page.data?.content?.meta?.id;
 					return section && id ? `detail-${section}-${id}-${lang}` : 'home';
 				}
@@ -288,8 +261,8 @@
 	<meta name="twitter:url" content={page.url.href} />
 	<meta name="twitter:site" content="@essesdev" />
 
-	<!-- Structured data (JSON-LD). L'escape di "</script>" e' richiesto dal parser
-	     Svelte; no-useless-escape e' un falso positivo qui. -->
+	<!-- Structured data (JSON-LD). L'escape di "</script>" è richiesto dal parser
+	     Svelte; no-useless-escape è un falso positivo qui. -->
 	{#if jsonLdHtml}
 		<!-- eslint-disable-next-line no-useless-escape -->
 		{@html `<script type="application/ld+json">${jsonLdHtml}<\/script>`}

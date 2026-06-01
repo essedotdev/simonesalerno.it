@@ -1,7 +1,13 @@
 import { ContentLoader } from '$lib/utils/content';
+import {
+	findRouteKeyAnyLang,
+	isValidLanguage,
+	isValidRouteForLang,
+	translateRoute
+} from '$lib/utils/i18n';
 import type { Handle } from '@sveltejs/kit';
 
-// Header di sicurezza applicati a tutte le risposte di pagina (la CSP e' gestita
+// Header di sicurezza applicati a tutte le risposte di pagina (la CSP è gestita
 // da SvelteKit via svelte.config.js).
 const SECURITY_HEADERS: Record<string, string> = {
 	'X-Content-Type-Options': 'nosniff',
@@ -18,9 +24,9 @@ function withSecurityHeaders(response: Response): Response {
 }
 
 // Cache-Control per le pagine HTML servite con successo. Le pagine sono
-// deterministiche per path (la lingua e' nell'URL), quindi possono essere
-// cacheate al CDN; il browser rivalida sempre (max-age=0) cosi' un nuovo deploy
-// e' visibile subito. Non applicato a redirect (escono prima) ne' a errori.
+// deterministiche per path (la lingua è nell'URL), quindi possono essere
+// cacheate al CDN; il browser rivalida sempre (max-age=0) così un nuovo deploy
+// è visibile subito. Non applicato a redirect (escono prima) né a errori.
 function withPageCache(response: Response): Response {
 	if (response.status >= 200 && response.status < 300) {
 		response.headers.set(
@@ -31,31 +37,14 @@ function withPageCache(response: Response): Response {
 	return response;
 }
 
-// Trova la sottorotta corretta per una lingua specifica
+// Trova la sottorotta corretta per una lingua specifica, riusando le primitive i18n
 function findRouteForLanguage(
 	subRoute: string,
 	targetLang: string,
 	navigation: Record<string, Record<string, string>>
 ): string | null {
-	// Trova la chiave logica per la sottorotta in qualsiasi lingua
-	let logicalRoute: string | null = null;
-
-	for (const lang of Object.keys(navigation)) {
-		const foundRoute = Object.keys(navigation[lang]).find(
-			(key) => navigation[lang][key] === subRoute
-		);
-		if (foundRoute) {
-			logicalRoute = foundRoute;
-			break;
-		}
-	}
-
-	// Se trova la chiave logica, restituisce la sottorotta per la lingua target
-	if (logicalRoute && navigation[targetLang] && navigation[targetLang][logicalRoute]) {
-		return navigation[targetLang][logicalRoute];
-	}
-
-	return null;
+	const found = findRouteKeyAnyLang(subRoute, navigation);
+	return found ? translateRoute(found.key, targetLang, navigation) : null;
 }
 
 // Trova lo slug corretto per una lingua specifica
@@ -105,19 +94,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		// Determina la lingua corrente dalla URL
 		let currentLang = 'en'; // default
-		if (pathSegments.length > 0) {
-			const firstSegment = pathSegments[0];
-			if (languages.find((l) => l.code === firstSegment)) {
-				currentLang = firstSegment;
-			}
+		if (pathSegments.length > 0 && isValidLanguage(pathSegments[0], languages)) {
+			currentLang = pathSegments[0];
 		}
 
 		// Gestisce percorsi con un solo segmento che non sono lingue valide
 		if (pathSegments.length === 1) {
-			const segment = pathSegments[0];
-			const isValidLanguage = languages.find((l) => l.code === segment);
-
-			if (!isValidLanguage) {
+			if (!isValidLanguage(pathSegments[0], languages)) {
 				// Reindirizza a /en per percorsi casuali
 				return Response.redirect(new URL('/en', origin).toString(), 302);
 			}
@@ -129,12 +112,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 			const slug = pathSegments[2];
 
 			// Controlla se la lingua esiste
-			const langExists = languages.find((l) => l.code === lang);
+			const langExists = isValidLanguage(lang, languages);
 
 			if (langExists && navigation[lang]) {
 				// PRIORITÀ 1: Lingua valida - controlla se la sottorotta è corretta per quella lingua
-				const validRoutes = Object.values(navigation[lang]);
-				if (!validRoutes.includes(sub)) {
+				if (!isValidRouteForLang(sub, lang, navigation)) {
 					// Trova la sottorotta corretta per la lingua specificata
 					// (es: /en/progetti → /en/projects)
 					const correctSubRoute = findRouteForLanguage(sub, lang, navigation);
@@ -144,9 +126,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 						// Se c'è uno slug, prova a tradurlo
 						if (slug) {
-							const originalLang = Object.keys(navigation).find((key) =>
-								Object.values(navigation[key]).includes(sub)
-							);
+							const originalLang = findRouteKeyAnyLang(sub, navigation)?.lang;
 
 							if (originalLang) {
 								const translatedSlug = await findSlugForLanguage(
@@ -190,9 +170,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			} else {
 				// PRIORITÀ 2: Lingua non valida - trova la lingua corretta per la sottorotta
 				// (es: /xx/projects → /en/projects)
-				const correctLang = Object.keys(navigation).find((key) =>
-					Object.values(navigation[key]).includes(sub)
-				);
+				const correctLang = findRouteKeyAnyLang(sub, navigation)?.lang;
 
 				if (correctLang) {
 					let remainingSegments = pathSegments.slice(2).join('/');
