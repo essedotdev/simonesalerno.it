@@ -229,3 +229,52 @@ resta data-access). Il codice morto si rimuove.
 - `pnpm check`: 0 errori; `pnpm lint`: pulito
 - `pnpm test:ci`: 145 unit verdi, 15 E2E verdi
 - `pnpm build`: OK end-to-end
+
+---
+
+## Ciclo 5 - Hardening da review live + nuove funzionalità (2026-06-01)
+
+### Obiettivo
+
+Dopo il deploy: verifica in produzione, rifiniture emerse dalla review live e
+aggiunta di funzionalità mancanti.
+
+### Manutenzione doc
+
+- Doc di progetto rinominati in CAPS (`CYCLES.md`, `ROADMAP.md`), riferimenti aggiornati.
+- Note personali (export chat, profilo LinkedIn, backup immagini) spostate in
+  `docs/archive/`. Le featured image dei progetti sono placeholder-only per scelta
+  (originali parziali in `docs/archive/backup/`).
+
+### Rifiniture (M9)
+
+- `00d1c6e` feat(i18n): root Accept-Language (fallback en) + redirect a un solo hop
+- `883e8f3` fix(sitemap): x-default + lastmod derivato dai contenuti
+- `5172f0e` perf(og): noise via sharp (2 passaggi, full-color), ~10x più veloce,
+  niente banding
+- Cloudflare: "Browser Cache TTL -> Respect Existing Headers" (impostazione dashboard)
+  per onorare il `Cache-Control` emesso dal worker.
+
+### Nuove funzionalità (M10)
+
+- `8771c3d` feat(projects): badge di stato sulle card
+- `247af32` feat(blog): feed RSS per-lingua (`/[lang]/rss.xml`) + discovery nel head
+- `81bacda` feat(blog): tempo di lettura + stima token (~1.3/parola, etichetta "~")
+- `744b4f5` feat(blog): sezione articoli simili (per tag in comune)
+- `6c2fea4` feat(content): tag cliccabili sui dettagli verso la listing filtrata
+
+### Decisioni / note
+
+- Stima token approssimata (niente tokenizer reale) per non gonfiare il bundle del
+  Worker; etichettata "~".
+- Tag cliccabili fatti sui dettagli (hanno sia il tag grezzo sia il tradotto); sulle
+  card servirebbe un refactor dei prop, rimandato.
+- Share articolo: valutato, versione minimale (Web Share API + copia link) non ancora
+  implementata, in attesa di conferma.
+
+### Verifiche
+
+- `pnpm check`: 0 errori; `pnpm lint`: pulito
+- `pnpm test:ci`: 156 unit verdi, 17 E2E verdi
+- `pnpm build`: OK end-to-end; produzione verificata via HTTP (redirect, OG, sitemap,
+  RSS, header)

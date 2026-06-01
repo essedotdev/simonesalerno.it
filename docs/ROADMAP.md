@@ -96,9 +96,24 @@ Vedi `docs/CYCLES.md` per il log dettagliato del lavoro svolto.
   e il campo `availableLanguages` di `DetailPageData`, che nessun componente leggeva.
   Dettagli in `docs/CYCLES.md` (Ciclo 4).
 
+### M9 - Rifiniture da review live - ✅ Completata (2026-06-01)
+
+- Root `/` sceglie la lingua da `Accept-Language` (fallback en) invece di rimandare
+  sempre a `/en`; redirect "smart" portati a un solo hop (niente trailing slash spurio).
+- Sitemap: aggiunto `x-default` (coerenza hreflang con l'HTML) e `lastmod` derivato
+  dai contenuti invece che dalla data di build.
+- OG: noise applicato da sharp dopo il render (2 passaggi, output full-color):
+  generazione ~10x più rapida (~8min -> ~1min) e niente banding del gradiente.
+- Cache HTML controllata da codice (`Cache-Control` lato worker) dopo aver impostato
+  "Respect Existing Headers" su Cloudflare. Dettagli in `docs/CYCLES.md` (Ciclo 5).
+
+### M10 - Nuove funzionalità - ✅ Completata (2026-06-01)
+
+- Badge di stato sulle card progetto, feed RSS per-lingua, tempo di lettura + stima
+  token sugli articoli, sezione "articoli simili", tag cliccabili sui dettagli verso
+  la listing filtrata. Dettagli in `docs/CYCLES.md` (Ciclo 5).
+
 ## Stato deploy
 
-Le Milestone M1-M3 sono pushate su `main` (fino a `66ff033`). Tutto il lavoro
-successivo (M4-M8, rimozione CI, slug map derivata, routing unificato) è committato
-localmente e non ancora pushato (push solo su comando esplicito). Il deploy avviene
-via Cloudflare Workers Builds al push.
+Tutte le milestone (M1-M10) sono pushate su `main`. Il deploy avviene via Cloudflare
+Workers Builds al push (build ~11s con le OG ottimizzate).

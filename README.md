@@ -14,8 +14,10 @@ Personal portfolio website built with SvelteKit and deployed on Cloudflare Worke
 
 - **Multi-language support** - Internationalization with dynamic routing
 - **Portfolio showcase** - Projects gallery with detailed views
-- **Articles/Blog** - Content publishing system
-- **Contact form** - Get in touch functionality
+- **Articles/Blog** - Content publishing with reading time and related posts
+- **Filtering & search** - Search, tags, status and date filters with pagination
+- **RSS feed** - Per-language blog feed
+- **Contact** - Email and social links
 - **Optimized images** - Automatic image optimization with vite-imagetools
 - **OG images** - Open Graph images pre-generated at build time (static PNGs)
 - **Responsive design** - Mobile-first approach
