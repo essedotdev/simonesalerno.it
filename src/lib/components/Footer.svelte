@@ -5,6 +5,7 @@
 	import { handleAnchorClick } from '$lib/utils';
 	import { getTranslation } from '$lib/utils/translations';
 	import Logo from './Logo.svelte';
+	import MotionToggle from './ui/MotionToggle.svelte';
 
 	// Receive data as props from parent layout
 	let { data }: FooterProps = $props();
@@ -39,9 +40,23 @@
 			</div>
 		</nav>
 		<div
-			class="text-md flex items-center justify-between px-4 pt-2 pb-7 text-neutral-200 opacity-70 sm:px-8 sm:text-lg lg:px-14"
+			class="text-md flex flex-col gap-3 px-4 pt-2 pb-7 text-neutral-200 opacity-70 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:text-lg lg:px-14"
 		>
-			{copyrightText}
+			<span>{copyrightText}</span>
+			<div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+				<a
+					href={`${base}/${data.selectedLanguage}/rss.xml`}
+					class="transition-colors hover:text-white">RSS</a
+				>
+				<a href={`${base}/sitemap.xml`} class="transition-colors hover:text-white">Sitemap</a>
+				<a
+					href="https://github.com/essedev/simonesalerno.it"
+					target="_blank"
+					rel="noreferrer"
+					class="transition-colors hover:text-white">Source</a
+				>
+				<MotionToggle lang={data.selectedLanguage} />
+			</div>
 		</div>
 	</div>
 </footer>
