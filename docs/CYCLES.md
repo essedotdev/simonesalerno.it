@@ -278,3 +278,40 @@ aggiunta di funzionalità mancanti.
 - `pnpm test:ci`: 156 unit verdi, 17 E2E verdi
 - `pnpm build`: OK end-to-end; produzione verificata via HTTP (redirect, OG, sitemap,
   RSS, header)
+
+---
+
+## Ciclo 6 - Raffinamento metriche articolo + restyle sitemap (2026-06-01)
+
+### Obiettivo
+
+Rifiniture post-deploy: rendere più realistica la stima token degli articoli e
+allineare la vista sitemap nel browser all'identità del sito.
+
+### Lavoro
+
+- `11c261f` feat(content): stima token da caratteri/divisore per lingua (~4 EN,
+  ~3.5 IT) invece di parole*1.3. Cattura la lunghezza media delle parole, più
+  realistica sull'italiano (BPE frammenta di più). I code block sono ora esclusi
+  dalla prosa (e dai minuti di lettura) e contati solo nei token; `extractText`
+  esplicito sui tipi di prosa, aggiunto `extractCode`, `contentMetrics` prende la
+  lingua (passata da `Article.svelte` via `currentLang`).
+- `6557978` feat(sitemap): restyle del foglio di stile della sitemap nel browser
+  (gradiente indaco su nero, font Geist, palette monocromatica fredda). I crawler
+  ignorano il CSS e leggono l'XML grezzo.
+- `ae97f6a` docs: correzione accenti italiani nei commenti (`OptimizedImage`,
+  `seo.ts`, `rss.xml`).
+
+### Decisioni / note
+
+- La stima resta approssimata e senza tokenizer reale (etichetta "~"), come nel
+  Ciclo 5: l'euristica passa da per-parola a per-carattere/lingua, più stabile.
+  Un tokenizer reale resterebbe esatto solo per un modello specifico (per Claude
+  non esiste tokenizer offline pubblico) e andrebbe spostato a build time per non
+  pesare sul bundle del Worker: non giustificato per un'etichetta decorativa.
+
+### Verifiche
+
+- `pnpm check`: 0 errori; `pnpm lint`: pulito
+- `pnpm test:ci`: 161 unit verdi, 17 E2E verdi
+- `pnpm build`: OK end-to-end
