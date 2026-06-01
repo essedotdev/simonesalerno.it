@@ -16,8 +16,8 @@ log in `docs/Roadmap.md` e `docs/Cycles.md` (tienili aggiornati a fine ciclo).
 - `pnpm deploy` - build + wrangler deploy.
 
 Giro di qualità prima di un commit non banale e SEMPRE prima di un push:
-`pnpm lint && pnpm check && pnpm build && pnpm test:ci`. La CI (GitHub Actions)
-ripete lo stesso su push/PR verso `main`.
+`pnpm lint && pnpm check && pnpm build && pnpm test:ci`. Non c'è CI remota: il
+deploy avviene via Cloudflare Workers Builds al push, il gate di qualità è locale.
 
 ## Contenuti
 

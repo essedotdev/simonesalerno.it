@@ -129,12 +129,15 @@ errato).
 ### Fase 6 - Code quality / DX / docs
 
 - `c395154` refactor(content): estratto `loadCollection<T>` generico
-- `93087d0` chore(dx): `.editorconfig` + GitHub Actions CI
+- `93087d0` chore(dx): `.editorconfig` (+ GitHub Actions CI, poi rimossa)
 - `8d80331` docs: `CLAUDE.md` di progetto + `ARCHITECTURE.md`, README aggiornato
 
 Eliminata la duplicazione projects/articles in `ContentLoader`; glob e import
 traduzioni restano literal per collezione (richiesto da Vite). Niente rename di
-massa per "consistenza naming" (churn non giustificato).
+massa per "consistenza naming" (churn non giustificato). La CI GitHub Actions,
+aggiunta in `93087d0`, è stata poi rimossa: con deploy via Cloudflare Workers
+Builds e gate locale prima del push sarebbe stata solo informativa e scollegata
+dal deploy.
 
 ### Verifiche (a fine ciclo)
 

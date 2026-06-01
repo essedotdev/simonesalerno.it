@@ -71,11 +71,12 @@ Vedi `docs/Cycles.md` per il log dettagliato del lavoro svolto.
 
 - `ContentLoader`: estratto `loadCollection<T>` generico, eliminata la
   duplicazione projects/articles (i due metodi pubblici sono ora wrapper sottili).
-- `.editorconfig` allineato a prettier; GitHub Actions CI (lint + check + build +
-  unit + E2E) su push/PR verso `main`.
+- `.editorconfig` allineato a prettier.
 - `CLAUDE.md` di progetto + `docs/ARCHITECTURE.md`; README aggiornato.
-- Nota: nessun rename di massa per "consistenza naming" (churn non giustificato);
-  la consistenza è migliorata dal refactor `loadCollection`.
+- Note: nessun rename di massa per "consistenza naming" (churn non giustificato),
+  la consistenza è migliorata dal refactor `loadCollection`. Una CI GitHub Actions
+  era stata aggiunta e poi rimossa: con deploy via Cloudflare Workers Builds e gate
+  locale prima del push sarebbe stata solo informativa e scollegata dal deploy.
 
 ## Stato deploy
 
