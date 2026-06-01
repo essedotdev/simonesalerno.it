@@ -265,27 +265,6 @@ export class ContentLoader {
 		return slugMap;
 	}
 
-	async getAvailableLanguages(contentType: ContentType, id: string): Promise<string[]> {
-		try {
-			const languages = await this.loadConfig('languages');
-			const availableLanguages: string[] = [];
-
-			for (const language of languages) {
-				try {
-					await import(`../content/${contentType}s/${id}/${language.code}.json`);
-					availableLanguages.push(language.code);
-				} catch {
-					// Traduzione non disponibile
-				}
-			}
-
-			return availableLanguages;
-		} catch (error) {
-			console.error(`Error getting available languages for ${contentType} ${id}:`, error);
-			return [];
-		}
-	}
-
 	async findContentBySlug(
 		slug: string,
 		lang: string,
@@ -296,61 +275,5 @@ export class ContentLoader {
 
 		// CORREZIONE CRITICA: Cerca nella lingua corrente, non in translations[0]
 		return collection.find((item) => item.translations[lang]?.slug === slug);
-	}
-
-	/**
-	 * Check if content exists by slug without loading it
-	 */
-	async contentExists(slug: string, lang: string, type: ContentType): Promise<boolean> {
-		try {
-			const content = await this.findContentBySlug(slug, lang, type);
-			return !!content;
-		} catch {
-			return false;
-		}
-	}
-
-	/**
-	 * Validate if a route is valid for the given language
-	 */
-	async isValidRoute(route: string, lang: string): Promise<boolean> {
-		try {
-			const navigation = await this.loadConfig('navigation');
-			const routeMap = navigation[lang];
-			if (!routeMap) return false;
-
-			return Object.values(routeMap).includes(route);
-		} catch {
-			return false;
-		}
-	}
-
-	/**
-	 * Validate if a language code is supported
-	 */
-	async isValidLanguage(lang: string): Promise<boolean> {
-		try {
-			const languages = await this.loadConfig('languages');
-			return languages.some((l) => l.code === lang);
-		} catch {
-			return false;
-		}
-	}
-
-	/**
-	 * Get route type (projects/blog) from route string
-	 */
-	async getRouteType(route: string, lang: string): Promise<'projects' | 'blog' | null> {
-		try {
-			const navigation = await this.loadConfig('navigation');
-			const routeMap = navigation[lang];
-			if (!routeMap) return null;
-
-			if (route === routeMap.projects) return 'projects';
-			if (route === routeMap.articles) return 'blog';
-			return null;
-		} catch {
-			return null;
-		}
 	}
 }

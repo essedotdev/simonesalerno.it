@@ -32,8 +32,7 @@ export const load: PageServerLoad = async ({ params, parent }): Promise<DetailPa
 		return {
 			type: 'project' as const,
 			content: project,
-			currentLang: lang,
-			availableLanguages: await loader.getAvailableLanguages('project', project.meta.id)
+			currentLang: lang
 		};
 	}
 
@@ -46,8 +45,7 @@ export const load: PageServerLoad = async ({ params, parent }): Promise<DetailPa
 		return {
 			type: 'article' as const,
 			content: article,
-			currentLang: lang,
-			availableLanguages: await loader.getAvailableLanguages('article', article.meta.id)
+			currentLang: lang
 		};
 	}
 

@@ -107,39 +107,4 @@ describe('ContentLoader - lookups', () => {
 		const found = await loader.findContentBySlug('does-not-exist-xyz', 'en', 'project');
 		expect(found).toBeUndefined();
 	});
-
-	it('getAvailableLanguages returns the langs a project is translated into', async () => {
-		const projects = await loader.loadProjects();
-		const sample = projects[0];
-		const langs = await loader.getAvailableLanguages('project', sample.meta.id);
-		expect(langs).toContain('en');
-	});
-
-	it('contentExists reflects findContentBySlug', async () => {
-		const projects = await loader.loadProjects('en');
-		const slug = projects[0].translations.en!.slug;
-		expect(await loader.contentExists(slug, 'en', 'project')).toBe(true);
-		expect(await loader.contentExists('nope-xyz', 'en', 'project')).toBe(false);
-	});
-});
-
-describe('ContentLoader - route helpers', () => {
-	it('isValidRoute validates against navigation', async () => {
-		expect(await loader.isValidRoute('projects', 'en')).toBe(true);
-		expect(await loader.isValidRoute('progetti', 'it')).toBe(true);
-		expect(await loader.isValidRoute('nonexistent', 'en')).toBe(false);
-	});
-
-	it('isValidLanguage validates language codes', async () => {
-		expect(await loader.isValidLanguage('en')).toBe(true);
-		expect(await loader.isValidLanguage('it')).toBe(true);
-		expect(await loader.isValidLanguage('xx')).toBe(false);
-	});
-
-	it('getRouteType maps localized routes to logical type', async () => {
-		expect(await loader.getRouteType('projects', 'en')).toBe('projects');
-		expect(await loader.getRouteType('blog', 'en')).toBe('blog');
-		expect(await loader.getRouteType('progetti', 'it')).toBe('projects');
-		expect(await loader.getRouteType('about', 'en')).toBeNull();
-	});
 });

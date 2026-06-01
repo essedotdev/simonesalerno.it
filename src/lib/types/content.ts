@@ -183,7 +183,6 @@ export interface DetailPageData {
 	type: 'project' | 'article';
 	content: ProjectItem | ArticleItem;
 	currentLang: string;
-	availableLanguages: string[];
 }
 
 // ==================================================
