@@ -4,6 +4,7 @@
 	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 	import type { ArticleSectionProps } from '$lib/types';
 	import { getTranslation, translateTags } from '$lib/utils/translations';
+	import { contentMetrics } from '$lib/utils/content-metrics';
 	import { ChevronLeft } from '@lucide/svelte';
 	import { inview, type Options } from 'svelte-inview';
 
@@ -24,6 +25,7 @@
 	let translatedTags = $derived(
 		currentTranslation?.tags ? translateTags(global, currentTranslation.tags) : []
 	);
+	let metrics = $derived(contentMetrics(currentTranslation?.content));
 
 	function formatDate(dateString: string, lang: string): string {
 		const date = new Date(dateString);
@@ -60,9 +62,21 @@
 				</h1>
 
 				<div class="flex flex-col gap-y-2 text-xl text-gray-400">
-					<time datetime={content.meta.published_date}>
-						{formatDate(content.meta.published_date, currentLang)}
-					</time>
+					<div class="flex flex-wrap items-center gap-x-2">
+						<time datetime={content.meta.published_date}>
+							{formatDate(content.meta.published_date, currentLang)}
+						</time>
+						{#if metrics.minutes > 0}
+							<span aria-hidden="true" class="text-gray-600">·</span>
+							<span>{metrics.minutes} min {currentLang === 'en' ? 'read' : 'di lettura'}</span>
+							<span aria-hidden="true" class="text-gray-600">·</span>
+							<span
+								title={currentLang === 'en' ? 'Estimated LLM context size' : 'Contesto LLM stimato'}
+							>
+								~{metrics.tokensLabel} token
+							</span>
+						{/if}
+					</div>
 
 					{#if currentTranslation.excerpt}
 						<p class="text-2xl text-gray-300 italic">
