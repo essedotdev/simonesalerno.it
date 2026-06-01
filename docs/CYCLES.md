@@ -281,17 +281,18 @@ aggiunta di funzionalità mancanti.
 
 ---
 
-## Ciclo 6 - Raffinamento metriche articolo + restyle sitemap (2026-06-01)
+## Ciclo 6 - Metriche articolo, restyle sitemap, back contestuale (2026-06-01)
 
 ### Obiettivo
 
-Rifiniture post-deploy: rendere più realistica la stima token degli articoli e
-allineare la vista sitemap nel browser all'identità del sito.
+Rifiniture post-deploy: stima token più realistica, vista sitemap allineata
+all'identità del sito, e un bug di navigazione segnalato live (il "Indietro" delle
+pagine di dettaglio tornava sempre in home).
 
 ### Lavoro
 
 - `11c261f` feat(content): stima token da caratteri/divisore per lingua (~4 EN,
-  ~3.5 IT) invece di parole*1.3. Cattura la lunghezza media delle parole, più
+  ~3.5 IT) invece di parole\*1.3. Cattura la lunghezza media delle parole, più
   realistica sull'italiano (BPE frammenta di più). I code block sono ora esclusi
   dalla prosa (e dai minuti di lettura) e contati solo nei token; `extractText`
   esplicito sui tipi di prosa, aggiunto `extractCode`, `contentMetrics` prende la
@@ -301,6 +302,13 @@ allineare la vista sitemap nel browser all'identità del sito.
   ignorano il CSS e leggono l'XML grezzo.
 - `ae97f6a` docs: correzione accenti italiani nei commenti (`OptimizedImage`,
   `seo.ts`, `rss.xml`).
+- `47637a3` fix(nav): back contestuale nelle pagine di dettaglio. Il bottone era un
+  link cablato alla home: da listing -> dettaglio -> Indietro si finiva in home.
+  Nuovo componente condiviso `BackLink` che ripercorre la history se si arriva da
+  una pagina interna, altrimenti ripiega sull'URL della listing.
+- `21e8fea` test(e2e): copertura dei casi di redirect i18n finora scoperti (lingua
+  non valida, route in lingua sbagliata con slug, no-loop sul canonico, traduzione
+  slug cross-lingua sugli articoli) + 5 E2E sul back contestuale.
 
 ### Decisioni / note
 
@@ -309,9 +317,18 @@ allineare la vista sitemap nel browser all'identità del sito.
   Un tokenizer reale resterebbe esatto solo per un modello specifico (per Claude
   non esiste tokenizer offline pubblico) e andrebbe spostato a build time per non
   pesare sul bundle del Worker: non giustificato per un'etichetta decorativa.
+- Back contestuale via `history.back()` (non un target fisso): rispetta da dove si
+  arriva. Resta un vero `<a href>` verso la listing come fallback per atterraggi
+  diretti e accessibilità.
+- Check redirect: tutti gli slug dei progetti coincidono tra en/it, quindi la
+  traduzione slug del hook (PRIORITÀ 1.5) non scatta mai sui progetti; l'unico
+  contenuto che la esercita è l'articolo. Coperto nei test.
+- Warning dev-only di SvelteKit ("Avoid using history.pushState") emerso nei nuovi
+  E2E interattivi: non proviene dal fix (`BackLink` usa `history.back`), nessun
+  `pushState` diretto nel codice. Da indagare a parte se diventa fastidioso.
 
 ### Verifiche
 
 - `pnpm check`: 0 errori; `pnpm lint`: pulito
-- `pnpm test:ci`: 161 unit verdi, 17 E2E verdi
+- `pnpm test:ci`: 161 unit verdi, 30 E2E verdi (+13: 5 back + 8 redirect)
 - `pnpm build`: OK end-to-end
