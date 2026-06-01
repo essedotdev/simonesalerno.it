@@ -1,9 +1,20 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('i18n routing & redirects', () => {
-	test('/ redirects to /en', async ({ page }) => {
-		await page.goto('/');
-		expect(page.url()).toMatch(/\/en(\/|$)/);
+	test('/ honors Accept-Language (it -> /it, otherwise /en)', async ({ request }) => {
+		const it = await request.get('/', {
+			headers: { 'Accept-Language': 'it-IT,it;q=0.9' },
+			maxRedirects: 0
+		});
+		expect(it.status()).toBe(302);
+		expect(it.headers()['location']).toMatch(/\/it$/);
+
+		const fr = await request.get('/', {
+			headers: { 'Accept-Language': 'fr-FR,fr;q=0.9' },
+			maxRedirects: 0
+		});
+		expect(fr.status()).toBe(302);
+		expect(fr.headers()['location']).toMatch(/\/en$/);
 	});
 
 	test('unknown single segment redirects to /en', async ({ page }) => {
@@ -24,6 +35,13 @@ test.describe('i18n routing & redirects', () => {
 		await page.goto('/en/progetti');
 		await page.waitForURL('**/en/projects');
 		expect(page.url()).toContain('/en/projects');
+	});
+
+	test('wrong-language route redirects once, without trailing slash', async ({ request }) => {
+		const res = await request.get('/en/progetti', { maxRedirects: 0 });
+		expect(res.status()).toBe(302);
+		// un solo hop al canonico, niente /en/projects/ con slash finale
+		expect(res.headers()['location']).toMatch(/\/en\/projects$/);
 	});
 
 	test('unknown detail slug returns 404', async ({ page }) => {

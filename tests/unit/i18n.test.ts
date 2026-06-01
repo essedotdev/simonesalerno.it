@@ -3,6 +3,7 @@ import {
 	findRouteKeyAnyLang,
 	isValidLanguage,
 	isValidRouteForLang,
+	preferredLanguage,
 	routeKeyOf,
 	sectionOf,
 	translateRoute
@@ -86,5 +87,29 @@ describe('sectionOf', () => {
 
 	it('ritorna null per route che non sono di sezione', () => {
 		expect(sectionOf('about', 'en', navigation)).toBeNull();
+	});
+});
+
+describe('preferredLanguage', () => {
+	const supported = ['en', 'it'];
+
+	it('sceglie la prima lingua supportata per q-value', () => {
+		expect(preferredLanguage('it-IT,it;q=0.9,en;q=0.8', supported, 'en')).toBe('it');
+		expect(preferredLanguage('en-US,en;q=0.9,it;q=0.8', supported, 'en')).toBe('en');
+	});
+
+	it('ignora i tag regionali (it-CH -> it)', () => {
+		expect(preferredLanguage('it-CH', supported, 'en')).toBe('it');
+	});
+
+	it('usa il fallback se nessuna lingua è supportata o header assente', () => {
+		expect(preferredLanguage('fr-FR,de;q=0.8', supported, 'en')).toBe('en');
+		expect(preferredLanguage('', supported, 'en')).toBe('en');
+		expect(preferredLanguage(null, supported, 'en')).toBe('en');
+		expect(preferredLanguage(undefined, supported, 'en')).toBe('en');
+	});
+
+	it('rispetta i q-value anche fuori ordine', () => {
+		expect(preferredLanguage('en;q=0.3, it;q=0.9', supported, 'en')).toBe('it');
 	});
 });

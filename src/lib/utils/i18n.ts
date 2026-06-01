@@ -18,6 +18,32 @@ export function isValidLanguage(lang: string | undefined, languages: Language[])
 }
 
 /**
+ * Sceglie la lingua dall'header Accept-Language: ritorna la prima lingua supportata
+ * per q-value decrescente, altrimenti `fallback`. Pura e testabile; usata dalla root
+ * per indirizzare "/" alla versione giusta.
+ */
+export function preferredLanguage(
+	acceptLanguage: string | null | undefined,
+	supported: string[],
+	fallback: string
+): string {
+	if (!acceptLanguage) return fallback;
+
+	const ranked = acceptLanguage
+		.split(',')
+		.map((part) => {
+			const [tag, ...params] = part.trim().split(';');
+			const qParam = params.find((p) => p.trim().startsWith('q='));
+			const q = qParam ? Number.parseFloat(qParam.split('=')[1]) : 1;
+			return { base: tag.trim().toLowerCase().split('-')[0], q: Number.isNaN(q) ? 0 : q };
+		})
+		.filter((l) => l.base)
+		.sort((a, b) => b.q - a.q);
+
+	return ranked.find((l) => supported.includes(l.base))?.base ?? fallback;
+}
+
+/**
  * Chiave logica di una route localizzata in una data lingua (es. `progetti` -> `projects`),
  * oppure null se la route non esiste in quella lingua.
  */

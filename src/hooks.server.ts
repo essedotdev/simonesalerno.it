@@ -47,6 +47,12 @@ function findRouteForLanguage(
 	return found ? translateRoute(found.key, targetLang, navigation) : null;
 }
 
+// Costruisce il path di redirect unendo solo i segmenti non vuoti: evita lo slash
+// finale (es. /en/projects, non /en/projects/) e quindi un secondo redirect.
+function buildPath(...segments: string[]): string {
+	return '/' + segments.filter(Boolean).join('/');
+}
+
 // Trova lo slug corretto per una lingua specifica
 async function findSlugForLanguage(
 	slug: string,
@@ -143,7 +149,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 							}
 						}
 
-						const redirectUrl = new URL(`/${lang}/${correctSubRoute}/${remainingSegments}`, origin);
+						const redirectUrl = new URL(
+							buildPath(lang, correctSubRoute, remainingSegments),
+							origin
+						);
 						return Response.redirect(redirectUrl.toString(), 302);
 					}
 				} else if (slug) {
@@ -161,7 +170,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 									.slice(2)
 									.join('/')
 									.replace(slug, translatedSlug);
-								const redirectUrl = new URL(`/${lang}/${sub}/${remainingSegments}`, origin);
+								const redirectUrl = new URL(buildPath(lang, sub, remainingSegments), origin);
 								return Response.redirect(redirectUrl.toString(), 302);
 							}
 						}
@@ -184,7 +193,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 						}
 					}
 
-					const redirectUrl = new URL(`/${correctLang}/${sub}/${remainingSegments}`, origin);
+					const redirectUrl = new URL(buildPath(correctLang, sub, remainingSegments), origin);
 					return Response.redirect(redirectUrl.toString(), 302);
 				}
 			}
