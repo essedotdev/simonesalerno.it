@@ -30,7 +30,7 @@
 	type="button"
 	onclick={toggle}
 	aria-pressed={enabled}
-	class="transition-colors hover:text-white"
+	class="cursor-pointer transition-colors hover:text-white"
 >
 	{label}: {enabled ? 'on' : 'off'}
 </button>

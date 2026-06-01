@@ -19,8 +19,8 @@
 		isInView = inView;
 	}}
 	class="flex w-full flex-col justify-between gap-y-14 tracking-tight sm:gap-y-24 {isInView
-		? 'animate'
-		: 'opacity-0'}"
+		? 'inview-reveal animate'
+		: 'inview-reveal opacity-0'}"
 >
 	<div class="flex flex-col gap-y-4 sm:gap-y-6">
 		<h3 class="text-[2.5rem] leading-none font-normal sm:text-5xl md:text-6xl 2xl:text-7xl">

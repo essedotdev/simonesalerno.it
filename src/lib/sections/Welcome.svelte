@@ -23,7 +23,9 @@
 		const { inView } = event.detail;
 		isInView = inView;
 	}}
-	class="relative flex flex-col items-center {isInView ? 'animate' : 'opacity-0'}"
+	class="relative flex flex-col items-center {isInView
+		? 'inview-reveal animate'
+		: 'inview-reveal opacity-0'}"
 >
 	<div class="mb-12 overflow-hidden">
 		<h1

@@ -137,3 +137,14 @@ html[data-motion='reduced'] *::after {
 	transition-property: opacity, color, background-color, border-color, filter !important;
 	scroll-behavior: auto !important;
 }
+
+/* Con movimento ridotto gli elementi con reveal-on-scroll restano visibili: senza
+   questo resterebbero opacity-0 finché non si scrolla ("spariscono e poi compaiono"). */
+@media (prefers-reduced-motion: reduce) {
+	html:not([data-motion='full']) .inview-reveal {
+		opacity: 1 !important;
+	}
+}
+html[data-motion='reduced'] .inview-reveal {
+	opacity: 1 !important;
+}

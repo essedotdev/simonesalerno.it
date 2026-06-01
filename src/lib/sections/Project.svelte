@@ -37,7 +37,7 @@
 		const { inView } = event.detail;
 		isInView = inView;
 	}}
-	class={isInView ? 'animate' : 'opacity-0'}
+	class={isInView ? 'inview-reveal animate' : 'inview-reveal opacity-0'}
 >
 	<div class="flex pb-10 text-2xl 2xl:pb-14">
 		<a href={homeUrl} class="flex items-center gap-x-[0.15rem]">
