@@ -15,12 +15,20 @@ import { html } from 'satori-html';
 import sharp from 'sharp';
 import { ContentLoader } from '../src/lib/utils/content';
 import { OgDataResolver } from '../src/lib/utils/og/data-resolver';
-import { generateHtmlLayout } from '../src/lib/utils/og/html-generator';
+import {
+	createGradientBackgroundHtml,
+	generateHtmlLayout
+} from '../src/lib/utils/og/html-generator';
 
 const OUT_DIR = join(process.cwd(), 'static/og');
 const FONT_DIR = join(process.cwd(), 'node_modules/@fontsource/geist-sans/files');
 const WIDTH = 1200;
 const HEIGHT = 630;
+// Noise applicato via sharp (composite) DOPO il render, non dentro satori: evita di
+// processare un data-URI da 170KB per ogni immagine (era ~il 99% del tempo).
+// Opacità 0.5 + blend overlay, come la vecchia background CSS.
+const NOISE_PATH = join(process.cwd(), 'static/noise.png');
+const NOISE_OPACITY = 0.5;
 
 // satori supporta woff (non woff2): usiamo i .woff di @fontsource/geist-sans,
 // offline e deterministici, niente fetch a build time.
@@ -97,21 +105,48 @@ async function main(): Promise<void> {
 		}
 	}
 
-	let count = 0;
-	for (const job of jobs) {
-		const config = await resolver.resolveLayout(job.params);
-		const markup = html(generateHtmlLayout(config));
-		// satori-html produce un nodo compatibile con satori
+	// Tile noise: scala l'alpha esistente del PNG per NOISE_OPACITY (dest-in con un
+	// pixel bianco a quell'opacità), da applicare poi in overlay sulla base.
+	const noiseTile = await sharp(NOISE_PATH)
+		.ensureAlpha()
+		.composite([
+			{
+				input: Buffer.from([255, 255, 255, Math.round(255 * NOISE_OPACITY)]),
+				raw: { width: 1, height: 1, channels: 4 },
+				tile: true,
+				blend: 'dest-in'
+			}
+		])
+		.png()
+		.toBuffer();
+
+	// Helper: layout HTML -> PNG buffer (satori -> resvg)
+	const renderPng = async (layout: string): Promise<Buffer> => {
+		const markup = html(layout);
 		const svg = await satori(markup as Parameters<typeof satori>[0], {
 			width: WIDTH,
 			height: HEIGHT,
 			fonts
 		});
-		// resvg rasterizza l'SVG di satori (gestisce i data-URI annidati meglio di librsvg)
-		const rendered = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH } }).render().asPng();
-		// sharp ricomprime in PNG quantizzato: ~150KB invece di ~930KB, testo nitido
-		await sharp(rendered)
-			.png({ palette: true, quality: 90, effort: 10 })
+		return new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH } }).render().asPng();
+	};
+
+	// Base condivisa (gradiente + noise in overlay), calcolata UNA volta: il noise sta
+	// SOTTO il contenuto, come la vecchia background CSS. Logo/testo non vengono velati.
+	const gradientPng = await renderPng(createGradientBackgroundHtml());
+	const baseImage = await sharp(gradientPng)
+		.composite([{ input: noiseTile, tile: true, blend: 'overlay' }])
+		.png()
+		.toBuffer();
+
+	let count = 0;
+	for (const job of jobs) {
+		const config = await resolver.resolveLayout(job.params);
+		// Contenuto su sfondo trasparente, composito SOPRA la base (gradiente+noise)
+		const content = await renderPng(generateHtmlLayout(config));
+		await sharp(baseImage)
+			.composite([{ input: content }])
+			.png({ compressionLevel: 9 })
 			.toFile(join(OUT_DIR, `${job.name}.png`));
 		count++;
 	}

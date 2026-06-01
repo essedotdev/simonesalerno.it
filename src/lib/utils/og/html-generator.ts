@@ -1,35 +1,39 @@
 import { logoBase64 } from '$lib/assets/logo-base64.js';
 import { escapeHtml } from './escape.js';
-import { OG_CONSTANTS, getCommonBackgroundElements, type LayoutConfig } from './layouts.js';
+import { OG_CONSTANTS, type LayoutConfig } from './layouts.js';
 
 /**
  * Create base container with common background and styling
  */
 function createBaseContainer(children: string, additionalStyles = ''): string {
-	const { noise } = getCommonBackgroundElements();
+	// Il noise NON è qui: lo applica sharp dopo il render (vedi generate-og-images.ts),
+	// per non far processare a satori/resvg un data-URI da 170KB su ogni immagine.
 	return `
 		<div style="
 			width: ${OG_CONSTANTS.WIDTH}px;
 			height: ${OG_CONSTANTS.HEIGHT}px;
 			position: relative;
-			background: linear-gradient(135deg, ${OG_CONSTANTS.COLORS.GRADIENT.START} 0%, ${OG_CONSTANTS.COLORS.GRADIENT.MID} 50%, ${OG_CONSTANTS.COLORS.GRADIENT.END} 100%);
+			background: transparent;
 			font-family: '${OG_CONSTANTS.FONTS.FAMILY}';
 			${additionalStyles}
 		">
-		<div style="
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background-image: url('${noise.src}');
-			background-repeat: repeat;
-			opacity: ${noise.opacity};
-			mix-blend-mode: ${noise.blendMode};
-			display: flex;
-		"></div>
 			${children}
 		</div>
+	`;
+}
+
+/**
+ * Sfondo gradiente da solo (senza contenuto): renderizzato una volta e usato come
+ * base su cui applicare il noise, SOTTO al contenuto delle altre layout.
+ */
+export function createGradientBackgroundHtml(): string {
+	return `
+		<div style="
+			display: flex;
+			width: ${OG_CONSTANTS.WIDTH}px;
+			height: ${OG_CONSTANTS.HEIGHT}px;
+			background: linear-gradient(135deg, ${OG_CONSTANTS.COLORS.GRADIENT.START} 0%, ${OG_CONSTANTS.COLORS.GRADIENT.MID} 50%, ${OG_CONSTANTS.COLORS.GRADIENT.END} 100%);
+		"></div>
 	`;
 }
 
