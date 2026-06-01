@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import ArticleCard from '$lib/components/ArticleCard.svelte';
+	import BackLink from '$lib/components/BackLink.svelte';
 	import OptimizedImage from '$lib/components/OptimizedImage.svelte';
 	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 	import type { ArticleSectionProps } from '$lib/types';
 	import { getTranslation, translateTags } from '$lib/utils/translations';
 	import { contentMetrics } from '$lib/utils/content-metrics';
-	import { ChevronLeft } from '@lucide/svelte';
 	import { inview, type Options } from 'svelte-inview';
 
 	// Receive props from parent
@@ -23,7 +23,8 @@
 		unobserveOnEnter: true
 	};
 
-	let homeUrl = $derived(`${base}${currentLang === 'en' ? '/' : `/${currentLang}`}`);
+	// Fallback per "Indietro" quando si atterra diretto sul dettaglio: la listing.
+	let blogUrl = $derived(`${base}/${currentLang}/${blogRoute}`);
 	let currentTranslation = $derived(content.translations[currentLang]);
 	// Coppie {raw, label}: il link usa il tag grezzo (il filtro confronta i raw),
 	// l'etichetta mostra il tag tradotto.
@@ -55,10 +56,7 @@
 	class={isInView ? 'inview-reveal animate' : 'inview-reveal opacity-0'}
 >
 	<div class="flex pb-10 text-2xl 2xl:pb-14">
-		<a href={homeUrl} class="flex items-center gap-x-[0.15rem]">
-			<ChevronLeft class="h-6 w-6 text-gray-100" style="margin-bottom: -0.1rem;" />
-			<span class="hover:underline">{backText}</span>
-		</a>
+		<BackLink href={blogUrl} label={backText} />
 	</div>
 
 	{#if content && currentTranslation}

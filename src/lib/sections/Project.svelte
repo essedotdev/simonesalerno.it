@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import BackLink from '$lib/components/BackLink.svelte';
 	import OptimizedImage from '$lib/components/OptimizedImage.svelte';
 	import ContentRenderer from '$lib/components/ui/ContentRenderer.svelte';
 	import type { ProjectSectionProps } from '$lib/types';
 	import { getTranslation, translateTags } from '$lib/utils/translations';
-	import { ChevronLeft, ExternalLink } from '@lucide/svelte';
+	import { ExternalLink } from '@lucide/svelte';
 	import { inview, type Options } from 'svelte-inview';
 
 	// Receive props from parent
@@ -19,9 +20,10 @@
 		unobserveOnEnter: true
 	};
 
-	let homeUrl = $derived(`${base}${currentLang === 'en' ? '/' : `/${currentLang}`}`);
 	let currentTranslation = $derived(content.translations[currentLang]);
 	let projectsRoute = $derived(navigation?.[currentLang]?.projects ?? 'projects');
+	// Fallback per "Indietro" quando si atterra diretto sul dettaglio: la listing.
+	let projectsUrl = $derived(`${base}/${currentLang}/${projectsRoute}`);
 	// Coppie {raw, label}: link sul tag grezzo (il filtro confronta i raw), testo tradotto.
 	let tagLinks = $derived(
 		(currentTranslation?.tags ?? []).map((raw) => ({
@@ -40,10 +42,7 @@
 	class={isInView ? 'inview-reveal animate' : 'inview-reveal opacity-0'}
 >
 	<div class="flex pb-10 text-2xl 2xl:pb-14">
-		<a href={homeUrl} class="flex items-center gap-x-[0.15rem]">
-			<ChevronLeft class="h-6 w-6 text-gray-100" style="margin-bottom: -0.1rem;" />
-			<span class="hover:underline">{backText}</span>
-		</a>
+		<BackLink href={projectsUrl} label={backText} />
 	</div>
 
 	{#if content && currentTranslation}
