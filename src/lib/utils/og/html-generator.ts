@@ -43,7 +43,6 @@ export function createHomeHtml(): string {
 			align-items: flex-end;
 			gap: 10px;
 			position: relative;
-			z-index: 1;
 		">
 			<img src="${logoBase64}" style="width: 180px; height: 180px; display: block;" />
 			<div style="
@@ -96,7 +95,6 @@ export function createListingHtml(title: string, subtitle?: string): string {
 	  position: absolute;
 	  top: 80px;
 	  left: 80px;
-	  z-index: 1;
 	  display: flex;
 	  align-items: flex-end;
 	  gap: 6px;
@@ -126,7 +124,6 @@ export function createListingHtml(title: string, subtitle?: string): string {
 	  top: 50%;
 	  left: 50%;
 	  transform: translate(-50%, -50%);
-	  z-index: 1;
 	  display: flex;
 	  flex-direction: column;
 	  align-items: center;
@@ -175,7 +172,6 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		  position: absolute;
 		  top: 80px;
 		  left: 80px;
-		  z-index: 1;
 		  display: flex;
 		  align-items: flex-end;
 		  gap: 6px;
@@ -193,7 +189,6 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		  justify-content: center;
 		  padding: 80px 40px 80px 80px;
 		  position: relative;
-		  z-index: 1;
 		  margin-top: 140px;
 		">
 		  <h1 style="
@@ -224,7 +219,6 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		  justify-content: center;
 		  padding: 80px 80px 80px 40px;
 		  position: relative;
-		  z-index: 1;
 		">
 		  <img src="${coverImage}" style="width: 400px; height: 300px;
 		    border-radius: 12px;
@@ -242,7 +236,6 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		  position: absolute;
 		  top: 80px;
 		  left: 80px;
-		  z-index: 1;
 		  display: flex;
 		  align-items: flex-end;
 		  gap: 6px;
@@ -256,7 +249,6 @@ export function createDetailHtml(title: string, excerpt?: string, coverImage?: s
 		<div style="
 		  display: flex;
 		  position: relative;
-		  z-index: 1;
 		">
 		  <div style="
 		    width: 720px;
