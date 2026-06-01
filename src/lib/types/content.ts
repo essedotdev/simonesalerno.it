@@ -245,6 +245,7 @@ export interface ProjectSectionProps {
 	content: ProjectItem;
 	currentLang: string;
 	global?: GlobalContent;
+	navigation?: NavigationConfig;
 }
 
 export interface ArticleSectionProps {

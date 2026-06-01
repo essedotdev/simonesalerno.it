@@ -25,8 +25,13 @@
 
 	let homeUrl = $derived(`${base}${currentLang === 'en' ? '/' : `/${currentLang}`}`);
 	let currentTranslation = $derived(content.translations[currentLang]);
-	let translatedTags = $derived(
-		currentTranslation?.tags ? translateTags(global, currentTranslation.tags) : []
+	// Coppie {raw, label}: il link usa il tag grezzo (il filtro confronta i raw),
+	// l'etichetta mostra il tag tradotto.
+	let tagLinks = $derived(
+		(currentTranslation?.tags ?? []).map((raw) => ({
+			raw,
+			label: translateTags(global, [raw])[0] ?? raw
+		}))
 	);
 	let metrics = $derived(contentMetrics(currentTranslation?.content));
 
@@ -88,12 +93,15 @@
 					{/if}
 				</div>
 
-				{#if translatedTags && translatedTags.length > 0}
+				{#if tagLinks.length > 0}
 					<div class="flex flex-wrap gap-2">
-						{#each translatedTags as tag (tag)}
-							<span class="rounded-full bg-gray-800 px-3 py-1 text-sm text-gray-300">
-								{tag}
-							</span>
+						{#each tagLinks as tag (tag.raw)}
+							<a
+								href={`${base}/${currentLang}/${blogRoute}?tags=${encodeURIComponent(tag.raw)}`}
+								class="rounded-full bg-gray-800 px-3 py-1 text-sm text-gray-300 transition-colors hover:bg-gray-700 hover:text-gray-100"
+							>
+								{tag.label}
+							</a>
 						{/each}
 					</div>
 				{/if}

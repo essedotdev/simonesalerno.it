@@ -8,7 +8,7 @@
 	import { inview, type Options } from 'svelte-inview';
 
 	// Receive props from parent
-	let { content, currentLang, global }: ProjectSectionProps = $props();
+	let { content, currentLang, global, navigation }: ProjectSectionProps = $props();
 
 	// Get translation with type safety
 	let backText = $derived(getTranslation(global, 'back'));
@@ -21,8 +21,13 @@
 
 	let homeUrl = $derived(`${base}${currentLang === 'en' ? '/' : `/${currentLang}`}`);
 	let currentTranslation = $derived(content.translations[currentLang]);
-	let translatedTags = $derived(
-		currentTranslation?.tags ? translateTags(global, currentTranslation.tags) : []
+	let projectsRoute = $derived(navigation?.[currentLang]?.projects ?? 'projects');
+	// Coppie {raw, label}: link sul tag grezzo (il filtro confronta i raw), testo tradotto.
+	let tagLinks = $derived(
+		(currentTranslation?.tags ?? []).map((raw) => ({
+			raw,
+			label: translateTags(global, [raw])[0] ?? raw
+		}))
 	);
 </script>
 
@@ -76,12 +81,15 @@
 					</a>
 				{/if}
 
-				{#if translatedTags && translatedTags.length > 0}
+				{#if tagLinks.length > 0}
 					<div class="flex flex-wrap gap-2">
-						{#each translatedTags as tag (tag)}
-							<span class="rounded-full bg-gray-800 px-3 py-1 text-sm text-gray-300">
-								{tag}
-							</span>
+						{#each tagLinks as tag (tag.raw)}
+							<a
+								href={`${base}/${currentLang}/${projectsRoute}?tags=${encodeURIComponent(tag.raw)}`}
+								class="rounded-full bg-gray-800 px-3 py-1 text-sm text-gray-300 transition-colors hover:bg-gray-700 hover:text-gray-100"
+							>
+								{tag.label}
+							</a>
 						{/each}
 					</div>
 				{/if}

@@ -13,6 +13,7 @@
 			content={data.content as import('$lib/types').ProjectItem}
 			currentLang={data.currentLang}
 			global={data.global}
+			navigation={data.navigation}
 		/>
 	{:else if data.type === 'article'}
 		<Article
