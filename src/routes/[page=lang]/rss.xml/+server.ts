@@ -6,7 +6,7 @@ import type { RequestHandler } from './$types';
 const site = 'https://simonesalerno.it';
 
 // Feed RSS degli articoli per lingua (/en/rss.xml, /it/rss.xml). Gli articoli sono
-// gia' ordinati per published_date desc dal ContentLoader.
+// già ordinati per published_date desc dal ContentLoader.
 export const GET: RequestHandler = async ({ params }) => {
 	const lang = params.page as string;
 	const loader = new ContentLoader();

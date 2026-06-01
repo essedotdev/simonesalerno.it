@@ -3,7 +3,7 @@ import { getLanguageUrl } from './language-url';
 
 /**
  * Helper SEO puri (canonical, hreflang, JSON-LD). Tutte le funzioni sono
- * deterministiche e prive di side effect, cosi' da essere testabili in isolamento
+ * deterministiche e prive di side effect, così da essere testabili in isolamento
  * e riusabili dal +layout. La serializzazione JSON-LD avviene via serializeJsonLd.
  */
 
@@ -18,7 +18,7 @@ type JsonLd = Record<string, unknown>;
 
 /**
  * URL canonico assoluto per il path corrente (senza query string, senza trailing
- * slash superfluo). Ogni versione di lingua e' canonica di se stessa: le altre
+ * slash superfluo). Ogni versione di lingua è canonica di se stessa: le altre
  * lingue sono dichiarate via hreflang.
  */
 export function buildCanonical(origin: string, pathname: string): string {

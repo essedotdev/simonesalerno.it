@@ -75,7 +75,7 @@
 							// vite-imagetools restituisce gli URL nell'ordine dei formati
 							// richiesti (avif, webp, jpg), ciascuno con N dimensioni. In dev
 							// gli URL non hanno estensione, quindi raggruppiamo per posizione.
-							// Deriviamo N dal conteggio reale invece di assumerlo: cosi' il
+							// Deriviamo N dal conteggio reale invece di assumerlo: così il
 							// componente si adatta se cambia il numero di larghezze.
 							const srcsets = srcsetString.split(', ').filter(Boolean);
 
