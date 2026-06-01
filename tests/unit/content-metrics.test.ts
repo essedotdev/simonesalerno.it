@@ -3,6 +3,7 @@ import {
 	contentMetrics,
 	countWords,
 	estimateTokens,
+	extractCode,
 	extractText,
 	formatTokens,
 	readingTimeMinutes
@@ -16,6 +17,13 @@ const sample: ContentBlocks = {
 		{ type: 'list', data: { items: ['alpha beta', 'gamma'] } },
 		{ type: 'image', data: { src: '/x.png', alt: 'ignored' } },
 		{ type: 'divider', data: {} }
+	]
+};
+
+const withCode: ContentBlocks = {
+	blocks: [
+		{ type: 'paragraph', data: { text: 'hello world' } },
+		{ type: 'code', data: { language: 'ts', text: 'const x = 1;' } }
 	]
 };
 
@@ -34,9 +42,21 @@ describe('extractText / countWords', () => {
 		expect(countWords(extractText(sample))).toBe(10);
 	});
 
+	it('esclude i code block dalla prosa', () => {
+		expect(extractText(withCode)).toBe('hello world');
+		expect(countWords(extractText(withCode))).toBe(2);
+	});
+
 	it('gestisce contenuto vuoto/undefined', () => {
 		expect(extractText(undefined)).toBe('');
 		expect(countWords('')).toBe(0);
+	});
+});
+
+describe('extractCode', () => {
+	it('estrae solo il testo dei code block', () => {
+		expect(extractCode(withCode)).toBe('const x = 1;');
+		expect(extractCode(sample)).toBe('');
 	});
 });
 
@@ -49,8 +69,14 @@ describe('readingTimeMinutes', () => {
 });
 
 describe('estimateTokens / formatTokens', () => {
-	it('stima ~1.3 token per parola', () => {
-		expect(estimateTokens(100)).toBe(130);
+	it('stima dai caratteri, ~4/token EN e ~3.5/token IT', () => {
+		expect(estimateTokens(100, 'en')).toBe(25);
+		expect(estimateTokens(100, 'it')).toBe(29);
+	});
+
+	it('default a EN per lingue sconosciute', () => {
+		expect(estimateTokens(100)).toBe(25);
+		expect(estimateTokens(100, 'fr')).toBe(25);
 	});
 
 	it('formatta compatto', () => {
@@ -60,11 +86,26 @@ describe('estimateTokens / formatTokens', () => {
 });
 
 describe('contentMetrics', () => {
-	it('aggrega le metriche', () => {
+	it('aggrega le metriche (default EN)', () => {
 		const m = contentMetrics(sample);
 		expect(m.words).toBe(10);
 		expect(m.minutes).toBe(1);
+		// prosa = 52 caratteri -> round(52/4) = 13
 		expect(m.tokens).toBe(13);
 		expect(m.tokensLabel).toBe('13');
+	});
+
+	it('usa il divisore IT quando lang = it', () => {
+		const m = contentMetrics(sample, 'it');
+		// round(52/3.5) = 15
+		expect(m.tokens).toBe(15);
+	});
+
+	it('conta il codice nei token ma non nelle parole/minuti', () => {
+		const m = contentMetrics(withCode, 'en');
+		expect(m.words).toBe(2);
+		expect(m.minutes).toBe(1);
+		// (11 prosa + 12 codice) / 4 = round(5.75) = 6
+		expect(m.tokens).toBe(6);
 	});
 });

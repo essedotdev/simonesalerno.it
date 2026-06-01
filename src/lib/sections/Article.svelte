@@ -33,7 +33,7 @@
 			label: translateTags(global, [raw])[0] ?? raw
 		}))
 	);
-	let metrics = $derived(contentMetrics(currentTranslation?.content));
+	let metrics = $derived(contentMetrics(currentTranslation?.content, currentLang));
 
 	function formatDate(dateString: string, lang: string): string {
 		const date = new Date(dateString);
