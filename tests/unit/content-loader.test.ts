@@ -67,15 +67,23 @@ describe('ContentLoader - articles', () => {
 	});
 });
 
-describe('ContentLoader - slug map', () => {
+describe('ContentLoader - slug map (derivata dai contenuti)', () => {
 	it('loadSlugMap() returns projects and articles maps', async () => {
 		const map = await loader.loadSlugMap();
 		expect(map.projects).toBeDefined();
 		expect(map.articles).toBeDefined();
-		// la slug map combacia con i progetti pubblicati
-		const projects = await loader.loadProjects('en');
+	});
+
+	it('ogni slug nella map combacia con la traduzione, per ogni lingua (niente drift)', async () => {
+		const map = await loader.loadSlugMap();
+		const projects = await loader.loadProjects(); // tutte le lingue
+		// L'indice copre esattamente i progetti pubblicati
+		expect(Object.keys(map.projects).length).toBe(projects.length);
 		for (const p of projects) {
-			expect(map.projects[p.meta.id]).toBeDefined();
+			for (const [lang, t] of Object.entries(p.translations)) {
+				// La map e' DERIVATA dalle traduzioni: gli slug devono combaciare sempre
+				expect(map.projects[p.meta.id]?.[lang]).toBe(t.slug);
+			}
 		}
 	});
 

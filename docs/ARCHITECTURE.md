@@ -38,9 +38,10 @@ una libreria i18n sovradimensionata. Lo schema:
 - routing `[page=lang]/[route=route]/[sub]` con param matcher in `src/params/`;
 - `hooks.server.ts` fa redirect "smart" (lingua sbagliata, route nella lingua
   sbagliata, slug nella lingua sbagliata) verso l'URL canonico;
-- una slug map leggera (`slug-map.json`, generata da `scripts/generate-slug-map.ts`)
-  mappa id -> slug per lingua, così i redirect e il language switcher non devono
-  caricare tutti i contenuti in tutte le lingue a ogni richiesta;
+- una slug map leggera (indice id -> slug per lingua) DERIVATA a runtime dai
+  contenuti e memoizzata per isolate, così i redirect e il language switcher non
+  devono caricare tutti i contenuti in tutte le lingue a ogni richiesta. Gli slug
+  vivono solo nelle traduzioni: niente file committato, nessun drift possibile;
 - `getLanguageUrl` e gli helper SEO sono funzioni pure estratte per essere
   testabili in isolamento.
 

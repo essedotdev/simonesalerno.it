@@ -9,7 +9,7 @@ log in `docs/Roadmap.md` e `docs/Cycles.md` (tienili aggiornati a fine ciclo).
 
 - `pnpm dev` - dev server (vite) su :5173.
 - `pnpm build` - catena: `validate-content` -> `generate-images` ->
-  `generate-slug-map` -> `generate-og-images` -> `vite build`.
+  `generate-og-images` -> `vite build`.
 - `pnpm check` - svelte-check (type check).
 - `pnpm lint` - prettier --check + eslint. `pnpm format` per scrivere.
 - `pnpm test:unit` - Vitest. `pnpm test:e2e` - Playwright. `pnpm test:ci` - tutti.
@@ -34,8 +34,10 @@ deploy avviene via Cloudflare Workers Builds al push, il gate di qualità è loc
 - Route `[page=lang]/[route=route]/[sub]`, matcher in `src/params/`.
 - Redirect smart in `src/hooks.server.ts` (lingua/route/slug nella lingua
   sbagliata -> URL canonico) basati sulla slug map.
-- `slug-map.json` è GENERATO (`scripts/generate-slug-map.ts`) e rigenerato in
-  build: non modificarlo a mano.
+- La slug map (indice id -> slug per lingua) è DERIVATA a runtime dai contenuti in
+  `ContentLoader.loadSlugMap` (memoizzata per isolate), non un file generato: gli
+  slug vivono solo nelle traduzioni, non c'è niente da rigenerare o sincronizzare.
+  In dev, dopo aver cambiato uno slug, riavvia il dev server.
 - URL per lingua: usa `getLanguageUrl` (puro, testato). SEO (canonical/hreflang/
   JSON-LD): helper puri in `src/lib/utils/seo.ts`, cablati nel `+layout.svelte`.
 

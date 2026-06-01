@@ -30,8 +30,8 @@ Vedi `docs/Cycles.md` per il log dettagliato del lavoro svolto.
 ### M2 - Test suite - ✅ Completata (2026-05-31)
 
 - Vitest (unit) + Playwright (E2E) configurati da zero.
-- 129 unit test: `ContentLoader` (tutti i metodi), schemi Zod su tutti i contenuti
-  reali, generatore slug-map, OG html-generator + escape, `getLanguageUrl`.
+- Unit test su `ContentLoader` (tutti i metodi), schemi Zod su tutti i contenuti
+  reali, slug map, OG html-generator + escape, `getLanguageUrl`, util SEO.
 - 10 E2E: redirect i18n, traduzione route, 404, sitemap+hreflang, render dettaglio
   EN/IT, og:image servita.
 - `getLanguageUrl` estratto in util puro testabile.
@@ -78,8 +78,17 @@ Vedi `docs/Cycles.md` per il log dettagliato del lavoro svolto.
   era stata aggiunta e poi rimossa: con deploy via Cloudflare Workers Builds e gate
   locale prima del push sarebbe stata solo informativa e scollegata dal deploy.
 
+### M7 - Slug map derivata (post-overhaul) - ✅ Completata (2026-06-01)
+
+- La slug map non è più un file pre-generato e committato ma un indice DERIVATO a
+  runtime dai contenuti, memoizzato per isolate. Gli slug vivono solo nelle
+  traduzioni: eliminata la duplicazione materializzata e quindi ogni possibilità di
+  drift. Rimossi script, file e step di build relativi. Dettagli in `docs/Cycles.md`
+  (Ciclo 3).
+
 ## Stato deploy
 
-Le Milestone M1-M3 sono pushate su `main` (commit fino a `66ff033`). M4-M6 sono
-committate localmente e non ancora pushate (push solo su comando esplicito). Il
-deploy avviene via Cloudflare Workers Builds al push.
+Le Milestone M1-M3 sono pushate su `main` (fino a `66ff033`). Tutto il lavoro
+successivo (M4-M7, rimozione CI, slug map derivata) è committato localmente e non
+ancora pushato (push solo su comando esplicito). Il deploy avviene via Cloudflare
+Workers Builds al push.

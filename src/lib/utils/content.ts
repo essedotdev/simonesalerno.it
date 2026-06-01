@@ -13,6 +13,7 @@ import type {
 	ProjectItem,
 	ProjectMeta,
 	ProjectTranslation,
+	SlugMap,
 	SlugMapData,
 	WelcomeContent
 } from '../types';
@@ -34,7 +35,7 @@ import {
 
 // Opzioni per il caricamento generico di una collezione (projects/articles).
 // Glob e import delle traduzioni restano literal per collezione (richiesto da
-// Vite per la static analysis); il resto della logica e' condiviso.
+// Vite per la static analysis); il resto della logica è condiviso.
 interface LoadCollectionOptions<TMeta> {
 	cacheKeyBase: 'projects' | 'articles';
 	pathBase: string;
@@ -47,6 +48,12 @@ interface LoadCollectionOptions<TMeta> {
 	sortKey: (meta: TMeta) => string;
 	lang?: string;
 }
+
+// Slug map memoizzata a livello di modulo: è un valore globale derivato (identico
+// per ogni richiesta) e i contenuti sono immutabili per la vita dell'isolate, quindi
+// si calcola una volta sola e si riusa tra le richieste. In dev, dopo aver cambiato
+// uno slug, va riavviato il dev server (stesso vincolo del vecchio generatore).
+let memoizedSlugMap: SlugMapData | null = null;
 
 export class ContentLoader {
 	private cache: Map<CacheKey, unknown> = new Map();
@@ -228,12 +235,34 @@ export class ContentLoader {
 		if (this.cache.has(cacheKey)) {
 			return this.cache.get(cacheKey) as SlugMapData;
 		}
+		if (memoizedSlugMap) {
+			this.cache.set(cacheKey, memoizedSlugMap);
+			return memoizedSlugMap;
+		}
 
-		const module = await import('../content/slug-map.json');
-		const data = module.default as SlugMapData;
+		// Indice id -> { lang: slug } DERIVATO dai contenuti. Gli slug vivono solo
+		// nelle traduzioni (single source of truth): non esiste un file pre-generato
+		// da tenere in sync, quindi il drift è strutturalmente impossibile.
+		const [projects, articles] = await Promise.all([this.loadProjects(), this.loadArticles()]);
 
-		this.cache.set(cacheKey, data);
-		return data;
+		const toSection = (
+			items: Array<{ meta: { id: string }; translations: Record<string, { slug: string }> }>
+		): SlugMap =>
+			Object.fromEntries(
+				items.map((item) => [
+					item.meta.id,
+					Object.fromEntries(Object.entries(item.translations).map(([lang, t]) => [lang, t.slug]))
+				])
+			);
+
+		const slugMap: SlugMapData = {
+			projects: toSection(projects),
+			articles: toSection(articles)
+		};
+
+		memoizedSlugMap = slugMap;
+		this.cache.set(cacheKey, slugMap);
+		return slugMap;
 	}
 
 	async getAvailableLanguages(contentType: ContentType, id: string): Promise<string[]> {
