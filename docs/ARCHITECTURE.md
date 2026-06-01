@@ -1,7 +1,7 @@
 # Architecture
 
 Il perché delle scelte di questo progetto. Per lo stato corrente vedi
-`docs/Roadmap.md`, per il log dei cicli `docs/Cycles.md`.
+`docs/ROADMAP.md`, per il log dei cicli `docs/CYCLES.md`.
 
 ## Cos'è
 

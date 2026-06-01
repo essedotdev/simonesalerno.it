@@ -12,7 +12,7 @@ i18n hand-rolled (EN/IT) e immagini OG. È in produzione.
 
 L'overhaul di qualità in 6 fasi (nato da un audit completo: sicurezza,
 correttezza, performance, manutenibilità) è completato su tutte le milestone.
-Vedi `docs/Cycles.md` per il log dettagliato del lavoro svolto.
+Vedi `docs/CYCLES.md` per il log dettagliato del lavoro svolto.
 
 ## Milestone
 
@@ -83,7 +83,7 @@ Vedi `docs/Cycles.md` per il log dettagliato del lavoro svolto.
 - La slug map non è più un file pre-generato e committato ma un indice DERIVATO a
   runtime dai contenuti, memoizzato per isolate. Gli slug vivono solo nelle
   traduzioni: eliminata la duplicazione materializzata e quindi ogni possibilità di
-  drift. Rimossi script, file e step di build relativi. Dettagli in `docs/Cycles.md`
+  drift. Rimossi script, file e step di build relativi. Dettagli in `docs/CYCLES.md`
   (Ciclo 3).
 
 ### M8 - Routing i18n unificato + dead code (post-overhaul) - ✅ Completata (2026-06-01)
@@ -94,7 +94,7 @@ Vedi `docs/Cycles.md` per il log dettagliato del lavoro svolto.
   reimplementazioni inline sparse.
 - Rimosso codice morto dal `ContentLoader` (4 metodi mai usati + `getAvailableLanguages`)
   e il campo `availableLanguages` di `DetailPageData`, che nessun componente leggeva.
-  Dettagli in `docs/Cycles.md` (Ciclo 4).
+  Dettagli in `docs/CYCLES.md` (Ciclo 4).
 
 ## Stato deploy
 

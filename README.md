@@ -57,8 +57,8 @@ pnpm test:ci          # Unit + E2E
 
 - [`CLAUDE.md`](CLAUDE.md) - conventions, commands and gotchas (for the coding agent)
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) - design decisions and tradeoffs
-- [`docs/Roadmap.md`](docs/Roadmap.md) - current milestones
-- [`docs/Cycles.md`](docs/Cycles.md) - work-cycle log
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) - current milestones
+- [`docs/CYCLES.md`](docs/CYCLES.md) - work-cycle log
 
 ## Deployment
 

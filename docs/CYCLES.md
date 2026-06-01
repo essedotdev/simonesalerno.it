@@ -3,7 +3,7 @@
 Log cronologico dei cicli di lavoro sul progetto. Ogni ciclo registra obiettivo,
 lavoro svolto (con riferimenti ai commit), verifiche e cosa resta. Serve a riprendere
 il filo tra una sessione e l'altra. La pianificazione ad alto livello vive in
-`docs/Roadmap.md`.
+`docs/ROADMAP.md`.
 
 ---
 

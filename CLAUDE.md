@@ -3,7 +3,7 @@
 Portfolio personale: SvelteKit 2 + Svelte 5 (runes) + TS strict + Tailwind 4,
 deploy su Cloudflare Workers. Contenuti file-based JSON, i18n hand-rolled EN/IT,
 OG pre-generate. Il perché delle scelte sta in `docs/ARCHITECTURE.md`; stato e
-log in `docs/Roadmap.md` e `docs/Cycles.md` (tienili aggiornati a fine ciclo).
+log in `docs/ROADMAP.md` e `docs/CYCLES.md` (tienili aggiornati a fine ciclo).
 
 ## Comandi
 
