@@ -114,14 +114,16 @@ body::before {
 	outline-offset: 2px;
 }
 
-/* Rispetta la preferenza di movimento ridotto: azzera animazioni e transizioni */
+/* Rispetta "Riduci movimento": toglie il MOVIMENTO (keyframe e transizioni di
+   transform: scale/rotate/translate, slide-in, parallax) ma mantiene i fade di
+   opacità/colore/filtro, che non causano problemi vestibolari. Così il sito resta
+   accessibile senza diventare completamente statico. */
 @media (prefers-reduced-motion: reduce) {
 	*,
 	*::before,
 	*::after {
-		animation-duration: 0.01ms !important;
-		animation-iteration-count: 1 !important;
-		transition-duration: 0.01ms !important;
+		animation: none !important;
+		transition-property: opacity, color, background-color, border-color, filter !important;
 		scroll-behavior: auto !important;
 	}
 }
