@@ -1,134 +1,144 @@
-/* Stili per rendere la sitemap più leggibile nel browser - Tema scuro */
+/* Stile della sitemap quando aperta nel browser. Allineato all'identita del
+   sito: gradiente indaco su nero, font Geist, accenti blu/bianco, palette
+   monocromatica fredda. I crawler ignorano questo foglio e leggono l'XML grezzo. */
+
 urlset {
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 20px;
-	background: #1a1a1a;
-	color: #e0e0e0;
-	line-height: 1.6;
+	display: block;
+	box-sizing: border-box;
+	min-height: 100vh;
+	margin: 0;
+	padding: 48px 24px 64px;
+	font: 300 16px/1.6 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	color: #c7cce0;
+	background:
+		radial-gradient(at 0% 90%, #20327e 0px, transparent 50%),
+		radial-gradient(at 96% 3%, #131b49 0px, transparent 50%),
+		radial-gradient(at 46% 45%, #000000 0px, transparent 50%) #0c0c0c;
+	background-attachment: fixed;
+	counter-reset: urls;
 }
 
+/* Intestazione */
 urlset::before {
-	content: '🗺️ Sitemap XML - simonesalerno.it';
+	content: 'Sitemap · simonesalerno.it';
 	display: block;
-	font-size: 24px;
-	font-weight: bold;
+	max-width: 960px;
+	margin: 0 auto 28px;
+	padding: 22px 26px;
+	font-size: 20px;
+	font-weight: 500;
+	letter-spacing: -0.01em;
 	color: #ffffff;
-	margin-bottom: 30px;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 12px;
+}
+
+/* Conteggio totale (i counter sono risolti dopo tutti i <url>) */
+urlset::after {
+	content: counter(urls) ' URL';
+	display: block;
+	max-width: 960px;
+	margin: 28px auto 0;
 	text-align: center;
-	padding: 20px;
-	background: #2d2d2d;
-	border-radius: 8px;
-	border: 1px solid #404040;
+	font-size: 12px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.4);
 }
 
 url {
+	counter-increment: urls;
 	display: block;
-	background: #2d2d2d;
-	margin: 15px 0;
-	padding: 20px;
-	border-radius: 8px;
-	border: 1px solid #404040;
-	border-left: 4px solid #64b5f6;
+	max-width: 960px;
+	margin: 14px auto;
+	padding: 18px 20px;
+	background: rgba(255, 255, 255, 0.035);
+	border: 1px solid rgba(255, 255, 255, 0.09);
+	border-radius: 12px;
 }
 
 loc {
 	display: block;
-	font-weight: 600;
-	color: #64b5f6;
-	font-size: 16px;
-	margin-bottom: 10px;
-	word-break: break-all;
-}
-
-loc::before {
-	content: '🔗 ';
-}
-
-lastmod {
-	display: inline-block;
-	background: #2e5d31;
-	color: #81c784;
-	padding: 4px 8px;
-	border-radius: 4px;
-	font-size: 12px;
-	margin-right: 10px;
+	margin-bottom: 12px;
+	font-size: 15px;
 	font-weight: 500;
-	border: 1px solid #4caf50;
+	color: #aebbff;
+	overflow-wrap: anywhere;
+}
+
+/* Badge metadati: chip monocromatici uniformi, label tecnica attenuata */
+lastmod,
+changefreq,
+priority {
+	display: inline-block;
+	margin: 0 8px 0 0;
+	padding: 3px 10px;
+	font-size: 11px;
+	letter-spacing: 0.02em;
+	color: #aab0c8;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 999px;
 }
 
 lastmod::before {
-	content: '📅 ';
-}
-
-changefreq {
-	display: inline-block;
-	background: #5d4e00;
-	color: #ffcc02;
-	padding: 4px 8px;
-	border-radius: 4px;
-	font-size: 12px;
-	margin-right: 10px;
-	font-weight: 500;
-	border: 1px solid #ffc107;
+	content: 'updated ';
+	color: rgba(255, 255, 255, 0.4);
 }
 
 changefreq::before {
-	content: '🔄 ';
-}
-
-priority {
-	display: inline-block;
-	background: #1e3a5f;
-	color: #90caf9;
-	padding: 4px 8px;
-	border-radius: 4px;
-	font-size: 12px;
-	margin-right: 10px;
-	font-weight: 500;
-	border: 1px solid #2196f3;
+	content: 'changes ';
+	color: rgba(255, 255, 255, 0.4);
 }
 
 priority::before {
-	content: '⭐ ';
+	content: 'priority ';
+	color: rgba(255, 255, 255, 0.4);
 }
 
-/* Stili per i link alternativi hreflang */
-url:has(link) {
-	border-left-color: #ba68c8;
-}
-
+/* Alternate hreflang */
 link {
 	display: block;
-	margin-top: 10px;
-	padding: 12px;
-	background: #3d2f4a;
-	border-radius: 4px;
-	font-size: 14px;
-	color: #e1bee7;
-	border: 1px solid #6a4c93;
-	font-weight: 500;
+	margin-top: 8px;
+	padding: 8px 12px;
+	font-size: 12.5px;
+	color: #9aa3c4;
+	background: rgba(255, 255, 255, 0.025);
+	border: 1px solid rgba(255, 255, 255, 0.07);
+	border-radius: 8px;
 }
 
 link::before {
-	content: '🌐 ' attr(hreflang) ' → ' attr(href);
-	font-weight: 500;
-	color: #e1bee7;
+	content: attr(hreflang) '  →  ' attr(href);
 }
 
-link::after {
-	content: '';
+/* Scrollbar coerente col sito */
+::-webkit-scrollbar {
+	width: 5px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.1);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
 	urlset {
-		padding: 10px;
+		padding: 28px 14px 48px;
+	}
+
+	urlset::before {
+		font-size: 17px;
+		padding: 18px 20px;
 	}
 
 	url {
-		padding: 15px;
+		padding: 15px 16px;
 	}
 
 	loc {
