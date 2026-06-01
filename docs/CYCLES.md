@@ -309,6 +309,10 @@ pagine di dettaglio tornava sempre in home).
 - `21e8fea` test(e2e): copertura dei casi di redirect i18n finora scoperti (lingua
   non valida, route in lingua sbagliata con slug, no-loop sul canonico, traduzione
   slug cross-lingua sugli articoli) + 5 E2E sul back contestuale.
+- `1800f08` feat(projects): badge di stato anche nel dettaglio (prima solo sulle
+  card: il dato `meta.status` c'era ma non veniva reso). Estratto `StatusBadge`
+  condiviso (stile + etichetta da una sola fonte), elimina la duplicazione che era
+  sparsa tra `ProjectCard` (`STATUS_STYLE`) e `Projects` (`STATUS_KEY`).
 
 ### Decisioni / note
 
@@ -330,5 +334,5 @@ pagine di dettaglio tornava sempre in home).
 ### Verifiche
 
 - `pnpm check`: 0 errori; `pnpm lint`: pulito
-- `pnpm test:ci`: 161 unit verdi, 30 E2E verdi (+13: 5 back + 8 redirect)
+- `pnpm test:ci`: 161 unit verdi, 31 E2E verdi (+14: 5 back, 8 redirect, 1 badge)
 - `pnpm build`: OK end-to-end
