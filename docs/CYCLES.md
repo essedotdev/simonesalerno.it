@@ -373,3 +373,17 @@ quali progetti mettere in evidenza, e in che ordine.
 - `pnpm check`: 0 errori; `pnpm lint`: pulito
 - `pnpm test:ci`: 166 unit verdi (+5 `featured`), 32 E2E verdi (+1 home featured)
 - `pnpm build`: OK end-to-end; `validate-content` verde
+
+---
+
+## Ciclo 8 - Link esterno progetto apre in nuova scheda (2026-06-02)
+
+### Obiettivo
+
+Il link al sito del progetto, nella pagina di dettaglio, non apriva in nuova
+scheda (mancava `target="_blank"`), a differenza dei link in Contact e Footer.
+
+### Lavoro
+
+- `fix(projects)`: aggiunto `target="_blank"` + `rel="noopener noreferrer"` al
+  link esterno in `Project.svelte`, allineandolo agli altri link esterni del sito.

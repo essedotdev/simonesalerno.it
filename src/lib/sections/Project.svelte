@@ -78,6 +78,8 @@
 					<a
 						href={content.meta.link}
 						class="flex w-min items-center gap-x-2 text-2xl underline"
+						target="_blank"
+						rel="noopener noreferrer"
 						data-sveltekit-reload
 					>
 						<ExternalLink class="h-6 w-6" />
