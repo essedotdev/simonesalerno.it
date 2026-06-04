@@ -61,7 +61,7 @@
 		{ "name": "status", "value": "Stato" },
 		{ "name": "statusCompleted", "value": "Completato" },
 		{ "name": "statusInProgress", "value": "In corso" },
-		{ "name": "statusIdea", "value": "Idea" },
+		{ "name": "statusIdea", "value": "Esplorazione" },
 		{ "name": "statusArchived", "value": "Archiviato" },
 		{ "name": "clearStatuses", "value": "Cancella stati" },
 		{ "name": "closeStatusDropdown", "value": "Chiudi menu stato" }

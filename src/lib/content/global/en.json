@@ -63,7 +63,7 @@
 		{ "name": "status", "value": "Status" },
 		{ "name": "statusCompleted", "value": "Completed" },
 		{ "name": "statusInProgress", "value": "In Progress" },
-		{ "name": "statusIdea", "value": "Idea" },
+		{ "name": "statusIdea", "value": "Exploration" },
 		{ "name": "statusArchived", "value": "Archived" },
 		{ "name": "clearStatuses", "value": "Clear statuses" },
 		{ "name": "closeStatusDropdown", "value": "Close status dropdown" }
