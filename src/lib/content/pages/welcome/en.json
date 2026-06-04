@@ -5,13 +5,13 @@
 			{
 				"type": "paragraph",
 				"data": {
-					"text": "AI-focused Developer. I build AI-native software with a clear philosophy: humans decide the architecture, AI speeds up execution, humans validate."
+					"text": "AI Engineer. I design the architecture, the AI writes the code, I review and ship. I know where it slips and I set it up so it doesn't."
 				}
 			},
 			{
 				"type": "paragraph",
 				"data": {
-					"text": "Concrete workflow: design and boundaries before code, targeted co-pilot for boilerplate and tests, review and hardening on every line. AI doesn't make decisions alone."
+					"text": "The AI does the heavy lifting, I keep the decisions. What used to take weeks now takes a weekend, and what goes out is production-ready, not a demo."
 				}
 			}
 		]
